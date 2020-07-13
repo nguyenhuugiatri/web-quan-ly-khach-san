@@ -11,7 +11,7 @@
  Target Server Version : 80018
  File Encoding         : 65001
 
- Date: 13/07/2020 22:46:28
+ Date: 13/07/2020 23:01:17
 */
 
 SET NAMES utf8mb4;
@@ -93,6 +93,12 @@ CREATE TABLE `customer`  (
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
+-- Records of customer
+-- ----------------------------
+INSERT INTO `customer` VALUES (1, '385746369', 'ABC', 96636362, 1);
+INSERT INTO `customer` VALUES (2, '123456789', 'BCA', 94463001, 2);
+
+-- ----------------------------
 -- Table structure for customertype
 -- ----------------------------
 DROP TABLE IF EXISTS `customertype`;
@@ -101,6 +107,12 @@ CREATE TABLE `customertype`  (
   `nametype` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of customertype
+-- ----------------------------
+INSERT INTO `customertype` VALUES (1, 'Việt Nam');
+INSERT INTO `customertype` VALUES (2, 'Nước Ngoài');
 
 -- ----------------------------
 -- Table structure for detailsbook
@@ -144,6 +156,21 @@ CREATE TABLE `room`  (
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
+-- Records of room
+-- ----------------------------
+INSERT INTO `room` VALUES (1, 'Phòng 1', 1, 0);
+INSERT INTO `room` VALUES (2, 'Phòng 2', 1, 0);
+INSERT INTO `room` VALUES (3, 'Phòng 3', 1, 0);
+INSERT INTO `room` VALUES (4, 'Phòng 4', 1, 0);
+INSERT INTO `room` VALUES (5, 'Phòng 5', 1, 0);
+INSERT INTO `room` VALUES (6, 'Phòng 6', 2, 0);
+INSERT INTO `room` VALUES (7, 'Phòng 7', 2, 0);
+INSERT INTO `room` VALUES (8, 'Phòng 8', 3, 0);
+INSERT INTO `room` VALUES (9, 'Phòng 9 ', 3, 0);
+INSERT INTO `room` VALUES (10, 'Phòng 10', 4, 0);
+INSERT INTO `room` VALUES (11, 'Phòng 11', 5, 0);
+
+-- ----------------------------
 -- Table structure for roomtype
 -- ----------------------------
 DROP TABLE IF EXISTS `roomtype`;
@@ -154,6 +181,15 @@ CREATE TABLE `roomtype`  (
   `max_persons` int(255) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of roomtype
+-- ----------------------------
+INSERT INTO `roomtype` VALUES (1, 'Phòng tiêu chuẩn ', 200, 2);
+INSERT INTO `roomtype` VALUES (2, 'Phòng vip 1', 400, 2);
+INSERT INTO `roomtype` VALUES (3, 'Phòng vip 2', 500, 3);
+INSERT INTO `roomtype` VALUES (4, 'Phòng vip 3', 800, 3);
+INSERT INTO `roomtype` VALUES (5, 'Phòng VIP', 1000, 3);
 
 -- ----------------------------
 -- Table structure for service
@@ -170,6 +206,16 @@ CREATE TABLE `service`  (
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
+-- Records of service
+-- ----------------------------
+INSERT INTO `service` VALUES (1, 'Nước suối', 1, 7000);
+INSERT INTO `service` VALUES (2, 'Nước ngọt', 1, 15000);
+INSERT INTO `service` VALUES (3, 'Bia', 1, 20000);
+INSERT INTO `service` VALUES (4, 'Snack', 2, 8000);
+INSERT INTO `service` VALUES (5, 'Cơm', 2, 30000);
+INSERT INTO `service` VALUES (6, 'Phở', 2, 50000);
+
+-- ----------------------------
 -- Table structure for servicetype
 -- ----------------------------
 DROP TABLE IF EXISTS `servicetype`;
@@ -178,6 +224,13 @@ CREATE TABLE `servicetype`  (
   `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of servicetype
+-- ----------------------------
+INSERT INTO `servicetype` VALUES (1, 'Thức uống');
+INSERT INTO `servicetype` VALUES (2, 'Thức ăn');
+INSERT INTO `servicetype` VALUES (3, 'Đồ tiêu dùng');
 
 -- ----------------------------
 -- Table structure for user
@@ -190,5 +243,14 @@ CREATE TABLE `user`  (
   `permission` int(255) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of user
+-- ----------------------------
+INSERT INTO `user` VALUES (1, 'thaianhhd', '123123', 0);
+INSERT INTO `user` VALUES (2, 'lemlem', 'lemdeptrai', 1);
+INSERT INTO `user` VALUES (3, 'baobede', '123123', 1);
+INSERT INTO `user` VALUES (4, 'thaianhvip', '123123', 0);
+INSERT INTO `user` VALUES (5, 'vipsaxpro', '123123', 0);
 
 SET FOREIGN_KEY_CHECKS = 1;
