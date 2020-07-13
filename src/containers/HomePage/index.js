@@ -22,20 +22,11 @@ class HomePage extends Component {
   render() {
     const { collapsed } = this.state;
     return (
-      <Layout>
+      <Layout className='container'>
         <Sidebar collapsed={collapsed} />
         <Layout className='site-layout'>
           <Header collapsed={collapsed} handleOnToggle={this.toggle} />
-          <Content
-            className='site-layout-background'
-            style={{
-              margin: '24px 16px',
-              padding: 24,
-              minHeight: 280,
-            }}
-          >
-            Content
-          </Content>
+          <Content className='site-layout-background content'>Content</Content>
         </Layout>
       </Layout>
     );

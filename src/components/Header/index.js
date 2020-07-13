@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
+import MenuBar from '../MenuBar';
 import 'antd/dist/antd.css';
-import { Layout } from 'antd';
+import { Layout, Row } from 'antd';
 import { MenuUnfoldOutlined, MenuFoldOutlined } from '@ant-design/icons';
 import './styles.scss';
 
@@ -11,13 +12,16 @@ class Header extends Component {
     const { collapsed, handleOnToggle } = this.props;
     return (
       <HeaderAntd className='site-layout-background' style={{ padding: 0 }}>
-        {React.createElement(
-          collapsed ? MenuUnfoldOutlined : MenuFoldOutlined,
-          {
-            className: 'trigger',
-            onClick: handleOnToggle,
-          }
-        )}
+        <Row>
+          {React.createElement(
+            collapsed ? MenuUnfoldOutlined : MenuFoldOutlined,
+            {
+              className: 'trigger',
+              onClick: handleOnToggle,
+            }
+          )}
+          <MenuBar />
+        </Row>
       </HeaderAntd>
     );
   }

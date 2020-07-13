@@ -15,7 +15,7 @@ class Sidebar extends Component {
     const { collapsed } = this.props;
     return (
       <Sider trigger={null} collapsible collapsed={collapsed}>
-        <div className='logo' />
+        <div className='logo'></div>
         <Menu theme='dark' mode='inline' defaultSelectedKeys={['1']}>
           <Menu.Item key='1' icon={<UserOutlined />}>
             nav 1

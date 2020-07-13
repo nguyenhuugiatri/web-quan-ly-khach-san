@@ -1,0 +1,9 @@
+.ant-menu-horizontal {
+  & > .ant-menu-item-selected {
+    color: unset;
+    border-bottom-color: transparent;
+  }
+  & > .ant-menu-item {
+    border-bottom-color: transparent;
+  }
+}
