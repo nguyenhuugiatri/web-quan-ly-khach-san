@@ -1,7 +1,11 @@
 import React from 'react';
-
+import LoginPage from './containers/LoginPage';
 function App() {
-  return <div className='App'>Hello World !</div>;
+  return (
+    <>
+      <LoginPage />
+    </>
+  );
 }
 
 export default App;
