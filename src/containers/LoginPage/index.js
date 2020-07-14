@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Row, Col, Form, Input, Button, Checkbox, Typography } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
+import { login } from './actions';
 
 import 'antd/dist/antd.css';
 import './styles.scss';
@@ -20,9 +21,10 @@ class LoginPage extends Component {
 
   handleOnFinish = () => {
     const { remember } = this.state;
+    const { login } = this.props;
     if (remember) localStorage.setItem('savedUser', JSON.stringify(this.state));
     else localStorage.clear();
-    // this.props.login(this.state);
+    login(this.state);
   };
 
   handleOnChangeInput = (e) => {
@@ -119,13 +121,12 @@ class LoginPage extends Component {
   }
 }
 
-// const mapDispatchToProps = (dispatch) => {
-//   return {
-//     login: (user) => {
-//       dispatch(action.actLogin(user));
-//     },
-//   };
-// };
+const mapDispatchToProps = (dispatch) => {
+  return {
+    login: (user) => {
+      dispatch(login(user));
+    },
+  };
+};
 
-// export default connect(null, mapDispatchToProps)(Login);
-export default LoginPage;
+export default connect(null, mapDispatchToProps)(LoginPage);
