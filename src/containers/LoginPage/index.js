@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Row, Col, Form, Input, Button, Checkbox, Typography } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
-import { login } from './actions';
+import { login } from '../App/actions';
 
 import 'antd/dist/antd.css';
 import './styles.scss';

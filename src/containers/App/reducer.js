@@ -4,10 +4,9 @@ let initState = {
   currentUser: null,
 };
 
-const loginReducer = (state = initState, action) => {
+const appReducer = (state = initState, action) => {
   switch (action.type) {
     case UPDATE_CURRENT_USER:
-      console.log(action);
       state.currentUser = action.user;
       return { ...state };
 
@@ -16,4 +15,4 @@ const loginReducer = (state = initState, action) => {
   }
 };
 
-export default loginReducer;
+export default appReducer;
