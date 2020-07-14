@@ -4,6 +4,7 @@ import HomePage from './containers/HomePage';
 function App() {
   return (
     <>
+      <LoginPage />
       <HomePage />
     </>
   );
