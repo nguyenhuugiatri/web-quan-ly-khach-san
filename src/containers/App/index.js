@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import LoginPage from '../LoginPage';
+import Users from '../Users';
 import HomePage from '../HomePage';
 import { Router } from '@reach/router';
 import { connect } from 'react-redux';
@@ -18,6 +19,7 @@ class App extends Component {
       return (
         <Router>
           <HomePage path='/' />
+          <Users path='/users'/>
         </Router>
       );
     else
