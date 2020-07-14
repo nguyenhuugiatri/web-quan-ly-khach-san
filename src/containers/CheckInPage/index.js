@@ -1,14 +1,20 @@
 import React, { Component } from "react";
 import { Drawer, Table,Form, Button, Col, Row, Input, Select, DatePicker } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
-
+import { CHECKIN_PAGE } from '../../components/Sidebar/constants';
+import createPage from '../../components/createPage';
 import "antd/dist/antd.css";
 import "./styles.scss";
 
 const { Option } = Select;
 
 const { Column, ColumnGroup } = Table;
-
+const DescriptionItem = ({ title, content }) => (
+  <div className="site-description-item-profile-wrapper">
+    <p className="site-description-item-profile-p-label">{title}: {content}</p>
+    
+  </div>
+);
 class CheckIn extends Component {
   constructor(props) {
     super(props);
@@ -37,7 +43,7 @@ class CheckIn extends Component {
             <PlusOutlined /> New account
           </Button>
           <Drawer
-            title="Create a new account"
+            title="CHECK IN"
             width={720}
             onClose={this.onClose}
             visible={this.state.visible}
@@ -62,23 +68,21 @@ class CheckIn extends Component {
                 <Col span={12}>
                   <Form.Item
                     name="name"
-                    label="Name"
-                    rules={[{ required: true, message: 'Please enter user name' }]}
+                    label="Name of customer"
+                    rules={[{ required: true, message: 'Please enter name of customer' }]}
                   >
-                    <Input placeholder="Please enter user name" />
+                    <Input placeholder="Please enter name of customer" />
                   </Form.Item>
                 </Col>
                 <Col span={12}>
                   <Form.Item
-                    name="url"
-                    label="Url"
-                    rules={[{ required: true, message: 'Please enter url' }]}
+                    name="CMND"
+                    label="CMND"
+                    rules={[{ required: true, message: 'Please enter CMND' }]}
                   >
                     <Input
                       style={{ width: '100%' }}
-                      addonBefore="http://"
-                      addonAfter=".com"
-                      placeholder="Please enter url"
+                      placeholder="Please enter CMND"
                     />
                   </Form.Item>
                 </Col>
@@ -86,14 +90,11 @@ class CheckIn extends Component {
               <Row gutter={16}>
                 <Col span={12}>
                   <Form.Item
-                    name="owner"
-                    label="Owner"
-                    rules={[{ required: true, message: 'Please select an owner' }]}
+                    name="room "
+                    label="Room"
+                    rules={[{ required: true, message: 'Room' }]}
                   >
-                    <Select placeholder="Please select an owner">
-                      <Option value="xiao">Xiaoxiao Fu</Option>
-                      <Option value="mao">Maomao Zhou</Option>
-                    </Select>
+                    <Input className='inputCheckin' defaultValue='Phong 316' disabled   />
                   </Form.Item>
                 </Col>
                 <Col span={12}>
@@ -102,24 +103,20 @@ class CheckIn extends Component {
                     label="Type"
                     rules={[{ required: true, message: 'Please choose the type' }]}
                   >
-                    <Select placeholder="Please choose the type">
-                      <Option value="private">Private</Option>
-                      <Option value="public">Public</Option>
-                    </Select>
+                    
+                    <Input className='inputCheckin' defaultValue='Phong Vip' disabled   />
+                    
                   </Form.Item>
                 </Col>
               </Row>
               <Row gutter={16}>
                 <Col span={12}>
                   <Form.Item
-                    name="approver"
-                    label="Approver"
-                    rules={[{ required: true, message: 'Please choose the approver' }]}
+                    name="price"
+                    label="Price"
+                    rules={[{ required: true, message: 'Price' }]}
                   >
-                    <Select placeholder="Please choose the approver">
-                      <Option value="jack">Jack Ma</Option>
-                      <Option value="tom">Tom Liu</Option>
-                    </Select>
+                    <Input className='inputCheckin' defaultValue='500.000' disabled   />
                   </Form.Item>
                 </Col>
                 <Col span={12}>
@@ -157,5 +154,5 @@ class CheckIn extends Component {
       );
   }
 }
-
-export default CheckIn;
+const CheckInPage = createPage(CheckIn, CHECKIN_PAGE);
+export default CheckInPage;

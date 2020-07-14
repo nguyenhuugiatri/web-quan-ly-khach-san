@@ -30,7 +30,7 @@ class Sidebar extends Component {
             <Link to='/users'>Users</Link>
           </Menu.Item>
           <Menu.Item key='3' icon={<UploadOutlined />}>
-            Rooms
+          <Link to='/checkin'>Users</Link>
           </Menu.Item>
         </Menu>
       </Sider>

@@ -5,6 +5,7 @@ import RoomPage from '../RoomPage';
 import { Router } from '@reach/router';
 import { connect } from 'react-redux';
 import { updateCurrentUser } from './actions';
+import CheckInPage from '../CheckInPage';
 
 class App extends Component {
   componentDidMount = () => {
@@ -20,6 +21,7 @@ class App extends Component {
         <Router>
           <RoomPage path='/' />
           <UserListPage path='/users' />
+          <CheckInPage path='/checkin' />
         </Router>
       );
     else
