@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import LoginPage from '../LoginPage';
-import Users from '../Users';
-import HomePage from '../HomePage';
+import UserListPage from '../UserListPage';
+import RoomPage from '../RoomPage';
 import { Router } from '@reach/router';
 import { connect } from 'react-redux';
 import { updateCurrentUser } from './actions';
@@ -18,8 +18,8 @@ class App extends Component {
     if (currentUser)
       return (
         <Router>
-          <HomePage path='/' />
-          <Users path='/users' />
+          <RoomPage path='/' />
+          <UserListPage path='/users' />
         </Router>
       );
     else
