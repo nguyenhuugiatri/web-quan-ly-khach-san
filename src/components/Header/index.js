@@ -7,6 +7,8 @@ import {
   MenuFoldOutlined,
   LogoutOutlined,
 } from '@ant-design/icons';
+import { logout } from './../../containers/App/actions';
+import { connect } from 'react-redux';
 import './styles.scss';
 
 const { Header: HeaderAntd } = Layout;
@@ -40,5 +42,12 @@ class Header extends Component {
     );
   }
 }
+const mapDispatchToProps = (dispatch) => {
+  return {
+    handleLogout: () => {
+      dispatch(logout());
+    },
+  };
+};
 
-export default Header;
+export default connect(null, mapDispatchToProps)(Header);
