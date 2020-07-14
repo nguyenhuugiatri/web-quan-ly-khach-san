@@ -3,7 +3,7 @@ import Square from '../../components/Square';
 import axios from 'axios';
 import createPage from '../../components/createPage';
 import { BOOKING_PAGE } from '../../components/Sidebar/constants';
-import { Row } from 'antd';
+import { Row, Col } from 'antd';
 
 const URL = process.env.SERV_HOST || 'http://localhost:8000';
 class RoomList extends Component {
@@ -25,18 +25,16 @@ class RoomList extends Component {
   };
 
   renderListRoom = (list) => {
-    const rows = list.map((room) =>
-      React.createElement(Square, {
-        ...room,
-        key: room.id,
-        name: room.name.replace('Phòng ', ''),
-      })
-    );
-    return React.createElement(
-      Row,
-      { justify: 'start', align: 'middle' },
-      rows
-    );
+    const rows = list.map((room) => (
+      <Col style={{ padding: '15px' }} span={4}>
+        <Square
+          {...room}
+          key={room.id}
+          name={room.name.replace('Phòng ', '')}
+        />
+      </Col>
+    ));
+    return <Row align='middle'>{rows}</Row>;
   };
 
   componentDidMount = () => {
