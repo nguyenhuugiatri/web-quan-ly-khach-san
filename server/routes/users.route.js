@@ -30,4 +30,13 @@ router.post('/login', async (req, res, next) => {
   return res.status(200).json({ user, token, message: 'Login successful !' });
 });
 
+
+router.get('/list', async (req, res, next) => {
+  const listUser = await userModel.getAllUser();
+  if (listUser)
+  res.status(200).json({listUser,message: 'Successful'});
+  else
+  res.status(404).json({message:'Not found'});
+});
+
 module.exports = router;

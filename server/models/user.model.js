@@ -8,4 +8,9 @@ module.exports = {
     if (rows.length === 0) return null;
     return rows[0];
   },
+  getAllUser: async () => {
+    const rows = await db.find('user');
+    if (rows.length === 0) return null;
+    return rows;
+  },
 };
