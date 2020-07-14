@@ -1,8 +1,8 @@
 import { combineReducers } from 'redux';
-import loginReducer from './containers/LoginPage/reducer';
+import appReducer from './containers/App/reducer';
 
 const rootReducer = combineReducers({
-  login: loginReducer,
+  global: appReducer,
 });
 
 export default rootReducer;

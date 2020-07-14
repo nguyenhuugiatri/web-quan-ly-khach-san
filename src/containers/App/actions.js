@@ -1,6 +1,5 @@
 import axios from 'axios';
 import showNotification from '../../utils/showNotification';
-// import { navigate } from '@reach/router';
 import { STATUS } from '../../utils/constants';
 import { UPDATE_CURRENT_USER } from './constants';
 
@@ -34,5 +33,12 @@ export const login = (user) => {
           showNotification(STATUS.ERROR, message);
         }
       });
+  };
+};
+
+export const logout = () => {
+  return (dispatch) => {
+    localStorage.removeItem('loggedInUser');
+    dispatch(updateCurrentUser(null));
   };
 };

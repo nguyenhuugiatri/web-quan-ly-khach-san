@@ -4,7 +4,7 @@ import Users from '../Users';
 import HomePage from '../HomePage';
 import { Router } from '@reach/router';
 import { connect } from 'react-redux';
-import { updateCurrentUser } from '../LoginPage/actions';
+import { updateCurrentUser } from './actions';
 
 class App extends Component {
   componentDidMount = () => {
@@ -19,7 +19,7 @@ class App extends Component {
       return (
         <Router>
           <HomePage path='/' />
-          <Users path='/users'/>
+          <Users path='/users' />
         </Router>
       );
     else
@@ -33,7 +33,7 @@ class App extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    currentUser: state.login.currentUser,
+    currentUser: state.global.currentUser,
   };
 };
 
