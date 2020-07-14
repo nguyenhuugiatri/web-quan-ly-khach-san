@@ -1,49 +1,45 @@
 import React, { Component } from "react";
 import { Table, Input, Button, Space } from 'antd';
 import Highlighter from "react-highlight-words";
-import { SearchOutlined } from '@ant-design/icons';
+import { SearchOutlined , UserAddOutlined} from '@ant-design/icons';
+import axios from "axios";
 import "antd/dist/antd.css";
 import "./styles.scss";
 
 
 
 const { Column, ColumnGroup } = Table;
-
-const data = [
-    {
-      key: '1',
-      name: 'John Brown',
-      age: 32,
-      address: 'New York No. 1 Lake Park',
-    },
-    {
-      key: '2',
-      name: 'Joe Black',
-      age: 42,
-      address: 'London No. 1 Lake Park',
-    },
-    {
-      key: '3',
-      name: 'Jim Green',
-      age: 32,
-      address: 'Sidney No. 1 Lake Park',
-    },
-    {
-      key: '4',
-      name: 'Jim Red',
-      age: 32,
-      address: 'London No. 2 Lake Park',
-    },
-  ];
-
 class Users extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      list: data,
+      list: [],
       searchText: '',
       searchedColumn: '',
     };
+  }
+  getList = () => {
+    axios
+      .get(`http://localhost:8000/users/list`)
+      .then((res) => {
+        const listGet = res.data.listUser;
+        for (let i=0;i<listGet.length;i++){
+          listGet[i].key=i+1;
+          if (listGet[i].permission == '0'){
+            listGet[i].permission = 'Nhân viên';
+          }
+          else
+          listGet[i].permission = 'Quản lý';
+        }
+        console.log(listGet);
+        this.setState({
+          list: listGet,
+        });
+      })
+      .catch((error) => console.log(error));
+  };
+  componentDidMount() {
+    this.getList();
   }
   getColumnSearchProps = dataIndex => ({
     filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
@@ -109,63 +105,53 @@ class Users extends Component {
   };
 
   render() {
-    // return (
-    //   <Table dataSource={data}>
-    //     <ColumnGroup title="Name">
-    //       <Column title="First Name" dataIndex="firstName" key="firstName" />
-    //       <Column title="Last Name" dataIndex="lastName" key="lastName" />
-    //     </ColumnGroup>
-    //     <Column title="Age" dataIndex="age" key="age" />
-    //     <Column title="Address" dataIndex="address" key="address" />
-    //     <Column
-    //       title="Tags"
-    //       dataIndex="tags"
-    //       key="tags"
-    //       render={(tags) => (
-    //         <>
-    //           {tags.map((tag) => (
-    //             <Tag color="blue" key={tag}>
-    //               {tag}
-    //             </Tag>
-    //           ))}
-    //         </>
-    //       )}
-    //     />
-    //     <Column
-    //       title="Action"
-    //       key="action"
-    //       render={(text, record) => (
-    //         <Space size="middle">
-    //           <a href='#'>Invite {record.lastName}</a>
-    //           <a href='#'>Delete</a>
-    //         </Space>
-    //       )}
-    //     />
-    //   </Table>
-    // );
     const columns = [
         {
-          title: 'Name',
-          dataIndex: 'name',
-          key: 'name',
+          title: 'Username',
+          dataIndex: 'username',
+          key: 'username',
           width: '30%',
-          ...this.getColumnSearchProps('name'),
+          ...this.getColumnSearchProps('username'), // 
         },
         {
-          title: 'Age',
-          dataIndex: 'age',
-          key: 'age',
+          title: 'Password',
+          dataIndex: 'password',
+          key: 'password',
           width: '20%',
-          ...this.getColumnSearchProps('age'),
+          ...this.getColumnSearchProps('password'),
         },
         {
-          title: 'Address',
-          dataIndex: 'address',
-          key: 'address',
-          ...this.getColumnSearchProps('address'),
+          title: 'Permission',
+          dataIndex: 'permission',
+          key: 'permission',
+          ...this.getColumnSearchProps('permission'),
+        },
+        {
+          title: 'Action',
+          key: 'operation',
+          fixed: 'right',
+          width: 100,
+        render: () => {
+          return (
+            <Space size="middle">
+            <a href='#'>Delete</a>
+            <a href='#'>Edit</a>
+            </Space>)},
         },
       ];
-      return <Table columns={columns} dataSource={data} />;
+      return (<div>
+
+        <Button 
+        icon = {<UserAddOutlined />}
+          type="primary"
+          style={{
+            marginBottom: 16,
+          }}
+        >
+          Add User
+        </Button>
+        <Table columns={columns} dataSource={this.state.list} bordered ></Table>
+        </div>);
   }
 }
 
