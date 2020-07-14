@@ -23,6 +23,8 @@ pool.on('connection', () => {
 const mysql_query = util.promisify(pool.query).bind(pool);
 
 module.exports = {
-  load: (sql) => mysql_query(sql),
-  find: (tableName) => mysql_query(`select * from ${tableName}`),
-};
+    load: sql => mysql_query(sql),
+    find: tableName => mysql_query(`select * from ${tableName}`),
+    findById: (tableName,id)=>mysql(`select * from ${tableName} where id = ${id}`),
+
+}
