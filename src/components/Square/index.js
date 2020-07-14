@@ -1,50 +1,81 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
+import { Card, Row, Col } from 'antd';
 import {
   SettingOutlined,
   EditOutlined,
   EllipsisOutlined,
-} from "@ant-design/icons";
-import "./styles.scss";
+  CheckCircleFilled,
+  ExclamationCircleFilled,
+  InfoCircleFilled,
+  ClockCircleFilled,
+} from '@ant-design/icons';
+import './styles.scss';
 
 export default class Square extends Component {
-  stringStatus(status) {
+  renderStatus(status) {
     switch (status) {
       case 0:
-        return "Vacant";
+        return (
+          <Row align='middle' style={{ color: '#237804' }}>
+            <CheckCircleFilled />
+            <span className='status'>Availabe</span>
+          </Row>
+        );
       case 1:
-        return "Cleaning in progress";
+        return (
+          <Row align='middle' style={{ color: '#cf1322' }}>
+            <ExclamationCircleFilled />
+            <span className='status'>Rent</span>
+          </Row>
+        );
       case 2:
-        return "Hour";
+        return (
+          <Row align='middle' style={{ color: '#096dd9' }}>
+            <InfoCircleFilled />
+            <span className='status'>Reserved</span>
+          </Row>
+        );
       case 3:
-        return "Day";
-      case 4:
-        return "Night";
+        return (
+          <Row align='middle' style={{ color: '#ad8b00' }}>
+            <ClockCircleFilled />
+            <span className='status'>Cleaning</span>
+          </Row>
+        );
       default:
-        return "Unknown";
+        return 'Unknown';
     }
   }
+
   render() {
     const { id, name, max_persons, status } = this.props;
     let type;
     if (max_persons % 2 >= 1) {
-      type = "Twin";
+      type = 'Twin';
     } else {
-      type = "Single";
+      type = 'Single';
     }
     return (
-      <div className="room-card" data-id={id}>
-        <div className="status-line">
-          <span></span>
-          <p>{this.stringStatus(status)}</p>
-          <div className="room-type">{type}</div>
-        </div>
-        <div className="room-number">{name}</div>
-        <div className="room-card-footer">
-          <SettingOutlined key="setting" />
-          <EditOutlined key="edit" />
-          <EllipsisOutlined key="ellipsis" />
-        </div>
-      </div>
+      <>
+        <Card
+          className='room-card'
+          data-id={id}
+          hoverable
+          actions={[
+            <SettingOutlined key='setting' />,
+            <EditOutlined key='edit' />,
+            <EllipsisOutlined key='ellipsis' />,
+          ]}
+        >
+          <>
+            <Row justify='space-between' align='middle' className='status-line'>
+              {this.renderStatus(status)}
+              <div className='room-type'>{type}</div>
+            </Row>
+            <div className='room-number'>{name}</div>
+          </>
+        </Card>
+      </>
     );
   }
 }
