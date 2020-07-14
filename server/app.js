@@ -6,6 +6,7 @@ const session = require('express-session');
 const morgan = require('morgan');
 
 const userRouter = require('./routes/users.route');
+const roomRouter = require('./routes/room.route');
 const PORT = process.env.PORT || 3002;
 const app = express();
 
@@ -34,6 +35,7 @@ app.use(
 );
 
 app.use('/users', userRouter);
+app.use('/room', roomRouter);
 
 app.listen(PORT, () => {
   console.log(`App is listening on port: ${PORT}`);
