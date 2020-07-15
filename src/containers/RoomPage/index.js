@@ -3,7 +3,7 @@ import Square from '../../components/Square';
 import axios from 'axios';
 import createPage from '../../components/createPage';
 import { BOOKING_PAGE } from '../../components/Sidebar/constants';
-import { Row, Col, Radio } from 'antd';
+import { Row, Col, Radio, Typography } from 'antd';
 
 const URL = process.env.SERV_HOST || 'http://localhost:8000';
 class RoomList extends Component {
@@ -40,7 +40,7 @@ class RoomList extends Component {
         />
       </Col>
     ));
-    return <Row align='middle'>{rows}</Row>;
+    return { list: <Row align='middle'>{rows}</Row>, total: rows.length };
   };
 
   handleOnChangeRadio = (e) => {
@@ -54,19 +54,29 @@ class RoomList extends Component {
     const { listRoom, filter } = this.state;
     return (
       <>
-        <Radio.Group
-          onChange={this.handleOnChangeRadio}
-          defaultValue={null}
-          buttonStyle='solid'
+        <Row
+          justify='space-between'
+          align='middle'
           style={{ marginBottom: '15px' }}
         >
-          <Radio.Button value={null}>All</Radio.Button>
-          <Radio.Button value={0}>Available</Radio.Button>
-          <Radio.Button value={1}>Rent</Radio.Button>
-          <Radio.Button value={2}>Reserved</Radio.Button>
-          <Radio.Button value={3}>Cleaning</Radio.Button>
-        </Radio.Group>
-        {this.renderListRoom(listRoom, filter)}
+          <Radio.Group
+            onChange={this.handleOnChangeRadio}
+            defaultValue={null}
+            buttonStyle='solid'
+          >
+            <Radio.Button value={null}>All</Radio.Button>
+            <Radio.Button value={0}>Available</Radio.Button>
+            <Radio.Button value={1}>Rent</Radio.Button>
+            <Radio.Button value={2}>Reserved</Radio.Button>
+            <Radio.Button value={3}>Cleaning</Radio.Button>
+          </Radio.Group>
+          <Col style={{ minWidth: '60px' }}>
+            <Typography.Text>
+              Total: {this.renderListRoom(listRoom, filter).total}
+            </Typography.Text>
+          </Col>
+        </Row>
+        {this.renderListRoom(listRoom, filter).list}
       </>
     );
   }
