@@ -1,35 +1,25 @@
 import React, { Component } from 'react';
 import Square from '../../components/Square';
-import axios from 'axios';
 import createPage from '../../components/createPage';
 import { BOOKING_PAGE } from '../../components/Sidebar/constants';
 import { Row, Col, Radio, Typography } from 'antd';
+import { connect } from 'react-redux';
+import { gerListRoomAPI } from './actions';
 
-const URL = process.env.SERV_HOST || 'http://localhost:8000';
 class RoomList extends Component {
   constructor(props) {
     super(props);
     this.state = {
       filter: null,
-      listRoom: [],
     };
   }
 
-  updateRoom = () => {
-    axios.get(`${URL}/room`).then((res) => {
-      if (res) {
-        this.setState({
-          listRoom: res.data,
-        });
-      }
-    });
-  };
-
   componentDidMount = () => {
-    this.updateRoom();
+    this.props.getListRoom();
   };
 
   renderListRoom = (list, filter) => {
+    if (!list) return { list: null, total: null };
     if (filter !== null) list = list.filter((room) => room.status === filter);
     const rows = list.map((room) => (
       <Col key={room.id} style={{ padding: '15px' }} span={4}>
@@ -51,7 +41,9 @@ class RoomList extends Component {
   };
 
   render() {
-    const { listRoom, filter } = this.state;
+    const { filter } = this.state;
+    const { listRoom } = this.props;
+    const { list, total } = this.renderListRoom(listRoom, filter);
     return (
       <>
         <Row
@@ -71,16 +63,30 @@ class RoomList extends Component {
             <Radio.Button value={3}>Cleaning</Radio.Button>
           </Radio.Group>
           <Col style={{ minWidth: '60px' }}>
-            <Typography.Text>
-              Total: {this.renderListRoom(listRoom, filter).total}
-            </Typography.Text>
+            <Typography.Text>Total: {total}</Typography.Text>
           </Col>
         </Row>
-        {this.renderListRoom(listRoom, filter).list}
+        {list}
       </>
     );
   }
 }
 
-const RoomPage = createPage(RoomList, BOOKING_PAGE);
+const mapStateToProps = (state) => {
+  return {
+    listRoom: state.room.listRoom,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    getListRoom: () => {
+      dispatch(gerListRoomAPI());
+    },
+  };
+};
+
+const RoomListConnect = connect(mapStateToProps, mapDispatchToProps)(RoomList);
+
+const RoomPage = createPage(RoomListConnect, BOOKING_PAGE);
 export default RoomPage;
