@@ -160,47 +160,42 @@ class RoomList extends Component {
             <Row gutter={16}>
               <Col span={12}>
                 <Form.Item
-                  name="room "
+                  // name="room "
                   label="Room"
-                  rules={[{ required: true, message: "Room" }]}
                 >
-                  <p>{this.state.currentRoom.name}</p>
-                  {/* <Input
+                  <Input
                     className="inputCheckin"
-                   value='22222'
-                  /> */}
+                   value={this.state.currentRoom.name}
+                   disabled
+                  />
                 </Form.Item>
               </Col>
               <Col span={12}>
                 <Form.Item
-                  name="type"
+                  // name="type"
                   label="Type"
-                  rules={[
-                    { required: true, message: "Please choose the type" },
-                  ]}
                 >
-                  <p >{this.state.currentRoom.typename}</p>
-                  {/* <Input
+                  <Input
                     className="inputCheckin"
-                    defaultValue="Phong Vip"
+                    value={this.state.currentRoom.typename}
                     disabled
-                  /> */}
+                  />
                 </Form.Item>
               </Col>
             </Row>
             <Row gutter={16}>
               <Col span={12}>
                 <Form.Item
-                  name="price"
+                  // name="price"
                   label="Price"
                   rules={[{ required: true, message: "Price" }]}
                 >
-                  <p>{this.state.currentRoom.price}</p>
-                  {/* <Input
+                  
+                  <Input
                     className="inputCheckin"
-                    defaultValue="500.000"
+                    value={this.state.currentRoom.price}
                     disabled
-                  /> */}
+                  />
                 </Form.Item>
               </Col>
               <Col span={12}>
