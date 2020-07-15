@@ -1,32 +1,28 @@
 import React, { Component } from 'react';
 import Square from '../../components/Square';
-import axios from 'axios';
 import createPage from '../../components/createPage';
 import { BOOKING_PAGE } from '../../components/Sidebar/constants';
-import { Row, Col } from 'antd';
+import { Row, Col, Radio, Typography } from 'antd';
+import { connect } from 'react-redux';
+import { gerListRoomAPI } from './actions';
 
-const URL = process.env.SERV_HOST || 'http://localhost:8000';
 class RoomList extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      listRoom: [],
+      filter: null,
     };
   }
 
-  updateRoom = () => {
-    axios.get(`${URL}/room`).then((res) => {
-      if (res) {
-        this.setState({
-          listRoom: res.data,
-        });
-      }
-    });
+  componentDidMount = () => {
+    this.props.getListRoom();
   };
 
-  renderListRoom = (list) => {
+  renderListRoom = (list, filter) => {
+    if (!list) return { list: null, total: null };
+    if (filter !== null) list = list.filter((room) => room.status === filter);
     const rows = list.map((room) => (
-      <Col style={{ padding: '15px' }} span={4}>
+      <Col key={room.id} style={{ padding: '15px' }} span={4}>
         <Square
           {...room}
           key={room.id}
@@ -34,18 +30,63 @@ class RoomList extends Component {
         />
       </Col>
     ));
-    return <Row align='middle'>{rows}</Row>;
+    return { list: <Row align='middle'>{rows}</Row>, total: rows.length };
   };
 
-  componentDidMount = () => {
-    this.updateRoom();
+  handleOnChangeRadio = (e) => {
+    const { value } = e.target;
+    this.setState({
+      filter: value,
+    });
   };
 
   render() {
-    const { listRoom } = this.state;
-    return <div>{this.renderListRoom(listRoom)}</div>;
+    const { filter } = this.state;
+    const { listRoom } = this.props;
+    const { list, total } = this.renderListRoom(listRoom, filter);
+    return (
+      <>
+        <Row
+          justify='space-between'
+          align='middle'
+          style={{ marginBottom: '15px' }}
+        >
+          <Radio.Group
+            onChange={this.handleOnChangeRadio}
+            defaultValue={null}
+            buttonStyle='solid'
+          >
+            <Radio.Button value={null}>All</Radio.Button>
+            <Radio.Button value={0}>Available</Radio.Button>
+            <Radio.Button value={1}>Rent</Radio.Button>
+            <Radio.Button value={2}>Reserved</Radio.Button>
+            <Radio.Button value={3}>Cleaning</Radio.Button>
+          </Radio.Group>
+          <Col style={{ minWidth: '60px' }}>
+            <Typography.Text>Total: {total}</Typography.Text>
+          </Col>
+        </Row>
+        {list}
+      </>
+    );
   }
 }
 
-const RoomPage = createPage(RoomList, BOOKING_PAGE);
+const mapStateToProps = (state) => {
+  return {
+    listRoom: state.room.listRoom,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    getListRoom: () => {
+      dispatch(gerListRoomAPI());
+    },
+  };
+};
+
+const RoomListConnect = connect(mapStateToProps, mapDispatchToProps)(RoomList);
+
+const RoomPage = createPage(RoomListConnect, BOOKING_PAGE);
 export default RoomPage;
