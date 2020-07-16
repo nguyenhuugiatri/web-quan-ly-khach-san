@@ -1,1 +1,10 @@
 export const GET_LIST_ROOM = 'GET_LIST_ROOM';
+export const UPDATE_CHECK_IN_CUSTOMER = 'UPDATE_CHECK_IN_CUSTOMER';
+export const UPDATE_CHECK_IN_ROOM = 'UPDATE_CHECK_IN_ROOM';
+
+export const STATUS = {
+  AVAILABLE: 0,
+  RENT: 1,
+  RESERVED: 2,
+  CLEANING: 3,
+};

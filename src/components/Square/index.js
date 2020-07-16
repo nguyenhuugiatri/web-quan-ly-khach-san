@@ -48,7 +48,7 @@ export default class Square extends Component {
   }
 
   render() {
-    const { id, name, max_persons, status } = this.props;
+    const { id, name, max_persons, status,handleOnClick,roomCurrent } = this.props;
     let type;
     if (max_persons % 2 >= 1) {
       type = 'Twin';
@@ -60,6 +60,7 @@ export default class Square extends Component {
         <Card
           className='room-card'
           data-id={id}
+          onClick={()=>handleOnClick(roomCurrent)}
           hoverable
           actions={[
             <SettingOutlined key='setting' />,
