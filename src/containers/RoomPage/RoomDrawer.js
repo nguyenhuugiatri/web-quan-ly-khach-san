@@ -25,7 +25,7 @@ class RoomDrawer extends Component {
   };
 
   render() {
-    const { visible, checkInRoom, checkInCustomer } = this.props;
+    const { visible, checkInRoom, checkInCustomer,currentUser } = this.props;
     const { status } = checkInRoom;
     return (
       <Drawer
@@ -51,7 +51,7 @@ class RoomDrawer extends Component {
             </Button>
             {status !== CLEANING && (
               <Button
-                onClick={checkInAPI({ checkInCustomer, checkInRoom })}
+                onClick={checkInAPI({ checkInCustomer, checkInRoom,currentUser })}
                 type='primary'
               >
                 {status === RENT ? 'Check out' : 'Check in'}
@@ -82,6 +82,7 @@ const mapStateToProps = (state) => {
   return {
     checkInRoom: state.room.checkInRoom,
     checkInCustomer: state.room.checkInCustomer,
+    currentUser:state.global.currentUser,
   };
 };
 
