@@ -1,5 +1,12 @@
-.inputCheckin:disabled{
-    background-color: transparent;
-    font-weight: normal;
-    color: black;
+.list-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  .filter-room {
+    margin-bottom: 15px;
+  }
+  .list-room {
+    flex: 1;
+    overflow: auto;
+  }
 }

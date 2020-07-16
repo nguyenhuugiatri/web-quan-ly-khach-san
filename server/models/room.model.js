@@ -1,4 +1,4 @@
-const query = require('../database/database');
+const query = require('../database/');
 const tableName = 'room';
 module.exports = {
   find: () =>
