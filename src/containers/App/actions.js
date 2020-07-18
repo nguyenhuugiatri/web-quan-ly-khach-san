@@ -16,7 +16,7 @@ export const login = (user) => {
   return (dispatch) => {
     axios({
       method: 'POST',
-      url: `${URL}/users/login`,
+      url: `${URL}/user/login`,
       data: user,
     })
       .then((result) => {

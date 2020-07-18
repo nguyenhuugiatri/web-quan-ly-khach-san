@@ -31,18 +31,28 @@ class FormCheckIn extends Component {
     if (typeof value === 'number')
       updateCheckInRoom({ ...checkInRoom, price: value });
     else updateCheckInRoom({ ...checkInRoom, date: value });
-    console.log(value);
   };
 
   handleOnChangeSelect = (value) => {
     const { updateCheckInCustomer, checkInCustomer } = this.props;
-    updateCheckInCustomer({ ...checkInCustomer, idtype: value });
+    updateCheckInCustomer({ ...checkInCustomer, idType: value });
   };
 
   render() {
-    const { searchCustomerByPhone, checkInCustomer, checkInRoom } = this.props;
-    const { cmnd, name: cusName, idtype, phone } = checkInCustomer;
-    const { name, typename, price } = checkInRoom;
+    const {
+      searchCustomerByPhone,
+      checkInCustomer,
+      checkInRoom,
+      listCustomerType,
+    } = this.props;
+    const {
+      idNumber,
+      name: cusName,
+      idType,
+      phone,
+      typeName: cusTypeName,
+    } = checkInCustomer;
+    const { name, typeName, price } = checkInRoom;
     return (
       <Form layout='vertical' hideRequiredMark>
         <Row gutter={16}>
@@ -50,7 +60,7 @@ class FormCheckIn extends Component {
             <Form.Item label='Name'>
               <Input
                 name='cusName'
-                value={cusName}
+                value={cusName || ''}
                 placeholder="Input customer's name"
                 onChange={this.handleOnChangeInputCustomer}
               />
@@ -59,8 +69,8 @@ class FormCheckIn extends Component {
           <Col span={12}>
             <Form.Item label='ID Number'>
               <Input
-                name='cmnd'
-                value={cmnd}
+                name='idNumber'
+                value={idNumber || ''}
                 placeholder="Input customer's ID number"
                 onChange={this.handleOnChangeInputCustomer}
               />
@@ -71,20 +81,23 @@ class FormCheckIn extends Component {
           <Col span={12}>
             <Form.Item label='Customer Type'>
               <Select
-                name='idtype'
+                name='idType'
                 placeholder='Select customer type'
-                value={idtype}
+                value={idType || null}
                 onChange={this.handleOnChangeSelect}
               >
-                <Select.Option value={1}>Local</Select.Option>
-                <Select.Option value={2}>Foreign</Select.Option>
+                {listCustomerType.map((item) => (
+                  <Select.Option key={item.id} value={item.id}>
+                    {item.name}
+                  </Select.Option>
+                ))}
               </Select>
             </Form.Item>
           </Col>
           <Col span={12}>
             <Form.Item label='Phone Number'>
               <Input.Search
-                value={phone}
+                value={phone || ''}
                 name='phone'
                 placeholder="Input customer's phone number"
                 onSearch={searchCustomerByPhone}
@@ -97,12 +110,12 @@ class FormCheckIn extends Component {
         <Row gutter={16}>
           <Col span={12}>
             <Form.Item label='Room'>
-              <Input name='name' value={name} disabled />
+              <Input name='name' value={name || ''} disabled />
             </Form.Item>
           </Col>
           <Col span={12}>
             <Form.Item label='Type'>
-              <Input name='type' value={typename} disabled />
+              <Input name='type' value={typeName || ''} disabled />
             </Form.Item>
           </Col>
         </Row>
@@ -112,7 +125,7 @@ class FormCheckIn extends Component {
               <InputNumber
                 style={{ width: '100%' }}
                 name='price'
-                value={price}
+                value={price || 0}
                 formatter={(value) =>
                   `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
                 }
@@ -140,6 +153,7 @@ const mapStateToProps = (state) => {
   return {
     checkInCustomer: state.room.checkInCustomer,
     checkInRoom: state.room.checkInRoom,
+    listCustomerType: state.room.listCustomerType,
   };
 };
 

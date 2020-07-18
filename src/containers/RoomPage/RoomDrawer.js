@@ -7,6 +7,7 @@ import {
   updateCheckInCustomer,
   updateCheckInRoom,
   checkInAPI,
+  getListCustomerTypeAPI,
 } from './actions';
 import './styles.scss';
 
@@ -24,8 +25,12 @@ class RoomDrawer extends Component {
     deleteCheckInRoom();
   };
 
+  componentDidMount = () => {
+    this.props.getListCustomerType();
+  };
+
   render() {
-    const { visible, checkInRoom, checkInCustomer,currentUser } = this.props;
+    const { visible, checkInRoom, checkInCustomer, currentUser } = this.props;
     const { status } = checkInRoom;
     return (
       <Drawer
@@ -51,7 +56,11 @@ class RoomDrawer extends Component {
             </Button>
             {status !== CLEANING && (
               <Button
-                onClick={checkInAPI({ checkInCustomer, checkInRoom,currentUser })}
+                onClick={checkInAPI({
+                  checkInCustomer,
+                  checkInRoom,
+                  currentUser,
+                })}
                 type='primary'
               >
                 {status === RENT ? 'Check out' : 'Check in'}
@@ -82,7 +91,7 @@ const mapStateToProps = (state) => {
   return {
     checkInRoom: state.room.checkInRoom,
     checkInCustomer: state.room.checkInCustomer,
-    currentUser:state.global.currentUser,
+    currentUser: state.global.currentUser,
   };
 };
 
@@ -93,6 +102,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     deleteCheckInRoom: () => {
       dispatch(updateCheckInRoom({}));
+    },
+    getListCustomerType: () => {
+      dispatch(getListCustomerTypeAPI());
     },
   };
 };
