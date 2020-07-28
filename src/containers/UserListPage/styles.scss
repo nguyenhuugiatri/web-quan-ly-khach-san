@@ -1,0 +1,14 @@
+.control-icon{
+    font-size: 18px;
+    transition: all ease-in 0.15s;
+    &:hover{
+        transform: scale(1.2);
+    }
+    &:active{
+        transform: scale(0.9);
+    }
+}
+.header-table{
+    display: flex;
+    justify-content: space-between;
+}
