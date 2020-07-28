@@ -5,7 +5,7 @@ const bodyParser = require('body-parser');
 const session = require('express-session');
 const morgan = require('morgan');
 
-const userRouter = require('./routes/users.route');
+const userRouter = require('./routes/user.route');
 const roomRouter = require('./routes/room.route');
 const customerRouter = require('./routes/customer.route');
 const PORT = process.env.PORT || 3002;
@@ -35,7 +35,7 @@ app.use(
   })
 );
 
-app.use('/users', userRouter);
+app.use('/user', userRouter);
 app.use('/room', roomRouter);
 app.use('/customer', customerRouter);
 

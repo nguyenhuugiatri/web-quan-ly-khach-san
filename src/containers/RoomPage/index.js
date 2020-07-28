@@ -6,13 +6,14 @@ import { getListRoomAPI, updateCheckInRoom } from './actions';
 import Square from '../../components/Square';
 import { Col, Row, Radio, Typography } from 'antd';
 import RoomDrawer from './RoomDrawer.js';
+import { STATUS } from './constants';
 import './styles.scss';
 
 class RoomList extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      filter: null,
+      filter: 0,
       visible: false,
     };
   }
@@ -35,7 +36,7 @@ class RoomList extends Component {
 
   renderListRoom = (list, filter) => {
     if (!list) return { list: null, total: null };
-    if (filter !== null) list = list.filter((room) => room.status === filter);
+    if (filter !== 0) list = list.filter((room) => room.status === filter);
     list = list.sort((a, b) => a.id - b.id);
 
     const rows = list.map((room) => (
@@ -43,7 +44,7 @@ class RoomList extends Component {
         <Square
           {...room}
           key={room.id}
-          name={room.name.replace('Phòng ', '')}
+          name={room.name.replace('Room ', '')}
           handleOnClick={() => {
             this.props.updateCheckInRoom(room);
             this.showDrawer();
@@ -74,14 +75,14 @@ class RoomList extends Component {
           <Row className='filter-room' justify='space-between' align='middle'>
             <Radio.Group
               onChange={this.handleOnChangeRadio}
-              defaultValue={null}
+              defaultValue={0}
               buttonStyle='solid'
             >
-              <Radio.Button value={null}>All</Radio.Button>
-              <Radio.Button value={0}>Available</Radio.Button>
-              <Radio.Button value={1}>Rent</Radio.Button>
-              <Radio.Button value={2}>Reserved</Radio.Button>
-              <Radio.Button value={3}>Cleaning</Radio.Button>
+              <Radio.Button value={0}>All</Radio.Button>
+              <Radio.Button value={STATUS.AVAILABLE}>Available</Radio.Button>
+              <Radio.Button value={STATUS.RENT}>Rent</Radio.Button>
+              <Radio.Button value={STATUS.RESERVED}>Reserved</Radio.Button>
+              <Radio.Button value={STATUS.CLEANING}>Cleaning</Radio.Button>
             </Radio.Group>
             <Col style={{ minWidth: '60px' }}>
               <Typography.Text>Total: {total}</Typography.Text>

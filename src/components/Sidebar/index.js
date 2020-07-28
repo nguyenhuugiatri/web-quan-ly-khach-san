@@ -29,9 +29,6 @@ class Sidebar extends Component {
           <Menu.Item key={PAGE.USER_PAGE} icon={<VideoCameraOutlined />}>
             <Link to='/users'>Users</Link>
           </Menu.Item>
-          <Menu.Item key='3' icon={<UploadOutlined />}>
-          <Link to='/checkin'>Users</Link>
-          </Menu.Item>
         </Menu>
       </Sider>
     );

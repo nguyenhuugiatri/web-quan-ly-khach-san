@@ -9,33 +9,34 @@ import {
   InfoCircleFilled,
   ClockCircleFilled,
 } from '@ant-design/icons';
+import { STATUS } from '../../containers/RoomPage/constants';
 import './styles.scss';
 
 export default class Square extends Component {
-  renderStatus(status) {
+  renderStatus = (status) => {
     switch (status) {
-      case 0:
+      case STATUS.AVAILABLE:
         return (
           <Row align='middle' style={{ color: '#237804' }}>
             <CheckCircleFilled />
             <span className='status'>Availabe</span>
           </Row>
         );
-      case 1:
+      case STATUS.RENT:
         return (
           <Row align='middle' style={{ color: '#cf1322' }}>
             <ExclamationCircleFilled />
             <span className='status'>Rent</span>
           </Row>
         );
-      case 2:
+      case STATUS.RESERVED:
         return (
           <Row align='middle' style={{ color: '#096dd9' }}>
             <InfoCircleFilled />
             <span className='status'>Reserved</span>
           </Row>
         );
-      case 3:
+      case STATUS.CLEANING:
         return (
           <Row align='middle' style={{ color: '#ad8b00' }}>
             <ClockCircleFilled />
@@ -45,22 +46,24 @@ export default class Square extends Component {
       default:
         return 'Unknown';
     }
-  }
+  };
 
   render() {
-    const { id, name, max_persons, status,handleOnClick,roomCurrent } = this.props;
-    let type;
-    if (max_persons % 2 >= 1) {
-      type = 'Twin';
-    } else {
-      type = 'Single';
-    }
+    const {
+      id,
+      name,
+      status,
+      typeName,
+      handleOnClick,
+      roomCurrent,
+    } = this.props;
+
     return (
       <>
         <Card
           className='room-card'
           data-id={id}
-          onClick={()=>handleOnClick(roomCurrent)}
+          onClick={() => handleOnClick(roomCurrent)}
           hoverable
           actions={[
             <SettingOutlined key='setting' />,
@@ -71,7 +74,7 @@ export default class Square extends Component {
           <>
             <Row justify='space-between' align='middle' className='status-line'>
               {this.renderStatus(status)}
-              <div className='room-type'>{type}</div>
+              <div className='room-type'>{typeName}</div>
             </Row>
             <div className='room-number'>{name}</div>
           </>
