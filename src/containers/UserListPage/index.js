@@ -1,44 +1,28 @@
-import React, { Component } from "react";
-import {
-  Table,
-  Input,
-  Button,
-  Space,
-  Form,
-  Select,
-  Tag,
-  message,
-  Pagination,
-  Popconfirm,
-} from "antd";
-import Highlighter from "react-highlight-words";
-import {
-  SearchOutlined,
-  UserAddOutlined,
-  DeleteOutlined,
-  EditOutlined,
-  SaveOutlined,
-  CloseCircleOutlined,
-} from "@ant-design/icons";
-import createPage from "../../components/createPage";
-import axios from "axios";
-import "antd/dist/antd.css";
-import "./styles.scss";
-import { USER_PAGE } from "../../components/Sidebar/constants";
-const URL = process.env.SERV_HOST || "http://localhost:8000";
+import React, { Component } from 'react';
+import { Button, message, Pagination } from 'antd';
+import DrawerUser from '../../components/DrawerUser';
+import TableUser from '../../components/TableUser';
+import { UserAddOutlined } from '@ant-design/icons';
+import createPage from '../../components/createPage';
+import axios from 'axios';
+import 'antd/dist/antd.css';
+import './styles.scss';
+import { USER_PAGE } from '../../components/Sidebar/constants';
+const URL = process.env.SERV_HOST || 'http://localhost:8000';
 
 class UserList extends Component {
   constructor(props) {
     super(props);
     this.state = {
       list: [],
-      searchText: "",
+      searchText: '',
       disable: false,
-      searchedColumn: "",
-      isediting: "",
+      isediting: '',
       currentPage: 1,
       formRef: React.createRef(),
       loading: false,
+      visible: false,
+      formInsert: React.createRef(),
     };
   }
 
@@ -58,106 +42,23 @@ class UserList extends Component {
     this.getList();
   }
 
-  getColumnSearchProps = (dataIndex) => ({
-    filterDropdown: ({
-      setSelectedKeys,
-      selectedKeys,
-      confirm,
-      clearFilters,
-    }) => {
-      let inputNode = (
-        <Input
-          ref={(node) => {
-            this.searchInput = node;
-          }}
-          placeholder={`Search ${dataIndex}`}
-          value={selectedKeys[0]}
-          onChange={(e) =>
-            setSelectedKeys(e.target.value ? [e.target.value] : [])
-          }
-          onPressEnter={() =>
-            this.handleSearch(selectedKeys, confirm, dataIndex)
-          }
-          style={{ width: 188, marginBottom: 8, display: "block" }}
-        />
-      );
-      return (
-        <div style={{ padding: 8 }}>
-          {inputNode}
-          <Space>
-            <Button
-              type="primary"
-              onClick={() =>
-                this.handleSearch(selectedKeys, confirm, dataIndex)
-              }
-              icon={<SearchOutlined />}
-              size="small"
-              style={{ width: 90 }}
-            >
-              Search
-            </Button>
-            <Button
-              onClick={() => this.handleReset(clearFilters)}
-              size="small"
-              style={{ width: 90 }}
-            >
-              Reset
-            </Button>
-          </Space>
-        </div>
-      );
-    },
-    filterIcon: (filtered) => (
-      <SearchOutlined style={{ color: filtered ? "#1890ff" : undefined }} />
-    ),
-    onFilter: (value, record) =>
-      record[dataIndex]
-        ? record[dataIndex]
-            .toString()
-            .toLowerCase()
-            .includes(value.toLowerCase())
-        : "",
-    onFilterDropdownVisibleChange: (visible) => {
-      if (visible) {
-        setTimeout(() => this.searchInput.select());
-      }
-    },
-    render: (text) =>
-      this.state.searchedColumn === dataIndex ? (
-        <Highlighter
-          highlightStyle={{ backgroundColor: "#ffc069", padding: 0 }}
-          searchWords={[this.state.searchText]}
-          autoEscape
-          textToHighlight={text ? text.toString() : ""}
-        />
-      ) : (
-        text
-      ),
-  });
-
-  handleSearch = (selectedKeys, confirm, dataIndex) => {
-    confirm();
-    this.setState({
-      searchText: selectedKeys[0],
-      searchedColumn: dataIndex,
-    });
-  };
-
-  handleReset = (clearFilters) => {
-    clearFilters();
-    this.setState({ searchText: "" });
-  };
   isEditing = (record) => {
     return record.key === this.state.isediting;
+  };
+  cancelEdit = () => {
+    this.setState({
+      isediting: '',
+    });
   };
   handleEdit = (record) => {
     return () => {
       this.setState({
         isediting: record.key,
-        disable:false
+        disable: false,
       });
+
       this.state.formRef.current.setFieldsValue({
-        username:record.username
+        username: record.username,
       });
     };
   };
@@ -170,7 +71,7 @@ class UserList extends Component {
           if (res.status === 200) {
             message.success({
               top: 100,
-              content: "Reset password success",
+              content: 'Reset password success',
             });
             this.setState({ loading: false, disable: true });
           }
@@ -206,199 +107,53 @@ class UserList extends Component {
     return () => {
       let per;
       let form = this.state.formRef.current;
-      const {username,permission} = form.getFieldsValue('username permission');
-      if(permission==="Manager"){
+      const { username, permission } = form.getFieldsValue(
+        'username permission'
+      );
+      console.log(username);
+      if (permission === 'Manager') {
         per = 1;
-      }else{
+      } else {
         per = 0;
       }
-      axios.patch(`${URL}/user/update`,{id: record.id,username,permission:per}).then(res=>{
-        if(res.status===200){
-          message.success({
-            content:res.data.message,
-            top:100
-          })
-          this.getList();
-          this.setState({
-            isediting:"",
-          })
-        }else{
-          message.warning({
-            content:res.data.message,
-            top:100
-          })
-          this.setState({
-            isediting:"",
-          })
-        }
-      })
+      axios
+        .patch(`${URL}/user/update`, {
+          id: record.id,
+          username: username,
+          permission: per,
+        })
+        .then((res) => {
+          if (res.status === 200) {
+            message.success({
+              content: res.data.message,
+              top: 100,
+            });
+            this.getList();
+            this.setState({
+              isediting: '',
+            });
+          } else {
+            message.warning({
+              content: res.data.message,
+              top: 100,
+            });
+            this.setState({
+              isediting: '',
+            });
+          }
+        });
     };
   };
-  EditableCell = ({
-    title,
-    editable,
-    children,
-    dataIndex,
-    inputType,
-    record,
-    editing,
-    ...restProps
-  }) => {
-    let inputNode = <Input />;
-    if (inputType === 1) {
-      inputNode = (
-        <Button
-          type="primary"
-          loading={this.state.loading}
-          onClick={this.handleResetPassword(record)}
-          disabled={this.state.disable}
-        >
-          Reset password
-        </Button>
-      );
-    } else if (inputType === 2) {
-      inputNode = (
-        <Select defaultValue={record.permission}>
-          <Select.Option value="Manager" >Manager</Select.Option>
-          <Select.Option value="Reception">Receptionist</Select.Option>
-        </Select>
-      );
-    }
-    return (
-      <td {...restProps}>
-        {editing ? (
-          <Form.Item
-            name={dataIndex}
-            style={{
-              margin: 0,
-            }}
-            rules={[
-              {
-                required: true,
-                message: `Please Input ${title}!`,
-              },
-            ]}
-          >
-            {inputNode}
-          </Form.Item>
-        ) : (
-          children
-        )}
-      </td>
-    );
-  };
-  render() {
-    const columns = [
-      {
-        title: "Username",
-        dataIndex: "username",
-        key: "username",
-        width: "35%",
-        editable: true,
-        ...this.getColumnSearchProps("username"),
-      },
-      {
-        title: "Password",
-        dataIndex: "password",
-        editable: true,
-        key: "password",
-        width: "30%",
-      },
-      {
-        title: "Permission",
-        editable: true,
-        dataIndex: "permission",
-        key: "permission",
-        width: "30%",
-        className: "tag",
-        render: (permission) => {
-          let color = "#096DD9";
-          if (permission === "Receptionist") {
-            color = "#CF1322";
-          }
-          return <Tag color={color}>{permission}</Tag>;
-        },
-        filters: [
-          { text: "Receptionist", value: "Receptionist" },
-          { text: "Manager", value: "Manager" },
-        ],
-        onFilter: (value, record) => record.permission.indexOf(value) === 0,
-      },
-      {
-        title: "Action",
-        key: "operation",
-        fixed: "right",
-        width: "5%",
-        render: (_, record) => {
-          if (!this.isEditing(record)) {
-            return (
-              <Space size="middle">
-                <EditOutlined
-                  style={{ color: "#096DD9" }}
-                  onClick={this.handleEdit(record)}
-                  className="control-icon"
-                  placement="topLeft"
-                />
-                <Popconfirm
-                  title="Are you sure ?"
-                  onConfirm={this.handleDelete(record)}
-                >
-                  <DeleteOutlined
-                    style={{ color: "#CF1322" }}
-                    className="control-icon"
-                  />
-                </Popconfirm>
-              </Space>
-            );
-          } else {
-            return (
-              <Space size="middle">
-                <Popconfirm
-                  title="Are you sure save this?"
-                  onConfirm={this.handleSave(record)}
-                >
-                  <SaveOutlined
-                    style={{ color: "#096DD9" }}
-                    onClick={this.handleEdit(record)}
-                    className="control-icon"
-                  />
-                </Popconfirm>
-
-                <CloseCircleOutlined
-                  style={{ color: "#CF1322" }}
-                  onClick={() => {
-                    this.setState({ isediting: "" });
-                  }}
-                  className="control-icon"
-                />
-              </Space>
-            );
-          }
-        },
-      },
-    ];
-    const mergeColumn = columns.map((col) => {
-      if (!col.editable) {
-        return col;
+  submitAdd=()=>{
+    const fields = this.state.formInsert.current.getFieldsValue();
+    axios.post(`${URL}/user/insert`, fields).then((value) => {
+      if (value) {
+        message.success('Insert user success');
+        this.getList();
       }
-      return {
-        ...col,
-        onCell: (record) => ({
-          inputType:
-            col.dataIndex === "username"
-              ? 0
-              : col.dataIndex === "password"
-              ? 1
-              : 2,
-          record,
-          width: col.width,
-          dataIndex: col.dataIndex,
-          title: col.title,
-          editing: this.isEditing(record),
-        }),
-      };
     });
-
+  }
+  render() {
     return (
       <div>
         <div className="header-table">
@@ -408,9 +163,27 @@ class UserList extends Component {
             style={{
               marginBottom: 16,
             }}
+            onClick={() => {
+              this.setState({ visible: true });
+              let form = this.state.formInsert.current;
+              if (form !== null) {
+                form.resetFields();
+              }
+            }}
           >
             Add User
           </Button>
+          <DrawerUser
+            title="Add user"
+            visible={this.state.visible}
+            onClose={() => {
+              this.setState({ visible: false });
+            }}
+            userList={this.state.list}
+            form={this.state.formInsert}
+            onSubmit={this.submitAdd}
+            onSuccess={this.getList}
+          ></DrawerUser>
           <Pagination
             size="medium"
             defaultPageSize={9}
@@ -418,28 +191,25 @@ class UserList extends Component {
             defaultCurrent={1}
             total={this.state.list.length}
             onChange={(pageNumber) => {
-              this.setState({ currentPage: pageNumber, isediting: "" });
+              this.setState({ currentPage: pageNumber, isediting: '' });
             }}
           />
         </div>
 
-        <Form ref={this.state.formRef} component={false}>
-          <Table
-            components={{
-              body: {
-                cell: this.EditableCell,
-              },
-            }}
-            columns={mergeColumn}
-            dataSource={this.state.list}
-            pagination={{
-              pageSize: 9,
-              current: this.state.currentPage,
-              style: { display: "none" },
-            }}
-            bordered
-          ></Table>
-        </Form>
+        <TableUser
+          listUser={this.state.list}
+          formUser={this.state.formRef}
+          currentPage={this.state.currentPage}
+          idEditing={this.isEditing}
+          handleDelete={this.handleDelete}
+          handleEdit={this.handleEdit}
+          handleResetPassword={this.handleResetPassword}
+          handleSave={this.handleSave}
+          isediting={this.state.isediting}
+          cancelEdit={this.cancelEdit}
+          loading={this.state.loading}
+          disable={this.state.disable}
+        ></TableUser>
       </div>
     );
   }
