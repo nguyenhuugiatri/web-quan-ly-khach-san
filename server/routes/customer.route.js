@@ -1,6 +1,8 @@
 const router = require('express').Router();
 const customerModel = require('../models/customer.model');
 const rentReceiptModel = require('../models/rentReceipt.model');
+const serviceModel = require('../models/service.model');
+const roomModel = require('../models/room.model');
 const moment = require('moment');
 
 router.post('/getByPhone', async (req, res, next) => {
@@ -44,15 +46,21 @@ router.post('/checkIn', async (req, res, next) => {
   await rentReceiptModel.addRentReceipt({
     id: customer.id,
     idUser: currentUser.id,
+    price: checkInRoom.price,
     dateIn,
     dateOut,
   });
+  const rentReceiptCurrent = await rentReceiptModel.singleByCustomer(customer.id);
+  console.log(rentReceiptCurrent);
+  await serviceModel.addServiceReceipt();
+  const serviceReceipt = await serviceModel.getNewServiceReceipt();
 
-  const billRent = await rentReceiptModel.singleByCustomer(checkInCustomer.id);
   await rentReceiptModel.addRentReceiptDetail({
-    id: billRent.id,
+    id: rentReceiptCurrent.id,
     idRoom: checkInRoom.id,
+    idServiceReceipt: serviceReceipt.id
   });
+  await rentReceiptModel.setStatusToRent(checkInRoom.id);
 });
 
 module.exports = router;
