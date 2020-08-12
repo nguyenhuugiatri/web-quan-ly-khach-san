@@ -1,5 +1,7 @@
 const router = require('express').Router();
 const customerModel = require('../models/customer.model');
+const rentReceiptModel = require('../models/rentReceipt.model');
+const moment = require('moment');
 
 router.post('/getByPhone', async (req, res, next) => {
   const { phone } = req.body;
@@ -13,17 +15,44 @@ router.post('/getByPhone', async (req, res, next) => {
   return res.status(200).json({ customer, message: 'Successful !' });
 });
 
+router.get('/listType', async (req, res, next) => {
+  const listCustomerType = await customerModel.getCustomerType();
+
+  if (listCustomerType === null)
+    return res.status(404).json({
+      message: 'Not found',
+    });
+
+  return res.status(200).json({ listCustomerType, message: 'Successful !' });
+});
+
 router.post('/checkIn', async (req, res, next) => {
-  console.log(req.body);
-  // const { phone } = req.body;
-  // const customer = await customerModel.singleByPhone(phone);
+  const { checkInCustomer, checkInRoom, currentUser } = req.body;
+  const { phone } = checkInCustomer;
+  const { date } = checkInRoom;
 
-  // if (customer === null)
-  //   return res.status(404).json({
-  //     message: 'Not found',
-  //   });
+  const dateIn = moment(date[0]).format('YYYY-MM-DD hh:mm:ss');
+  const dateOut = moment(date[1]).format('YYYY-MM-DD hh:mm:ss');
 
-  // return res.status(200).json({ customer, message: 'Successful !' });
+  const checkExist = await customerModel.singleByPhone(phone);
+  if (checkExist === null) {
+    await customerModel.addCustomer(checkInCustomer);
+  } else {
+    await customerModel.updateCustomer(checkInCustomer);
+  }
+  const customer = await customerModel.singleByPhone(phone);
+  await rentReceiptModel.addRentReceipt({
+    id: customer.id,
+    idUser: currentUser.id,
+    dateIn,
+    dateOut,
+  });
+
+  const billRent = await rentReceiptModel.singleByCustomer(checkInCustomer.id);
+  await rentReceiptModel.addRentReceiptDetail({
+    id: billRent.id,
+    idRoom: checkInRoom.id,
+  });
 });
 
 module.exports = router;

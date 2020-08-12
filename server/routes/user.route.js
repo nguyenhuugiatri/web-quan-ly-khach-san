@@ -2,7 +2,7 @@ const router = require('express').Router();
 const requireToken = require('../middlewares/auth.mdw');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
-const userModel = require('./../models/user.model');
+const userModel = require('../models/user.model');
 
 router.post('/login', async (req, res, next) => {
   const { username, password } = req.body;
@@ -10,13 +10,13 @@ router.post('/login', async (req, res, next) => {
 
   if (user === null)
     return res.status(404).json({
-      message: 'Not found',
+      message: 'Not found !',
     });
 
   const rs = bcrypt.compareSync(password, user.password);
   if (!rs)
     return res.status(403).json({
-      message: 'Wrong password',
+      message: 'Wrong password !',
     });
 
   const token = jwt.sign({ user: username }, 'anhem1nha', {
@@ -30,13 +30,10 @@ router.post('/login', async (req, res, next) => {
   return res.status(200).json({ user, token, message: 'Login successful !' });
 });
 
-
 router.get('/list', async (req, res, next) => {
   const listUser = await userModel.getAllUser();
-  if (listUser)
-  res.status(200).json({listUser,message: 'Successful'});
-  else
-  res.status(404).json({message:'Not found'});
+  if (listUser) res.status(200).json({ listUser, message: 'Successful !' });
+  else res.status(404).json({ message: 'Not found !' });
 });
 
 module.exports = router;

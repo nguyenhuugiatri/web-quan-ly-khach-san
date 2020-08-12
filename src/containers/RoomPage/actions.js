@@ -3,6 +3,7 @@ import showNotification from '../../utils/showNotification';
 import { STATUS } from '../../utils/constants';
 import {
   GET_LIST_ROOM,
+  GET_LIST_CUSTOMER_TYPE,
   UPDATE_CHECK_IN_CUSTOMER,
   UPDATE_CHECK_IN_ROOM,
 } from './constants';
@@ -13,6 +14,13 @@ export const getListRoom = (listRoom) => {
   return {
     type: GET_LIST_ROOM,
     listRoom,
+  };
+};
+
+export const getCustomerType = (listCustomerType) => {
+  return {
+    type: GET_LIST_CUSTOMER_TYPE,
+    listCustomerType,
   };
 };
 
@@ -33,10 +41,29 @@ export const updateCheckInRoom = (room) => {
 export const getListRoomAPI = () => {
   return (dispatch) => {
     axios
-      .get(`${URL}/room`)
+      .get(`${URL}/room/list`)
       .then((res) => {
         if (res.data) {
           dispatch(getListRoom(res.data));
+        }
+      })
+      .catch((err) => {
+        if (err && err.response) {
+          const { message } = err.response.data;
+          showNotification(STATUS.ERROR, message);
+        }
+      });
+  };
+};
+
+export const getListCustomerTypeAPI = () => {
+  return (dispatch) => {
+    axios
+      .get(`${URL}/customer/listType`)
+      .then((res) => {
+        if (res.data) {
+          const { listCustomerType } = res.data;
+          dispatch(getCustomerType(listCustomerType));
         }
       })
       .catch((err) => {
