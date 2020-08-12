@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import FormCheckIn from './FormCheckIn';
+import FormCheckOut from './FormCheckOut';
 import { Drawer, Button, Result } from 'antd';
 import { STATUS } from './constants';
 import { connect } from 'react-redux';
@@ -81,7 +82,8 @@ class RoomDrawer extends Component {
             }
           />
         )) ||
-          (status === AVAILABLE && <FormCheckIn />) || <div>cc</div>}
+          (status === AVAILABLE && <FormCheckIn />) ||
+          (status === RENT && <FormCheckOut />)}
       </Drawer>
     );
   }

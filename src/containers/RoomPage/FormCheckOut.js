@@ -18,7 +18,7 @@ import {
 import moment from 'moment';
 import './styles.scss';
 
-class FormCheckIn extends Component {
+class FormCheckOut extends Component {
   handleOnChangeInputCustomer = (e) => {
     const { updateCheckInCustomer, checkInCustomer } = this.props;
     const { name: inputName, value } = e.target;
@@ -181,4 +181,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(FormCheckIn);
+export default connect(mapStateToProps, mapDispatchToProps)(FormCheckOut);
