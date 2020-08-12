@@ -31,9 +31,62 @@ router.post('/login', async (req, res, next) => {
 });
 
 router.get('/list', async (req, res, next) => {
-  const listUser = await userModel.getAllUser();
-  if (listUser) res.status(200).json({ listUser, message: 'Successful !' });
-  else res.status(404).json({ message: 'Not found !' });
+  let listUser = await userModel.getAllUser();
+  if (listUser !== null) {
+    listUser = listUser.map((user, i) => {
+      user.key = i;
+      if (user.permission === 0) {
+        user.permission = 'Receptionist';
+      } else if (user.permission === 1) {
+        user.permission = 'Manager';
+      }
+      user.password = '********';
+      return user;
+    });
+    if (listUser) return res.status(200).json({ listUser, message: 'Successful !' });
+    else return res.status(403).json({ message: 'Somethings went wrongs!' });
+  } else {
+    res.status(204).json({ message: 'No content' });
+  }
 });
 
+router.patch('/resetpassword', async (req, res) => {
+  const salt = bcrypt.genSaltSync(10);
+  const newPassword = bcrypt.hashSync('password123', salt);
+  await userModel.resetPassword(req.body.id, newPassword).then((result) => {
+    if (!result) return res.status(404).json({ message: 'Somethings wrongs!' });
+    res.status(200).json({ message: 'Reset password success!' });
+  });
+});
+router.patch('/delete', async (req, res) => {
+  try {
+    await userModel.delete(req.body.id).then((result) => {
+      if (result) return res.status(200).json({ message: 'Delete success!' });
+      return res.status(404).json({ message: 'Somethings wrongs!' });
+    });
+  } catch (error) {
+    res.status(403).json({ message: error });
+  }
+});
+router.patch('/update', async (req, res) => {
+  await userModel.update(req.body.id, req.body).then((result) => {
+    if (result) return res.status(200).json({ message: 'Update success!' });
+    return res.status(400).json({ message: 'Something went wrongs!' });
+  }).catch(err=>{
+    if(err){
+      res.status(404).json({message:err})
+    }
+  });
+});
+router.post('/insert', async (req, res) => {
+  let value = req.body;
+  value.isDelete = 0;
+  await userModel.insert(value).then((re) => {
+    if (re) {
+      return res.status(200).json({ message: 'Created' });
+    } else {
+      return res.status(404).json({ message: 'Not created' });
+    }
+  });
+});
 module.exports = router;

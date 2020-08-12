@@ -26,5 +26,5 @@ module.exports = {
     load: sql => mysql_query(sql),
     find: tableName => mysql_query(`select * from ${tableName}`),
     findById: (tableName,id)=>mysql(`select * from ${tableName} where id = ${id}`),
-
+    insert: (tableName, entity) => mysql_query(`insert into ${tableName} set ?`, entity),
 }
