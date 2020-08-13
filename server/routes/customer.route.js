@@ -29,39 +29,43 @@ router.get('/listType', async (req, res, next) => {
 });
 
 router.post('/checkIn', async (req, res, next) => {
-  const { checkInCustomer, checkInRoom, currentUser } = req.body;
-  const { phone } = checkInCustomer;
-  const { date } = checkInRoom;
+  try {
+    const { checkInCustomer, checkInRoom, currentUser } = req.body;
+    const { phone } = checkInCustomer;
+    const { date } = checkInRoom;
 
-  const dateIn = moment(date[0]).format('YYYY-MM-DD hh:mm:ss');
-  const dateOut = moment(date[1]).format('YYYY-MM-DD hh:mm:ss');
+    const dateIn = moment(date[0]).format('YYYY-MM-DD hh:mm:ss');
+    const dateOut = moment(date[1]).format('YYYY-MM-DD hh:mm:ss');
+    const checkExist = await customerModel.singleByPhone(phone);
+    if (checkExist === null) {
+      await customerModel.addCustomer(checkInCustomer);
+    } else {
+      await customerModel.updateCustomer(checkInCustomer);
+    }
+    const customer = await customerModel.singleByPhone(phone);
+    await rentReceiptModel.addRentReceipt({
+      id: customer.id,
+      idUser: currentUser.id,
+      price: checkInRoom.price,
+      dateIn,
+      dateOut,
+    });
+    const rentReceiptCurrent = await rentReceiptModel.singleByCustomer(
+      customer.id
+    );
+    await serviceModel.addServiceReceipt();
+    const serviceReceipt = await serviceModel.getNewServiceReceipt();
 
-  const checkExist = await customerModel.singleByPhone(phone);
-  if (checkExist === null) {
-    await customerModel.addCustomer(checkInCustomer);
-  } else {
-    await customerModel.updateCustomer(checkInCustomer);
+    await rentReceiptModel.addRentReceiptDetail({
+      id: rentReceiptCurrent.id,
+      idRoom: checkInRoom.id,
+      idServiceReceipt: serviceReceipt.id,
+    });
+    await rentReceiptModel.setStatusToRent(checkInRoom.id);
+    return res.status(200).json({ message: 'Check-in was successful !' });
+  } catch (err) {
+    return res.status(400).json({ message: 'Check-in was failed !' });
   }
-  const customer = await customerModel.singleByPhone(phone);
-  await rentReceiptModel.addRentReceipt({
-    id: customer.id,
-    idUser: currentUser.id,
-    price: checkInRoom.price,
-    dateIn,
-    dateOut,
-  });
-  const rentReceiptCurrent = await rentReceiptModel.singleByCustomer(
-    customer.id
-  );
-  await serviceModel.addServiceReceipt();
-  const serviceReceipt = await serviceModel.getNewServiceReceipt();
-
-  await rentReceiptModel.addRentReceiptDetail({
-    id: rentReceiptCurrent.id,
-    idRoom: checkInRoom.id,
-    idServiceReceipt: serviceReceipt.id,
-  });
-  await rentReceiptModel.setStatusToRent(checkInRoom.id);
 });
 
 router.post('/getCheckOutCustomerByPhone', async (req, res, next) => {
