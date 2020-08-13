@@ -35,7 +35,7 @@ class FormCheckOut extends Component {
       typeName: cusTypeName,
     } = checkInCustomer;
 
-    let { name, typeName, price, dateIn, total } = checkInRoom;
+    let { name, typeName, dateIn, total } = checkInRoom;
 
     return (
       <Form layout='vertical' hideRequiredMark>
@@ -112,7 +112,6 @@ class FormCheckOut extends Component {
                 disabled
                 name='type'
                 value={typeName || ''}
-                disabled
               />
             </Form.Item>
           </Col>

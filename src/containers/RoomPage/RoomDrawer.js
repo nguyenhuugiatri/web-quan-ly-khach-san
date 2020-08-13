@@ -12,7 +12,7 @@ import {
 } from './actions';
 import './styles.scss';
 
-const { AVAILABLE, RENT, CLEANING } = STATUS;
+const { AVAILABLE, RENT, CLEANING, RESERVED } = STATUS;
 
 class RoomDrawer extends Component {
   handleClose = () => {
@@ -29,7 +29,11 @@ class RoomDrawer extends Component {
       checkInRoom,
       currentUser,
     });
-    await this.handleClose();
+    this.handleClose();
+  };
+
+  handleCheckOutClicked = () => {
+    console.log('Check out');
   };
 
   componentDidMount = () => {
@@ -61,10 +65,18 @@ class RoomDrawer extends Component {
             <Button onClick={this.handleClose} style={{ marginRight: 8 }}>
               Cancel
             </Button>
-            {status !== CLEANING && (
-              <Button onClick={this.handleCheckInClicked} type='primary'>
-                {status === RENT ? 'Check out' : 'Check in'}
+            {status === RENT ? (
+              <Button onClick={this.handleCheckOutClicked} type='primary'>
+                Check out
               </Button>
+            ) : status === AVAILABLE ? (
+              <Button onClick={this.handleCheckInClicked} type='primary'>
+                Check in
+              </Button>
+            ) : status === RESERVED ? (
+              <></>
+            ) : (
+              <></>
             )}
           </div>
         }
