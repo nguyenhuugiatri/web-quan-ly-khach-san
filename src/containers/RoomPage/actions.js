@@ -151,7 +151,7 @@ export const checkOutAPI = (idRoom) => {
 };
 
 export const checkInAPI = (data) => {
-  axios({
+  return axios({
     method: 'POST',
     url: `${URL}/customer/checkIn`,
     data,
