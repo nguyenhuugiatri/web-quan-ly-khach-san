@@ -13,7 +13,7 @@ router.get('/list', async (req, res) => {
     });
 });
 router.get('/listRoom', async (req, res) => {
-  await query
+  await roomModel
     .listRoom()
     .then((result) => {
       res.status(200).json(result);
@@ -25,7 +25,7 @@ router.get('/listRoom', async (req, res) => {
 router.post('/roomCurrent', async (req, res) => {
   const { id } = req.body;
   console.log(req.body);
-  await query
+  await roomModel
     .roomById(id)
     .then((result) => {
       res.status(200).json(result);

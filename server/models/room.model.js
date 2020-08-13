@@ -17,11 +17,11 @@ module.exports = {
   },
 
   listRoom: () =>
-    query.load(
+    db.load(
       `select * from room`
     ),
     roomById: (id) =>
-    query.load(
+    db.load(
       `SELECT rt.name, rt.price FROM room as r ,roomtype as rt where r.idType = rt.id and r.id = '${id}'`
     ),
 };

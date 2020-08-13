@@ -13,6 +13,7 @@ import {
 } from "antd";
 import DrawerUser from "../../components/DrawerUser";
 import TableUser from "../../components/TableUser";
+import moment from 'moment';
 import { UserAddOutlined } from "@ant-design/icons";
 import createPage from "../../components/createPage";
 import axios from "axios";
@@ -123,8 +124,8 @@ class Booking extends Component {
       date:data.dateTime
     }
     let dataSend = {
-      checkInCustomer:customerBook,
-      checkInRoom:roomBook,
+      bookCustomer:customerBook,
+      bookRoom:roomBook,
     }
   
     // const { name, typeName, price } = checkInRoom;
@@ -266,13 +267,21 @@ class Booking extends Component {
                   </Form.Item>
                 </Col>
                 <Col span={12}>
-                  <Form.Item name="dateTime" label="DateTime">
-                    <DatePicker.RangePicker
-                      style={{ width: "100%" }}
-                      getPopupContainer={(trigger) => trigger.parentElement}
-                      // onChange={this.handleOnChangeInputRoom}
-                    />
-                  </Form.Item>
+                  
+                  <Form.Item name='dateTime' label='Date'>
+              <DatePicker.RangePicker
+                ranges={{
+                  Today: [moment(), moment()],
+                  'This Month': [
+                    moment().startOf('month'),
+                    moment().endOf('month'),
+                  ],
+                }}
+                showTime
+                format='YYYY/MM/DD HH:mm'
+                // onChange={this.handleOnChangeInputRoom}
+              />
+            </Form.Item>
                 </Col>
               </Row>
             </Form>

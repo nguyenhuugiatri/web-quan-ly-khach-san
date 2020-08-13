@@ -1,5 +1,4 @@
 const db = require('../database');
-
 module.exports = {
   singleByPhone: async (phone) => {
     const rows = await db.load(

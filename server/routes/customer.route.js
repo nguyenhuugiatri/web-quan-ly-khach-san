@@ -62,6 +62,7 @@ router.post('/checkIn', async (req, res, next) => {
     idServiceReceipt: serviceReceipt.id,
   });
   await rentReceiptModel.setStatusToRent(checkInRoom.id);
+  return res.status(200).json({message: 'Successful !' });
 });
 
 router.post('/getCheckOutCustomerByPhone', async (req, res, next) => {
