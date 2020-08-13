@@ -29,7 +29,7 @@ class RoomDrawer extends Component {
       checkInRoom,
       currentUser,
     });
-    this.handleClose();
+    await this.handleClose();
   };
 
   componentDidMount = () => {
