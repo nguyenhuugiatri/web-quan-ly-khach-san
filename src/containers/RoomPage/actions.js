@@ -6,6 +6,7 @@ import {
   GET_LIST_CUSTOMER_TYPE,
   UPDATE_CHECK_IN_CUSTOMER,
   UPDATE_CHECK_IN_ROOM,
+  CHECK_OUT,
 } from './constants';
 
 const URL = process.env.SERV_HOST || 'http://localhost:8000';
@@ -35,6 +36,13 @@ export const updateCheckInRoom = (room) => {
   return {
     type: UPDATE_CHECK_IN_ROOM,
     room,
+  };
+};
+
+export const checkOut = (checkOutInfo) => {
+  return {
+    type: CHECK_OUT,
+    checkOutInfo,
   };
 };
 
@@ -93,6 +101,50 @@ export const searchCustomerByPhoneAPI = (phone) => {
           const { message } = err.response.data;
           showNotification(STATUS.ERROR, message);
           dispatch(updateCheckInCustomer({}));
+        }
+      });
+  };
+};
+
+export const fillCheckOutCustomerAPI = (idRoom) => {
+  return (dispatch) => {
+    axios({
+      method: 'POST',
+      url: `${URL}/customer/getCheckOutCustomerByPhone`,
+      data: { idRoom },
+    })
+      .then((result) => {
+        const { checkOutCustomer } = result.data;
+        if (checkOutCustomer) {
+          dispatch(updateCheckInCustomer(checkOutCustomer));
+        }
+      })
+      .catch((err) => {
+        if (err && err.response) {
+          const { message } = err.response.data;
+          showNotification(STATUS.ERROR, message);
+        }
+      });
+  };
+};
+
+export const checkOutAPI = (idRoom) => {
+  return (dispatch) => {
+    axios({
+      method: 'POST',
+      url: `${URL}/room/checkOut`,
+      data: { idRoom },
+    })
+      .then((result) => {
+        const { roomCheckOut, total } = result.data;
+        if (roomCheckOut && total) {
+          dispatch(checkOut({ ...roomCheckOut, total }));
+        }
+      })
+      .catch((err) => {
+        if (err && err.response) {
+          const { message } = err.response.data;
+          showNotification(STATUS.ERROR, message);
         }
       });
   };
