@@ -15,10 +15,6 @@ import './styles.scss';
 const { AVAILABLE, RENT, CLEANING } = STATUS;
 
 class RoomDrawer extends Component {
-  handleOnCheckIn = (values) => {
-    console.log(values);
-  };
-
   handleClose = () => {
     const { onClose, deleteCheckInCustomer, deleteCheckInRoom } = this.props;
     onClose();
@@ -26,12 +22,22 @@ class RoomDrawer extends Component {
     deleteCheckInRoom();
   };
 
+  handleCheckInClicked = async () => {
+    const { checkInCustomer, checkInRoom, currentUser } = this.props;
+    await checkInAPI({
+      checkInCustomer,
+      checkInRoom,
+      currentUser,
+    });
+    this.handleClose();
+  };
+
   componentDidMount = () => {
     this.props.getListCustomerType();
   };
 
   render() {
-    const { visible, checkInRoom, checkInCustomer, currentUser } = this.props;
+    const { visible, checkInRoom } = this.props;
     const { status } = checkInRoom;
     return (
       <Drawer
@@ -56,14 +62,7 @@ class RoomDrawer extends Component {
               Cancel
             </Button>
             {status !== CLEANING && (
-              <Button
-                onClick={checkInAPI({
-                  checkInCustomer,
-                  checkInRoom,
-                  currentUser,
-                })}
-                type='primary'
-              >
+              <Button onClick={this.handleCheckInClicked} type='primary'>
                 {status === RENT ? 'Check out' : 'Check in'}
               </Button>
             )}

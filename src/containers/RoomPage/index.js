@@ -29,9 +29,12 @@ class RoomList extends Component {
   };
 
   onClose = () => {
-    this.setState({
-      visible: false,
-    });
+    this.setState(
+      {
+        visible: false,
+      },
+      this.props.getListRoom()
+    );
   };
 
   renderListRoom = (list, filter) => {

@@ -55,7 +55,6 @@ class FormCheckOut extends Component {
     } = checkInCustomer;
     const { name, typeName, price } = checkInRoom;
     const currentDate = moment();
-    console.log('currentDate', currentDate);
     return (
       <Form layout='vertical' hideRequiredMark>
         <Row gutter={16}>

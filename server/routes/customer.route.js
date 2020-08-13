@@ -50,15 +50,16 @@ router.post('/checkIn', async (req, res, next) => {
     dateIn,
     dateOut,
   });
-  const rentReceiptCurrent = await rentReceiptModel.singleByCustomer(customer.id);
-  console.log(rentReceiptCurrent);
+  const rentReceiptCurrent = await rentReceiptModel.singleByCustomer(
+    customer.id
+  );
   await serviceModel.addServiceReceipt();
   const serviceReceipt = await serviceModel.getNewServiceReceipt();
 
   await rentReceiptModel.addRentReceiptDetail({
     id: rentReceiptCurrent.id,
     idRoom: checkInRoom.id,
-    idServiceReceipt: serviceReceipt.id
+    idServiceReceipt: serviceReceipt.id,
   });
   await rentReceiptModel.setStatusToRent(checkInRoom.id);
 });
