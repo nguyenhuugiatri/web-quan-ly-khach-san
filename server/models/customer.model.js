@@ -20,17 +20,27 @@ module.exports = {
     if (rows.length === 0) return null;
     return rows;
   },
+
   addCustomer: async (customer) => {
     await db.load(
       `INSERT INTO Customer (idNumber,name,phone,idType)
       VALUES ('${customer.idNumber}','${customer.name}','${customer.phone}','${customer.idType}')`
     );
   },
+
   updateCustomer: async (customer) => {
     await db.load(
       `UPDATE Customer
       SET idNumber = '${customer.idNumber}', name = '${customer.name}', idType='${customer.idType}'
       WHERE phone = '${customer.phone}';`
     );
+  },
+
+  singleByCheckOutRoom: async (idRoom) => {
+    const rows = await db.load(
+      `SELECT c.name, c.idNumber, ct.name as typeName, c.phone FROM room r, rentreceipt rr, rentreceiptdetail rrd, customer c, customertype ct WHERE r.id = rrd.idRoom and rrd.idRentReceipt=rr.id and c.id = rr.idCustomer and c.idType = ct.id and r.id = ${idRoom}`
+    );
+    if (rows.length === 0) return null;
+    return rows[rows.length - 1];
   },
 };

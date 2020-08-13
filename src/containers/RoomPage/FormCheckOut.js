@@ -11,70 +11,54 @@ import {
 } from 'antd';
 import { connect } from 'react-redux';
 import {
-  searchCustomerByPhoneAPI,
+  fillCheckOutCustomerAPI,
   updateCheckInCustomer,
   updateCheckInRoom,
+  checkOutAPI,
 } from './actions';
 import moment from 'moment';
 import './styles.scss';
 
 class FormCheckOut extends Component {
-  handleOnChangeInputCustomer = (e) => {
-    const { updateCheckInCustomer, checkInCustomer } = this.props;
-    const { name: inputName, value } = e.target;
-    if (inputName === 'cusName')
-      updateCheckInCustomer({ ...checkInCustomer, name: value });
-    else updateCheckInCustomer({ ...checkInCustomer, [inputName]: value });
-  };
-
-  handleOnChangeInputRoom = (value) => {
-    const { updateCheckInRoom, checkInRoom } = this.props;
-    if (typeof value === 'number')
-      updateCheckInRoom({ ...checkInRoom, price: value });
-    else updateCheckInRoom({ ...checkInRoom, date: value });
-  };
-
-  handleOnChangeSelect = (value) => {
-    const { updateCheckInCustomer, checkInCustomer } = this.props;
-    updateCheckInCustomer({ ...checkInCustomer, idType: value });
-  };
-
+  componentDidMount() {
+    const { checkInRoom, fillCheckOutCustomer, checkOut } = this.props;
+    fillCheckOutCustomer(checkInRoom.id);
+    checkOut(checkInRoom.id);
+  }
   render() {
-    const {
-      searchCustomerByPhone,
-      checkInCustomer,
-      checkInRoom,
-      listCustomerType,
-    } = this.props;
+    const { checkInCustomer, checkInRoom, listCustomerType } = this.props;
+
     const {
       idNumber,
       name: cusName,
-      idType,
       phone,
       typeName: cusTypeName,
     } = checkInCustomer;
-    const { name, typeName, price } = checkInRoom;
-    const currentDate = moment();
+
+    let { name, typeName, price, dateIn, total } = checkInRoom;
+
     return (
       <Form layout='vertical' hideRequiredMark>
         <Row gutter={16}>
           <Col span={12}>
             <Form.Item label='Name'>
               <Input
+                className='inputDisabled'
+                disabled
                 name='cusName'
                 value={cusName || ''}
                 placeholder="Input customer's name"
-                onChange={this.handleOnChangeInputCustomer}
               />
             </Form.Item>
           </Col>
           <Col span={12}>
             <Form.Item label='ID Number'>
               <Input
+                className='inputDisabled'
+                disabled
                 name='idNumber'
                 value={idNumber || ''}
                 placeholder="Input customer's ID number"
-                onChange={this.handleOnChangeInputCustomer}
               />
             </Form.Item>
           </Col>
@@ -83,10 +67,10 @@ class FormCheckOut extends Component {
           <Col span={12}>
             <Form.Item label='Customer Type'>
               <Select
+                disabled
                 name='idType'
                 placeholder='Select customer type'
-                value={idType || null}
-                onChange={this.handleOnChangeSelect}
+                value={cusTypeName || null}
               >
                 {listCustomerType.map((item) => (
                   <Select.Option key={item.id} value={item.id}>
@@ -98,12 +82,12 @@ class FormCheckOut extends Component {
           </Col>
           <Col span={12}>
             <Form.Item label='Phone Number'>
-              <Input.Search
+              <Input
+                className='inputDisabled'
+                disabled
                 value={phone || ''}
                 name='phone'
                 placeholder="Input customer's phone number"
-                onSearch={searchCustomerByPhone}
-                onChange={this.handleOnChangeInputCustomer}
               />
             </Form.Item>
           </Col>
@@ -112,45 +96,53 @@ class FormCheckOut extends Component {
         <Row gutter={16}>
           <Col span={12}>
             <Form.Item label='Room'>
-              <Input name='name' value={name || ''} disabled />
+              <Input
+                className='inputDisabled'
+                disabled
+                name='name'
+                value={name || ''}
+                disabled
+              />
             </Form.Item>
           </Col>
           <Col span={12}>
             <Form.Item label='Type'>
-              <Input name='type' value={typeName || ''} disabled />
+              <Input
+                className='inputDisabled'
+                disabled
+                name='type'
+                value={typeName || ''}
+                disabled
+              />
             </Form.Item>
           </Col>
         </Row>
         <Row gutter={16}>
           <Col span={12}>
-            <Form.Item label='Price'>
+            <Form.Item label='Total'>
               <InputNumber
+                disabled
                 style={{ width: '100%' }}
-                name='price'
-                value={price || 0}
+                name='total'
+                value={total || 0}
                 formatter={(value) =>
                   `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
                 }
                 parser={(value) => value.replace(/\$\s?|(,*)/g, '')}
-                onChange={this.handleOnChangeInputRoom}
               />
             </Form.Item>
           </Col>
           <Col span={12}>
-            <Form.Item name='dateTime' label='Date'>
-              <DatePicker.RangePicker
-                ranges={{
-                  Today: [moment(), moment()],
-                  'This Month': [
-                    moment().startOf('month'),
-                    moment().endOf('month'),
-                  ],
-                }}
-                showTime
-                format='YYYY/MM/DD HH:mm:ss'
-                onChange={this.handleOnChangeInputRoom}
-              />
-            </Form.Item>
+            {dateIn && (
+              <Form.Item name='dateTime' label='Date'>
+                <DatePicker.RangePicker
+                  defaultValue={[moment(moment(dateIn)), moment()]}
+                  disabled
+                  showTime
+                  format='YYYY/MM/DD HH:mm'
+                />
+              </Form.Item>
+            )}
           </Col>
         </Row>
       </Form>
@@ -174,8 +166,11 @@ const mapDispatchToProps = (dispatch) => {
     updateCheckInRoom: (room) => {
       dispatch(updateCheckInRoom(room));
     },
-    searchCustomerByPhone: (phone) => {
-      dispatch(searchCustomerByPhoneAPI(phone));
+    fillCheckOutCustomer: (idRoom) => {
+      dispatch(fillCheckOutCustomerAPI(idRoom));
+    },
+    checkOut: (idRoom) => {
+      dispatch(checkOutAPI(idRoom));
     },
   };
 };

@@ -147,7 +147,7 @@ class FormCheckIn extends Component {
                   ],
                 }}
                 showTime
-                format='YYYY/MM/DD HH:mm:ss'
+                format='YYYY/MM/DD HH:mm'
                 onChange={this.handleOnChangeInputRoom}
               />
             </Form.Item>

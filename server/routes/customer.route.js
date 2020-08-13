@@ -64,4 +64,14 @@ router.post('/checkIn', async (req, res, next) => {
   await rentReceiptModel.setStatusToRent(checkInRoom.id);
 });
 
+router.post('/getCheckOutCustomerByPhone', async (req, res, next) => {
+  const { idRoom } = req.body;
+  const checkOutCustomer = await customerModel.singleByCheckOutRoom(idRoom);
+  if (checkOutCustomer === null)
+    return res.status(404).json({
+      message: 'Not found',
+    });
+  return res.status(200).json({ checkOutCustomer, message: 'Successful !' });
+});
+
 module.exports = router;
