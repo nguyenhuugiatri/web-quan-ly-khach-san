@@ -23,11 +23,14 @@ class Sidebar extends Component {
           mode='inline'
           defaultSelectedKeys={[`${activePage}`]}
         >
-          <Menu.Item key={PAGE.BOOKING_PAGE} icon={<UserOutlined />}>
-            <Link to='/'>Booking</Link>
+          <Menu.Item key={PAGE.HOME_PAGE} icon={<UserOutlined />}>
+            <Link to='/'>Home</Link>
           </Menu.Item>
           <Menu.Item key={PAGE.USER_PAGE} icon={<VideoCameraOutlined />}>
             <Link to='/users'>Users</Link>
+          </Menu.Item>
+          <Menu.Item key={PAGE.BOOKING_PAGE} icon={<VideoCameraOutlined />}>
+            <Link to='/booking'>Booking</Link>
           </Menu.Item>
         </Menu>
       </Sider>

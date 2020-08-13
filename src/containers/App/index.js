@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import LoginPage from '../LoginPage';
 import UserListPage from '../UserListPage';
+import BookingPage from '../BookingPage';
 import RoomPage from '../RoomPage';
 import { Router } from '@reach/router';
 import { connect } from 'react-redux';
@@ -20,6 +21,7 @@ class App extends Component {
         <Router>
           <RoomPage path='/' />
           <UserListPage path='/users' />
+          <BookingPage path='/booking' />
         </Router>
       );
     else

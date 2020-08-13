@@ -15,4 +15,13 @@ module.exports = {
     if (rows.length === 0) return null;
     return rows[rows.length - 1];
   },
+
+  listRoom: () =>
+    query.load(
+      `select * from room`
+    ),
+    roomById: (id) =>
+    query.load(
+      `SELECT rt.name, rt.price FROM room as r ,roomtype as rt where r.idType = rt.id and r.id = '${id}'`
+    ),
 };

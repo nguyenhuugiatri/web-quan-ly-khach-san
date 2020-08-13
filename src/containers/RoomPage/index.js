@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import createPage from '../../components/createPage';
-import { BOOKING_PAGE } from '../../components/Sidebar/constants';
+import { HOME_PAGE } from '../../components/Sidebar/constants';
 import { connect } from 'react-redux';
 import { getListRoomAPI, updateCheckInRoom } from './actions';
 import Square from '../../components/Square';
@@ -119,6 +119,6 @@ const mapDispatchToProps = (dispatch) => {
 
 const RoomListConnect = connect(mapStateToProps, mapDispatchToProps)(RoomList);
 
-const RoomPage = createPage(RoomListConnect, BOOKING_PAGE);
+const RoomPage = createPage(RoomListConnect, HOME_PAGE);
 
 export default RoomPage;

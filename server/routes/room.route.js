@@ -12,6 +12,29 @@ router.get('/list', async (req, res) => {
       res.status(400).json(e);
     });
 });
+router.get('/listRoom', async (req, res) => {
+  await query
+    .listRoom()
+    .then((result) => {
+      res.status(200).json(result);
+    })
+    .catch((e) => {
+      res.status(400).json(e);
+    });
+});
+router.post('/roomCurrent', async (req, res) => {
+  const { id } = req.body;
+  console.log(req.body);
+  await query
+    .roomById(id)
+    .then((result) => {
+      res.status(200).json(result);
+    })
+    .catch((e) => {
+      res.status(400).json(e);
+    });
+});
+
 
 router.post('/checkOut', async (req, res, next) => {
   const { idRoom } = req.body;
