@@ -99,24 +99,26 @@ export const searchCustomerByPhoneAPI = (phone) => {
 };
 
 export const checkInAPI = (data) => {
-  return (dispatch) => {
-    axios({
-      method: 'POST',
-      url: `${URL}/customer/checkIn`,
-      data,
-    }).then((result) => {
-      console.log(result.data);
+  // return (dispatch) => {
+  axios({
+    method: 'POST',
+    url: `${URL}/customer/checkIn`,
+    data,
+  })
+    .then((result) => {
+      showNotification(STATUS.ERROR);
       // const { customer } = result.data;
       // if (customer) {
       //   dispatch(updateCheckInCustomer(customer));
       // }
+    })
+    .catch((err) => {
+      console.log('err', err);
+      //   if (err && err.response) {
+      //     const { message } = err.response.data;
+      //     showNotification(STATUS.ERROR, message);
+      //     dispatch(updateCheckInCustomer({}));
+      //   }
     });
-    // .catch((err) => {
-    //   if (err && err.response) {
-    //     const { message } = err.response.data;
-    //     showNotification(STATUS.ERROR, message);
-    //     dispatch(updateCheckInCustomer({}));
-    //   }
-    // });
-  };
+  // };
 };
