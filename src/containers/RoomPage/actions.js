@@ -7,6 +7,7 @@ import {
   UPDATE_CHECK_IN_CUSTOMER,
   UPDATE_CHECK_IN_ROOM,
   CHECK_OUT,
+  GET_LIST_SERVICE_TYPE,
 } from './constants';
 
 const URL = process.env.SERV_HOST || 'http://localhost:8000';
@@ -22,6 +23,13 @@ export const getCustomerType = (listCustomerType) => {
   return {
     type: GET_LIST_CUSTOMER_TYPE,
     listCustomerType,
+  };
+};
+
+export const getServiceType = (listServiceType) => {
+  return {
+    type: GET_LIST_SERVICE_TYPE,
+    listServiceType,
   };
 };
 
@@ -78,6 +86,26 @@ export const getListCustomerTypeAPI = () => {
         if (err && err.response) {
           const { message } = err.response.data;
           showNotification(STATUS.ERROR, message);
+        }
+      });
+  };
+};
+
+export const getListServiceTypeAPI = () => {
+  return (dispatch) => {
+    axios
+      .get(`${URL}/service/getList`)
+      .then((res) => {
+        if (res.data) {
+          const { serviceList } = res.data;
+          dispatch(getServiceType(serviceList));
+        }
+      })
+      .catch((err) => {
+        if (err && err.response) {
+          const { message } = err.response.data;
+          console.log('Error:', message);
+          // showNotification(STATUS.ERROR, message);
         }
       });
   };

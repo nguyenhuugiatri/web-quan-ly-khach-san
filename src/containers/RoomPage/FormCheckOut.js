@@ -21,6 +21,7 @@ import {
   updateCheckInCustomer,
   updateCheckInRoom,
   checkOutAPI,
+  getListServiceTypeAPI,
 } from './actions';
 import moment from 'moment';
 import './styles.scss';
@@ -52,12 +53,23 @@ class FormCheckOut extends Component {
   };
 
   componentDidMount() {
-    const { checkInRoom, fillCheckOutCustomer, checkOut } = this.props;
+    const {
+      checkInRoom,
+      fillCheckOutCustomer,
+      checkOut,
+      getListServiceType,
+    } = this.props;
+    getListServiceType();
     fillCheckOutCustomer(checkInRoom.id);
     checkOut(checkInRoom.id);
   }
   render() {
-    const { checkInCustomer, checkInRoom, listCustomerType } = this.props;
+    const {
+      checkInCustomer,
+      checkInRoom,
+      listCustomerType,
+      listServiceType,
+    } = this.props;
 
     const {
       idNumber,
@@ -149,7 +161,7 @@ class FormCheckOut extends Component {
         </Row>
         <Row gutter={16}>
           <Col span={12}>
-            <Form.Item label='Total'>
+            <Form.Item label='Room Charge'>
               <InputNumber
                 disabled
                 style={{ width: '100%' }}
@@ -199,7 +211,7 @@ class FormCheckOut extends Component {
         </Row>
         <TableService serviceList={serviceList} />
         <AddServiceForm
-          modalData={this.state}
+          modalData={{ ...this.state, listServiceType }}
           handleOk={this.handleOk}
           handleCancel={this.handleCancel}
         />
@@ -213,6 +225,7 @@ const mapStateToProps = (state) => {
     checkInCustomer: state.room.checkInCustomer,
     checkInRoom: state.room.checkInRoom,
     listCustomerType: state.room.listCustomerType,
+    listServiceType: state.room.listServiceType,
   };
 };
 
@@ -229,6 +242,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     checkOut: (idRoom) => {
       dispatch(checkOutAPI(idRoom));
+    },
+    getListServiceType: () => {
+      dispatch(getListServiceTypeAPI());
     },
   };
 };

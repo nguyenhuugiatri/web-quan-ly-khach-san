@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import 'antd/dist/antd.css';
-import { Table, Popconfirm } from 'antd';
+import { Table, Popconfirm, InputNumber, Row } from 'antd';
+import './style.scss';
 
 const columns = [
   {
@@ -40,7 +41,7 @@ const columns = [
 
 export default class TableService extends Component {
   render() {
-    let { serviceList } = this.props;
+    let { serviceList, serviceCharge } = this.props;
     if (serviceList)
       serviceList = serviceList.map((e, i) => ({ key: i + 1, ...e }));
     return (
@@ -51,6 +52,20 @@ export default class TableService extends Component {
           dataSource={serviceList}
           pagination={false}
           scroll={{ y: 300 }}
+          footer={() => (
+            <Row align='middle'>
+              Total:
+              <InputNumber
+                className='serviceCharge'
+                disabled
+                value={serviceCharge || 0}
+                formatter={(value) =>
+                  `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                }
+                parser={(value) => value.replace(/\$\s?|(,*)/g, '')}
+              />
+            </Row>
+          )}
         />
       </div>
     );

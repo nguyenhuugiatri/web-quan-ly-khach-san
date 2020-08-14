@@ -1,6 +1,12 @@
 const db = require('../database');
 
 module.exports = {
+  getList: async () => {
+    const rows = await db.load(`select * from Service`);
+    if (rows.length === 0) return null;
+    return rows;
+  },
+
   addServiceReceipt: async () => {
     await db.load(
       `INSERT INTO servicereceipt (idService,amount,total)
