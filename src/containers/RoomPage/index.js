@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import createPage from '../../components/createPage';
 import { BOOKING_PAGE } from '../../components/Sidebar/constants';
 import { connect } from 'react-redux';
-import { getListRoomAPI, updateCheckInRoom } from './actions';
+import { getListRoomAPI, updateCheckInRoom } from './actions';  
 import Square from '../../components/Square';
 import { Col, Row, Radio, Typography } from 'antd';
 import RoomDrawer from './RoomDrawer.js';
