@@ -64,9 +64,9 @@ router.post('/checkOut', async (req, res, next) => {
     });
 
   let { dateIn, dateOut, price, priceHour } = roomCheckOut;
-  let total = 0;
   dateIn = moment(dateIn);
   dateOut = moment();
+  let total = 0;
   const numberOfHour = Math.abs(dateOut.diff(dateIn, 'hours'));
   const numberOfDays = parseInt(numberOfHour / 24);
   if (numberOfDays === 0) {

@@ -91,7 +91,7 @@ class FormCheckOut extends Component {
       name,
       typeName,
       dateIn,
-      total,
+      total: roomCharge,
       serviceList,
       serviceCharge,
     } = checkInRoom;
@@ -181,7 +181,7 @@ class FormCheckOut extends Component {
                 disabled
                 style={{ width: '100%' }}
                 name='total'
-                value={total || 0}
+                value={roomCharge || 0}
                 formatter={(value) =>
                   `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
                 }
@@ -203,33 +203,60 @@ class FormCheckOut extends Component {
           </Col>
         </Row>
         <Divider></Divider>
-        <Row
-          justify='space-between'
-          align='middle'
-          style={{
-            marginBottom: '8px',
-          }}
-        >
-          <Typography.Text
-            style={{
-              color: 'rgba(0, 0, 0, 0.85)',
-            }}
-          >
-            Services
-          </Typography.Text>
-          <Tooltip title='Add service'>
-            <Button
-              shape='circle'
-              icon={<AppstoreAddOutlined onClick={this.showModal} />}
+        <div className='total-bill-footer'>
+          <div className='service-table'>
+            <Row
+              justify='space-between'
+              align='middle'
+              style={{
+                marginBottom: '8px',
+              }}
+            >
+              <Typography.Text
+                style={{
+                  color: 'rgba(0, 0, 0, 0.85)',
+                }}
+              >
+                Service List
+              </Typography.Text>
+              <Tooltip title='Add service'>
+                <Button
+                  shape='circle'
+                  icon={<AppstoreAddOutlined onClick={this.showModal} />}
+                />
+              </Tooltip>
+            </Row>
+            <TableService
+              serviceList={serviceList}
+              serviceCharge={serviceCharge}
             />
-          </Tooltip>
-        </Row>
-        <TableService serviceList={serviceList} serviceCharge={serviceCharge} />
-        <AddServiceForm
-          modalData={{ ...this.state, listServiceType }}
-          handleAddService={this.handleAddService}
-          handleCancel={this.handleCancel}
-        />
+            <AddServiceForm
+              modalData={{ ...this.state, listServiceType }}
+              handleAddService={this.handleAddService}
+              handleCancel={this.handleCancel}
+            />
+          </div>
+          <Row className='total-bill' align='middle'>
+            <Row
+              align='middle'
+              style={{
+                color: 'black',
+                fontWeight: '500',
+              }}
+            >
+              Total Cost:
+              <InputNumber
+                className='serviceCharge'
+                disabled
+                value={serviceCharge + roomCharge || 0}
+                formatter={(value) =>
+                  `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                }
+                parser={(value) => value.replace(/\$\s?|(,*)/g, '')}
+              />
+            </Row>
+          </Row>
+        </div>
       </Form>
     );
   }

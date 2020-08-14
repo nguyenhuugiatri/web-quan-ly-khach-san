@@ -54,7 +54,7 @@ export default class TableService extends Component {
           scroll={{ y: 250 }}
           footer={() => (
             <Row align='middle'>
-              Total:
+              Service Charge:
               <InputNumber
                 className='serviceCharge'
                 disabled
