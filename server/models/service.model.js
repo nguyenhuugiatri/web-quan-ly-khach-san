@@ -15,7 +15,7 @@ module.exports = {
   },
 
   getNewServiceReceipt: async () => {
-    const rows = await db.load(`select id from servicereceipt`);
+    const rows = await db.load(`select * from servicereceipt`);
     if (rows.length === 0) return null;
     return rows[rows.length - 1];
   },

@@ -11,7 +11,7 @@
  Target Server Version : 80020
  File Encoding         : 65001
 
- Date: 13/08/2020 16:44:14
+ Date: 14/08/2020 21:35:07
 */
 
 SET NAMES utf8mb4;
@@ -48,6 +48,7 @@ CREATE TABLE `BookReceipt` (
   `id` int NOT NULL AUTO_INCREMENT,
   `idCustomer` int DEFAULT NULL,
   `dateIn` datetime DEFAULT NULL,
+  `dateOut` datetime DEFAULT NULL,
   `status` int DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `idCustomer` (`idCustomer`),
@@ -101,8 +102,8 @@ CREATE TABLE `Customer` (
 BEGIN;
 INSERT INTO `Customer` VALUES (1, 1, 'Nguyễn Hữu Gia Trí', '0931467534', '261457481', 0);
 INSERT INTO `Customer` VALUES (2, 2, 'Huỳnh Thái Anh', '0821457888', '261783812', 0);
-INSERT INTO `Customer` VALUES (3, 1, 'Lê Hoài Bảo', '0931532566', '253212222', 0);
-INSERT INTO `Customer` VALUES (6, 2, 'Lem Đẹp Trai Vô Cùng', '0944026118', '123333', 0);
+INSERT INTO `Customer` VALUES (3, 1, 'Lê Hoài Bảo', '0931532566', '273214222', 0);
+INSERT INTO `Customer` VALUES (5, 2, 'Lem Đẹp Trai Vô Cùng', '0944026118', '213212422', 0);
 COMMIT;
 
 -- ----------------------------
@@ -145,11 +146,6 @@ CREATE TABLE `RentReceipt` (
 -- Records of RentReceipt
 -- ----------------------------
 BEGIN;
-INSERT INTO `RentReceipt` VALUES (1, 1, 1, '2020-08-04 04:40:31', '2020-08-21 04:40:31', 200);
-INSERT INTO `RentReceipt` VALUES (2, 6, 1, '2020-08-13 04:41:18', '2020-08-21 04:41:18', 400);
-INSERT INTO `RentReceipt` VALUES (3, 6, 1, '2020-08-13 04:41:51', '2020-08-21 04:41:51', 610);
-INSERT INTO `RentReceipt` VALUES (4, 1, 1, '2020-08-04 04:40:31', '2020-08-21 04:40:31', 200);
-INSERT INTO `RentReceipt` VALUES (5, 6, 1, '2020-08-13 04:41:18', '2020-08-21 04:41:18', 400);
 COMMIT;
 
 -- ----------------------------
@@ -173,11 +169,6 @@ CREATE TABLE `RentReceiptDetail` (
 -- Records of RentReceiptDetail
 -- ----------------------------
 BEGIN;
-INSERT INTO `RentReceiptDetail` VALUES (1, 1, 1);
-INSERT INTO `RentReceiptDetail` VALUES (4, 1, 4);
-INSERT INTO `RentReceiptDetail` VALUES (2, 6, 2);
-INSERT INTO `RentReceiptDetail` VALUES (5, 6, 5);
-INSERT INTO `RentReceiptDetail` VALUES (3, 7, 3);
 COMMIT;
 
 -- ----------------------------
@@ -199,13 +190,13 @@ CREATE TABLE `Room` (
 -- Records of Room
 -- ----------------------------
 BEGIN;
-INSERT INTO `Room` VALUES (1, 1, 'Room 1', 2, 0);
+INSERT INTO `Room` VALUES (1, 1, 'Room 1', 1, 0);
 INSERT INTO `Room` VALUES (2, 2, 'Room 2', 1, 0);
 INSERT INTO `Room` VALUES (3, 3, 'Room 3', 1, 0);
 INSERT INTO `Room` VALUES (4, 4, 'Room 4', 1, 0);
 INSERT INTO `Room` VALUES (5, 1, 'Room 5', 1, 0);
-INSERT INTO `Room` VALUES (6, 2, 'Room 6', 2, 0);
-INSERT INTO `Room` VALUES (7, 3, 'Room 7', 2, 0);
+INSERT INTO `Room` VALUES (6, 2, 'Room 6', 1, 0);
+INSERT INTO `Room` VALUES (7, 3, 'Room 7', 1, 0);
 INSERT INTO `Room` VALUES (8, 4, 'Room 8', 1, 0);
 INSERT INTO `Room` VALUES (9, 1, 'Room 9', 1, 0);
 INSERT INTO `Room` VALUES (10, 2, 'Room 10', 1, 0);
@@ -229,7 +220,7 @@ INSERT INTO `Room` VALUES (27, 3, 'Room 27', 1, 0);
 INSERT INTO `Room` VALUES (28, 4, 'Room 28', 1, 0);
 INSERT INTO `Room` VALUES (29, 1, 'Room 29', 1, 0);
 INSERT INTO `Room` VALUES (30, 2, 'Room 30', 1, 0);
-INSERT INTO `Room` VALUES (31, 3, 'Room 31', 4, 0);
+INSERT INTO `Room` VALUES (31, 3, 'Room 31', 1, 0);
 INSERT INTO `Room` VALUES (32, 4, 'Room 32', 1, 0);
 COMMIT;
 
@@ -300,11 +291,6 @@ CREATE TABLE `ServiceReceipt` (
 -- Records of ServiceReceipt
 -- ----------------------------
 BEGIN;
-INSERT INTO `ServiceReceipt` VALUES (1, NULL, NULL, 0);
-INSERT INTO `ServiceReceipt` VALUES (2, NULL, NULL, 0);
-INSERT INTO `ServiceReceipt` VALUES (3, NULL, NULL, 0);
-INSERT INTO `ServiceReceipt` VALUES (4, NULL, NULL, 0);
-INSERT INTO `ServiceReceipt` VALUES (5, NULL, NULL, 0);
 COMMIT;
 
 -- ----------------------------
