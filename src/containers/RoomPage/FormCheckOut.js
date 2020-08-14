@@ -57,6 +57,24 @@ class FormCheckOut extends Component {
       .catch((err) => console.log(err));
   };
 
+  handleDeleteService = (rentReceiptId) => {
+    const { checkOut, checkInRoom } = this.props;
+    axios({
+      method: 'POST',
+      url: `${URL}/service/delete`,
+      data: { rentReceiptId },
+    })
+      .then((result) => {
+        checkOut(checkInRoom.id);
+      })
+      .catch((err) => {
+        if (err && err.response) {
+          const { message } = err.response.data;
+          console.log('Error: ', message);
+        }
+      });
+  };
+
   handleCancel = () => {
     this.setState({ visible: false });
   };
@@ -229,6 +247,7 @@ class FormCheckOut extends Component {
             <TableService
               serviceList={serviceList}
               serviceCharge={serviceCharge}
+              handleDeleteService={this.handleDeleteService}
             />
             <AddServiceForm
               modalData={{ ...this.state, listServiceType }}

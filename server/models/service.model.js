@@ -21,8 +21,8 @@ module.exports = {
   },
 
   getServiceByRentReceiptId: async (rentReceiptId) => {
-    const rows = await db.load(`select s.name, amount,s.price from RentReceipt rr, RentReceiptDetail rrd, ServiceReceipt sr, Service s, ServiceType st
-    where rr.id=rrd.idRentReceipt and rrd.idServiceReceipt=sr.id and sr.idService=s.id and s.idType =st.id and rr.id = ${rentReceiptId}`);
+    const rows = await db.load(`select sr.id, s.name, amount,s.price from RentReceipt rr, RentReceiptDetail rrd, ServiceReceipt sr, Service s, ServiceType st
+    where rr.id=rrd.idRentReceipt and rrd.idServiceReceipt=sr.id and sr.idService=s.id and s.idType =st.id and amount>0 and rr.id = ${rentReceiptId}`);
     if (rows.length === 0) return [];
     return rows;
   },

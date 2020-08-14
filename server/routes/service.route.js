@@ -51,13 +51,24 @@ router.post('/add', async (req, res, next) => {
   }
 });
 
+router.post('/delete', async (req, res, next) => {
+  try {
+    const { rentReceiptId } = req.body;
+    await serviceReceiptModel.deleteServiceReceipt(rentReceiptId);
+    return res.status(200).json({ message: 'Successful !' });
+  } catch (err) {
+    return res.status(400).json({
+      message: 'Failed !',
+    });
+  }
+});
+
 router.post('/total', async (req, res, next) => {
   try {
     const { idRentReceipt } = req.body;
     const getTotalCharges = await serviceModel.getTotalCharges(idRentReceipt);
     let serviceCharge = 0;
     if (getTotalCharges) serviceCharge = getTotalCharges.total;
-    console.log('serviceCharge', getTotalCharges);
     return res.status(200).json({ serviceCharge, message: 'Successful !' });
   } catch (err) {
     return res.status(400).json({
