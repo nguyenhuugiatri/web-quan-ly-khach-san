@@ -151,26 +151,22 @@ export const checkOutAPI = (idRoom) => {
 };
 
 export const checkInAPI = (data) => {
-  // return (dispatch) => {
-  axios({
+  return axios({
     method: 'POST',
     url: `${URL}/customer/checkIn`,
     data,
   })
     .then((result) => {
-      showNotification(STATUS.ERROR);
-      // const { customer } = result.data;
-      // if (customer) {
-      //   dispatch(updateCheckInCustomer(customer));
-      // }
+      const { message } = result.data;
+      if (message) {
+        showNotification(STATUS.SUCCESS, message);
+      }
     })
     .catch((err) => {
-      console.log('err', err);
-      //   if (err && err.response) {
-      //     const { message } = err.response.data;
-      //     showNotification(STATUS.ERROR, message);
-      //     dispatch(updateCheckInCustomer({}));
-      //   }
+      if (err && err.response) {
+        console.log('err.response', err.response);
+        const { message } = err.response.data;
+        showNotification(STATUS.ERROR, message);
+      }
     });
-  // };
 };

@@ -112,12 +112,22 @@ class FormCheckIn extends Component {
         <Row gutter={16}>
           <Col span={12}>
             <Form.Item label='Room'>
-              <Input name='name' value={name || ''} disabled />
+              <Input
+                className='inputDisabled'
+                name='name'
+                value={name || ''}
+                disabled
+              />
             </Form.Item>
           </Col>
           <Col span={12}>
             <Form.Item label='Type'>
-              <Input name='type' value={typeName || ''} disabled />
+              <Input
+                className='inputDisabled'
+                name='type'
+                value={typeName || ''}
+                disabled
+              />
             </Form.Item>
           </Col>
         </Row>
