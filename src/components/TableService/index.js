@@ -51,7 +51,7 @@ export default class TableService extends Component {
           columns={columns}
           dataSource={serviceList}
           pagination={false}
-          scroll={{ y: 300 }}
+          scroll={{ y: 250 }}
           footer={() => (
             <Row align='middle'>
               Total:

@@ -44,9 +44,9 @@ router.post('/roomCurrent', async (req, res) => {
     });
 });
 router.post('/listRoomByType', async (req, res) => {
-  const { id,dateIn,dateOut } = req.body;
+  const { id, dateIn, dateOut } = req.body;
   await roomModel
-    .listRoomByType(id,dateIn,dateOut)
+    .listRoomByType(id, dateIn, dateOut)
     .then((result) => {
       res.status(200).json(result);
     })
@@ -54,7 +54,6 @@ router.post('/listRoomByType', async (req, res) => {
       res.status(400).json(e);
     });
 });
-
 
 router.post('/checkOut', async (req, res, next) => {
   const { idRoom } = req.body;
@@ -68,8 +67,8 @@ router.post('/checkOut', async (req, res, next) => {
   let total = 0;
   dateIn = moment(dateIn);
   dateOut = moment();
-  const numberOfDays = dateOut.diff(dateIn, 'days');
-  const numberOfHour = dateOut.diff(dateIn, 'hours');
+  const numberOfHour = Math.abs(dateOut.diff(dateIn, 'hours'));
+  const numberOfDays = parseInt(numberOfHour / 24);
   if (numberOfDays === 0) {
     total += priceHour + (numberOfHour - 1) * (priceHour / 2);
   } else {

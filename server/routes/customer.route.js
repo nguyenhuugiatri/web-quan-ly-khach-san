@@ -28,7 +28,7 @@ router.get('/listType', async (req, res, next) => {
   return res.status(200).json({ listCustomerType, message: 'Successful !' });
 });
 router.get('/listCustomer', async (req, res, next) => {
-  const listCustomer= await customerModel.getListCustomer();
+  const listCustomer = await customerModel.getListCustomer();
   if (listCustomer === null)
     return res.status(404).json({
       message: 'Not found',
@@ -73,6 +73,7 @@ router.post('/checkIn', async (req, res, next) => {
     await rentReceiptModel.setStatusToRent(checkInRoom.id);
     return res.status(200).json({ message: 'Check-in was successful !' });
   } catch (err) {
+    console.log('Error:', err);
     return res.status(400).json({ message: 'Check-in was failed !' });
   }
 });
