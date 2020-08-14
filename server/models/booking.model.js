@@ -10,8 +10,8 @@ module.exports = {
   },
   addBookReceipt: async (bookReceipt) => {
     await db.load(
-      `INSERT INTO bookReceipt (idCustomer,dateIn,status)
-      VALUES ('${bookReceipt.id}','${bookReceipt.dateIn}','${bookReceipt.status})`
+      `INSERT INTO bookReceipt (idCustomer,dateIn,dateOut,status)
+      VALUES ('${bookReceipt.id}','${bookReceipt.dateIn}','${bookReceipt.dateOut}','${bookReceipt.status}')`
     );
   },
   addBookReceiptDetail: async (bookReceiptDetail) => {

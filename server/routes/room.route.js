@@ -22,11 +22,33 @@ router.get('/listRoom', async (req, res) => {
       res.status(400).json(e);
     });
 });
+router.get('/listTypeRoom', async (req, res) => {
+  await roomModel
+    .listTypeRoom()
+    .then((result) => {
+      res.status(200).json(result);
+    })
+    .catch((e) => {
+      res.status(400).json(e);
+    });
+});
 router.post('/roomCurrent', async (req, res) => {
   const { id } = req.body;
   console.log(req.body);
   await roomModel
     .roomById(id)
+    .then((result) => {
+      res.status(200).json(result);
+    })
+    .catch((e) => {
+      res.status(400).json(e);
+    });
+});
+router.post('/listRoomByType', async (req, res) => {
+  const { id,dateIn,dateOut } = req.body;
+  console.log(req.body);
+  await roomModel
+    .listRoomByType(id,dateIn,dateOut)
     .then((result) => {
       res.status(200).json(result);
     })

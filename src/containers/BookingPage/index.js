@@ -13,12 +13,13 @@ import {
 } from "antd";
 import DrawerUser from "../../components/DrawerUser";
 import TableUser from "../../components/TableUser";
-import moment from 'moment';
+import moment from "moment";
 import { UserAddOutlined } from "@ant-design/icons";
 import createPage from "../../components/createPage";
 import axios from "axios";
 import "antd/dist/antd.css";
 import { BOOKING_PAGE } from "../../components/Sidebar/constants";
+import BookDrawer from "./BookDrawer"
 const URL = process.env.SERV_HOST || "http://localhost:8000";
 
 class Booking extends Component {
@@ -27,13 +28,26 @@ class Booking extends Component {
     this.state = {
       visible: false,
       listCustomerType: [],
-      listRoom: [],
+      listRoomByType: [],
+      listTypeRoom: [],
+      dateTime:[],
       idRoom: "",
-      idTypeRoom:"",
+      idTypeRoom: "",
       typeRoom: "",
       priceRoom: "",
       valueForm: React.createRef(),
     };
+  }
+ 
+  handleOnChangeDateTime = (value) => {
+  const dateIn = moment(value[0]).format('YYYY-MM-DD hh:mm');
+  const dateOut = moment(value[1]).format('YYYY-MM-DD hh:mm');
+  this.setState({
+    dateTime: [dateIn,dateOut],
+  });
+  };
+  handleOnClose =() => {
+    this.setState({ visible: false });
   }
   handleOnChangeSelectRoom = (value) => {
     this.setState(
@@ -45,12 +59,43 @@ class Booking extends Component {
       }
     );
   };
-  handleOnChangeSelectCusType = (value) => {
+  handleOnChangeSelectTypeRoom = (value) => {
     this.setState(
       {
         idTypeRoom: value,
+      },
+      () => {
+        this.getListRoomByType();
       }
     );
+  };
+  getListRoomByType = () => {
+    console.log(this.state.idTypeRoom);
+    axios({
+      method: "POST",
+      url: `${URL}/room/listRoomByType`,
+      data: {
+        id: this.state.idTypeRoom,
+        dateIn: this.state.dateTime[0],
+        dateOut: this.state.dateTime[1],
+      },
+    })
+      .then((result) => {
+        let data = result.data;
+        console.log(data);
+        this.setState({
+          listRoomByType: data,
+        });
+      })
+      .catch((err) => {
+        if (err && err.response) {
+        }
+      });
+  };
+  handleOnChangeSelectCusType = (value) => {
+    this.setState({
+      idTypeRoom: value,
+    });
   };
   getListType = () => {
     axios
@@ -67,14 +112,15 @@ class Booking extends Component {
         console.log(err);
       });
   };
-  getListRoom = () => {
+ 
+  getListTypeRoom = () => {
     axios
-      .get(`${URL}/room/listRoom`)
+      .get(`${URL}/room/listTypeRoom`)
       .then((res) => {
         if (res.data) {
-          let listRoom = res.data;
+          let listTypeRoom = res.data;
           this.setState({
-            listRoom: listRoom,
+            listTypeRoom: listTypeRoom,
           });
         }
       })
@@ -106,40 +152,36 @@ class Booking extends Component {
   };
   componentDidMount() {
     this.getListType();
-    this.getListRoom();
+    this.getListTypeRoom();
   }
   submitBooking = () => {
     var data = this.state.valueForm.current.getFieldsValue();
-    //
     let customerBook = {
       idNumber: data.idNumber,
       name: data.cusName,
       idType: data.idCusType,
-      phone:data.phone,
-    }
+      phone: data.phone,
+    };
     let roomBook = {
       idRoom: this.state.idRoom,
       idTypeRoom: this.state.idTypeRoom,
       price: this.state.priceRoom,
-      date:data.dateTime
-    }
+      date: data.dateTime,
+    };
     let dataSend = {
-      bookCustomer:customerBook,
-      bookRoom:roomBook,
-    }
-  
-    // const { name, typeName, price } = checkInRoom;
-    //
+      bookCustomer: customerBook,
+      bookRoom: roomBook,
+    };
     axios({
-      method: 'POST',
+      method: "POST",
       url: `${URL}/booking/bookRoom`,
-      data : dataSend,
+      data: dataSend,
     }).then((result) => {
       console.log(result.data);
     });
   };
   render() {
-    const { listCustomerType, listRoom } = this.state;
+    const { listCustomerType, listTypeRoom,listRoomByType,visible } = this.state;
     return (
       <div>
         <div className="header-table">
@@ -155,142 +197,11 @@ class Booking extends Component {
           >
             Add User
           </Button>
-          <Drawer
-            title="BOOKING"
-            visible={this.state.visible}
-            onClose={() => {
-              this.setState({ visible: false });
-            }}
-            width={720}
-            bodyStyle={{ paddingBottom: 80 }}
-            footer={
-              <div
-                style={{
-                  textAlign: "right",
-                }}
-              >
-                <Button onClick={this.handleClose} style={{ marginRight: 8 }}>
-                  Cancel
-                </Button>
-                <Button
-                  type="primary"
-                  onClick={this.submitBooking}
-                  style={{ marginRight: 8 }}
-                >
-                  Book
-                </Button>
-              </div>
-            }
-            onSubmit={this.submitBooking}
-          >
-            <Form layout="vertical" hideRequiredMark ref={this.state.valueForm}>
-              <Row gutter={16}>
-                <Col span={12}>
-                  <Form.Item label="Name" name="cusName">
-                    <Input
-                      
-                      // value={cusName || ''}
-                      placeholder="Input customer's name"
-                      // onChange={this.handleOnChangeInputCustomer}
-                    />
-                  </Form.Item>
-                </Col>
-                <Col span={12}>
-                  <Form.Item label="ID Number" name="idNumber">
-                    <Input
-                      //   value={idNumber || ''}
-                      placeholder="Input customer's ID number"
-                      //   onChange={this.handleOnChangeInputCustomer}
-                    />
-                  </Form.Item>
-                </Col>
-              </Row>
-              <Row className="form-part" gutter={16}>
-                <Col span={12}>
-                  <Form.Item label="Customer Type" name="idCusType">
-                    <Select  placeholder="Select customer type" onChange={this.handleOnChangeSelectCusType}>
-                      {listCustomerType.map((item) => (
-                        <Select.Option key={item.id} value={item.id}>
-                          {item.name}
-                        </Select.Option>
-                      ))}
-                    </Select>
-                  </Form.Item>
-                </Col>
-                <Col span={12}>
-                  <Form.Item label="Phone Number" name="phone">
-                    <Input.Search
-                      //  value={phone || ''}
-                      placeholder="Input customer's phone number"
-                      //  onSearch={searchCustomerByPhone}
-                      //  onChange={this.handleOnChangeInputCustomer}
-                    />
-                  </Form.Item>
-                </Col>
-              </Row>
-              <Divider></Divider>
-              <Row gutter={16}>
-                <Col span={12}>
-                  <Form.Item label="Room" name="idRoom" >
-                    <Select
-                     
-                      placeholder="Select room"
-                      onChange={this.handleOnChangeSelectRoom}
-                    >
-                      {listRoom.map((item) => (
-                        <Select.Option key={item.id} value={item.id}>
-                          {item.name}
-                        </Select.Option>
-                      ))}
-                    </Select>
-                  </Form.Item>
-                </Col>
-                <Col span={12}>
-                  <Form.Item label="Type">
-                    <Input name="type" value={this.state.typeRoom} disabled />
-                  </Form.Item>
-                </Col>
-              </Row>
-              <Row gutter={16}>
-                <Col span={12}>
-                  <Form.Item label="Price">
-                    <InputNumber
-                      style={{ width: "100%" }}
-                      name="price"
-                      value={this.state.priceRoom || 0}
-                      formatter={(value) =>
-                        `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-                      }
-                      parser={(value) => value.replace(/\$\s?|(,*)/g, '')}
-                      // onChange={this.handleOnChangeInputRoom}
-                    />
-                  </Form.Item>
-                </Col>
-                <Col span={12}>
-                  
-                  <Form.Item name='dateTime' label='Date'>
-              <DatePicker.RangePicker
-                ranges={{
-                  Today: [moment(), moment()],
-                  'This Month': [
-                    moment().startOf('month'),
-                    moment().endOf('month'),
-                  ],
-                }}
-                showTime
-                format='YYYY/MM/DD HH:mm'
-                // onChange={this.handleOnChangeInputRoom}
-              />
-            </Form.Item>
-                </Col>
-              </Row>
-            </Form>
-          </Drawer>
+          <BookDrawer dataForm={this.state} handleOnChangeSelectCusType={this.handleOnChangeSelectCusType} handleOnClose ={this.handleOnClose} submitBooking={this.submitBooking} handleOnChangeSelectTypeRoom={this.handleOnChangeSelectTypeRoom} handleOnChangeDateTime={this.handleOnChangeDateTime} handleOnChangeSelectRoom={this.handleOnChangeSelectRoom}></BookDrawer>
         </div>
       </div>
     );
   }
 }
-
 const BookingPage = createPage(Booking, BOOKING_PAGE);
 export default BookingPage;
