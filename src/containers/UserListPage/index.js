@@ -82,7 +82,6 @@ class UserList extends Component {
     return () => {
       axios.patch(`${URL}/user/delete`, { id: record.id }).then((res) => {
         if (res.status === 200) {
-          console.log(res);
           message.success({
             style: {
               top: 100,
@@ -110,7 +109,6 @@ class UserList extends Component {
       const { username, permission } = form.getFieldsValue(
         'username permission'
       );
-      console.log(username);
       if (permission === 'Manager') {
         per = 1;
       } else {

@@ -164,7 +164,6 @@ export const checkInAPI = (data) => {
     })
     .catch((err) => {
       if (err && err.response) {
-        console.log('err.response', err.response);
         const { message } = err.response.data;
         showNotification(STATUS.ERROR, message);
       }

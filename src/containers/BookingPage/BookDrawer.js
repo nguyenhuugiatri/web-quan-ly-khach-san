@@ -13,9 +13,13 @@ import {
     InputNumber,
   } from "antd";
 export default class BookDrawer extends Component {
-     
+  
+       
+
+    
+    
     render() {
-        const {dataForm,handleOnClose,handleOnChangeSelectCusType,handleOnChangeDateTime,handleOnChangeSelectRoom,handleOnChangeSelectTypeRoom,submitBooking} = this.props;
+         const {dataForm,handleOnClose,handleOnChangeSelectCusType,handleOnChangeDateTime,handleOnChangePrice,handleOnChangeSelectRoom,handleOnChangeSelectTypeRoom,submitBooking} = this.props;
         const {listCustomerType,listTypeRoom,listRoomByType,visible,valueForm,priceRoom} = dataForm;
         return (
             <div>
@@ -94,9 +98,10 @@ export default class BookDrawer extends Component {
               </Row>
               <Divider></Divider>
               <Row>
-              <Col span={12}>
+              <Col span={24}>
                   <Form.Item name="dateTime" label="Date">
                     <DatePicker.RangePicker
+                    style={{width:'100%'}}
                       ranges={{
                         Today: [moment(), moment()],
                         "This Month": [
@@ -143,17 +148,17 @@ export default class BookDrawer extends Component {
                 </Col>
               </Row>
               <Row gutter={16}>
-                <Col span={12}>
-                  <Form.Item label="Price">
+                <Col span={24}>
+                  <Form.Item label="Price"   >
                     <InputNumber
+                     value={priceRoom}
                       style={{ width: "100%" }}
-                      name="price"
-                      value={priceRoom || 0}
+                      
                       formatter={(value) =>
                         `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
                       }
                       parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
-                      // onChange={this.handleOnChangeInputRoom}
+                       onChange={handleOnChangePrice}
                     />
                   </Form.Item>
                 </Col>

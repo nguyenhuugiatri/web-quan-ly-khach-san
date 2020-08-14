@@ -28,7 +28,6 @@ router.post("/bookRoom", async (req, res, next) => {
     const { bookCustomer, bookRoom } = req.body;
     const { phone } = bookCustomer;
     const { date } = bookRoom;
-    console.log(req.body);
     const dateIn = moment(date[0]).format("YYYY-MM-DD hh:mm");
     const dateOut = moment(date[1]).format("YYYY-MM-DD hh:mm");
 
@@ -44,6 +43,7 @@ router.post("/bookRoom", async (req, res, next) => {
       dateIn,
       dateOut,
       status: "0",
+      price:bookRoom.price,
     });
 
     const bookReceipt = await bookingModel.singleByCustomer(customer.id);

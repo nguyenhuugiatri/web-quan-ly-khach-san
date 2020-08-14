@@ -40,6 +40,11 @@ class Booking extends Component {
   handleOnClose = () => {
     this.setState({ visible: false });
   };
+  handleOnChangePrice=(value)=>{
+    this.setState({
+      priceRoom:value
+    });
+  }
   handleOnChangeSelectRoom = (value) => {
     this.setState(
       {
@@ -49,6 +54,7 @@ class Booking extends Component {
         this.getNameTypeAndPrice();
       }
     );
+    
   };
   handleOnChangeSelectTypeRoom = (value) => {
     this.setState(
@@ -61,7 +67,6 @@ class Booking extends Component {
     );
   };
   getListRoomByType = () => {
-    console.log(this.state.idTypeRoom);
     axios({
       method: "POST",
       url: `${URL}/room/listRoomByType`,
@@ -73,7 +78,6 @@ class Booking extends Component {
     })
       .then((result) => {
         let data = result.data;
-        console.log(data);
         this.setState({
           listRoomByType: data,
         });
@@ -108,8 +112,7 @@ class Booking extends Component {
       .get(`${URL}/booking/listBooking`)
       .then((res) => {
         if (res.data) {
-          console.log('111111111111111111',res.data);
-           let  listBooking  = res.data;
+           let listBooking  = res.data;
            for (let i=0;i<listBooking.length;i++){
             listBooking[i].key=listBooking[i].id;
             listBooking[i].dateIn=moment(listBooking[i].dateIn).format("YYYY-MM-DD hh:mm");
@@ -130,7 +133,6 @@ class Booking extends Component {
       .get(`${URL}/room/listTypeRoom`)
       .then((res) => {
         if (res.data) {
-          console.log(res.data);
           let listTypeRoom = res.data;
           this.setState({
             listTypeRoom: listTypeRoom,
@@ -142,7 +144,6 @@ class Booking extends Component {
       });
   };
   getNameTypeAndPrice = () => {
-    console.log(this.state.idRoom);
     axios({
       method: "POST",
       url: `${URL}/room/roomCurrent`,
@@ -152,7 +153,6 @@ class Booking extends Component {
     })
       .then((result) => {
         let data = result.data;
-        console.log(data[0].name);
         this.setState({
           typeRoom: data[0].name,
           priceRoom: data[0].price,
@@ -204,7 +204,6 @@ class Booking extends Component {
       url: `${URL}/booking/bookRoom`,
       data: dataSend,
     }).then((result) => {
-      console.log(result.data);
       const { message } = result.data;
       showNotification(STATUS.SUCCESS, message);
       this.handleOnClose();
@@ -231,13 +230,14 @@ class Booking extends Component {
               this.setState({ visible: true });
             }}
           >
-            Add User
+            Add New Booking
           </Button>
           <BookDrawer
             dataForm={this.state}
             handleOnChangeSelectCusType={this.handleOnChangeSelectCusType}
             handleOnClose={this.handleOnClose}
             submitBooking={this.submitBooking}
+            handleOnChangePrice={this.handleOnChangePrice}
             handleOnChangeSelectTypeRoom={this.handleOnChangeSelectTypeRoom}
             handleOnChangeDateTime={this.handleOnChangeDateTime}
             handleOnChangeSelectRoom={this.handleOnChangeSelectRoom}

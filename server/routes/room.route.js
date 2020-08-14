@@ -34,7 +34,6 @@ router.get('/listTypeRoom', async (req, res) => {
 });
 router.post('/roomCurrent', async (req, res) => {
   const { id } = req.body;
-  console.log(req.body);
   await roomModel
     .roomById(id)
     .then((result) => {
@@ -46,7 +45,6 @@ router.post('/roomCurrent', async (req, res) => {
 });
 router.post('/listRoomByType', async (req, res) => {
   const { id,dateIn,dateOut } = req.body;
-  console.log(req.body);
   await roomModel
     .listRoomByType(id,dateIn,dateOut)
     .then((result) => {

@@ -140,11 +140,11 @@ export default class TableBooking extends Component {
         ...this.getColumnSearchProps("nameRoom"),
       },
       {
-        title: "Status",
-        dataIndex: "status",
-        key: "status",
+        title: "Price",
+        dataIndex: "price",
+        key: "price",
         width: "30%",
-        ...this.getColumnSearchProps("status"),
+        ...this.getColumnSearchProps("price"),
       },
       {
         title: "Action",
