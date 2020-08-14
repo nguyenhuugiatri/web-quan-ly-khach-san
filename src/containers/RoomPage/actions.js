@@ -128,6 +128,14 @@ export const fillCheckOutCustomerAPI = (idRoom) => {
   };
 };
 
+const getListServiceAPI = (rentReceiptId) => {
+  return axios({
+    method: 'POST',
+    url: `${URL}/service/getListByRentReceiptId`,
+    data: { rentReceiptId },
+  });
+};
+
 export const checkOutAPI = (idRoom) => {
   return (dispatch) => {
     axios({
@@ -138,7 +146,10 @@ export const checkOutAPI = (idRoom) => {
       .then((result) => {
         const { roomCheckOut, total } = result.data;
         if (roomCheckOut && total) {
-          dispatch(checkOut({ ...roomCheckOut, total }));
+          getListServiceAPI(roomCheckOut.rentReceiptId).then((result) => {
+            const { serviceList } = result.data;
+            dispatch(checkOut({ ...roomCheckOut, serviceList, total }));
+          });
         }
       })
       .catch((err) => {
