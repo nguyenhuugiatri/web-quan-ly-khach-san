@@ -1,25 +1,13 @@
 import React, { Component } from "react";
 import { Button, message, Pagination } from "antd";
-import {
-  Drawer,
-  Form,
-  Col,
-  Row,
-  Input,
-  DatePicker,
-  Divider,
-  Select,
-  InputNumber,
-} from "antd";
-import DrawerUser from "../../components/DrawerUser";
-import TableUser from "../../components/TableUser";
 import moment from "moment";
 import { UserAddOutlined } from "@ant-design/icons";
 import createPage from "../../components/createPage";
 import axios from "axios";
 import "antd/dist/antd.css";
 import { BOOKING_PAGE } from "../../components/Sidebar/constants";
-import BookDrawer from "./BookDrawer"
+import BookDrawer from "./BookDrawer";
+import TableBooking from "./TableBooking";
 const URL = process.env.SERV_HOST || "http://localhost:8000";
 
 class Booking extends Component {
@@ -30,7 +18,8 @@ class Booking extends Component {
       listCustomerType: [],
       listRoomByType: [],
       listTypeRoom: [],
-      dateTime:[],
+      listBooking:[],
+      dateTime: [],
       idRoom: "",
       idTypeRoom: "",
       typeRoom: "",
@@ -38,17 +27,17 @@ class Booking extends Component {
       valueForm: React.createRef(),
     };
   }
- 
+
   handleOnChangeDateTime = (value) => {
-  const dateIn = moment(value[0]).format('YYYY-MM-DD hh:mm');
-  const dateOut = moment(value[1]).format('YYYY-MM-DD hh:mm');
-  this.setState({
-    dateTime: [dateIn,dateOut],
-  });
+    const dateIn = moment(value[0]).format("YYYY-MM-DD hh:mm");
+    const dateOut = moment(value[1]).format("YYYY-MM-DD hh:mm");
+    this.setState({
+      dateTime: [dateIn, dateOut],
+    });
   };
-  handleOnClose =() => {
+  handleOnClose = () => {
     this.setState({ visible: false });
-  }
+  };
   handleOnChangeSelectRoom = (value) => {
     this.setState(
       {
@@ -112,12 +101,34 @@ class Booking extends Component {
         console.log(err);
       });
   };
- 
+  getListBooking = () => {
+    axios
+      .get(`${URL}/booking/listBooking`)
+      .then((res) => {
+        if (res.data) {
+          console.log('111111111111111111',res.data);
+           let  listBooking  = res.data;
+           for (let i=0;i<listBooking.length;i++){
+            listBooking[i].key=listBooking[i].id;
+            listBooking[i].dateIn=moment(listBooking[i].dateIn).format("YYYY-MM-DD hh:mm");
+            listBooking[i].dateOut=moment(listBooking[i].dateOut).format("YYYY-MM-DD hh:mm");
+           }
+          this.setState({
+            listBooking: listBooking,
+          });
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   getListTypeRoom = () => {
     axios
       .get(`${URL}/room/listTypeRoom`)
       .then((res) => {
         if (res.data) {
+          console.log(res.data);
           let listTypeRoom = res.data;
           this.setState({
             listTypeRoom: listTypeRoom,
@@ -153,7 +164,21 @@ class Booking extends Component {
   componentDidMount() {
     this.getListType();
     this.getListTypeRoom();
+    this.getListBooking();
   }
+  setStatusBook = (record) => {
+    return ()=>{
+      axios({
+        method: "POST",
+        url: `${URL}/booking/setStatus`,
+        data: {
+          id: record.id,
+        }
+      }).then((result) => {
+        this.getListBooking();
+      });
+    }
+  };
   submitBooking = () => {
     var data = this.state.valueForm.current.getFieldsValue();
     let customerBook = {
@@ -181,7 +206,6 @@ class Booking extends Component {
     });
   };
   render() {
-    const { listCustomerType, listTypeRoom,listRoomByType,visible } = this.state;
     return (
       <div>
         <div className="header-table">
@@ -197,8 +221,17 @@ class Booking extends Component {
           >
             Add User
           </Button>
-          <BookDrawer dataForm={this.state} handleOnChangeSelectCusType={this.handleOnChangeSelectCusType} handleOnClose ={this.handleOnClose} submitBooking={this.submitBooking} handleOnChangeSelectTypeRoom={this.handleOnChangeSelectTypeRoom} handleOnChangeDateTime={this.handleOnChangeDateTime} handleOnChangeSelectRoom={this.handleOnChangeSelectRoom}></BookDrawer>
+          <BookDrawer
+            dataForm={this.state}
+            handleOnChangeSelectCusType={this.handleOnChangeSelectCusType}
+            handleOnClose={this.handleOnClose}
+            submitBooking={this.submitBooking}
+            handleOnChangeSelectTypeRoom={this.handleOnChangeSelectTypeRoom}
+            handleOnChangeDateTime={this.handleOnChangeDateTime}
+            handleOnChangeSelectRoom={this.handleOnChangeSelectRoom}
+          ></BookDrawer>
         </div>
+        <TableBooking listBooking={this.state.listBooking} setStatusBook={this.setStatusBook}></TableBooking>
       </div>
     );
   }

@@ -4,7 +4,24 @@ const bookingModel = require('../models/booking.model');
 const moment = require('moment');
 
 
-
+router.get('/listBooking', async (req, res) => {
+  await bookingModel.getListBooking()
+    .then((result) => {
+      res.status(200).json(result);
+    })
+    .catch((e) => {
+      res.status(400).json(e);
+    });
+});
+router.post('/setStatus', async (req, res) => {
+  await bookingModel.setStatusBookReceipt(req.body.id)
+    .then((result) => {
+      res.status(200).json(result);
+    })
+    .catch((e) => {
+      res.status(400).json(e);
+    });
+});
 router.post('/bookRoom', async (req, res, next) => {
   const { bookCustomer, bookRoom } = req.body;
   const { phone } = bookCustomer;
