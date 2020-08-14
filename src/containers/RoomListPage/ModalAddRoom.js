@@ -1,11 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Modal, Form, Select, Input, Row, Col, Button } from 'antd';
-import {
-  getListRoomTypeAPI,
-  updateVisible,
-  createRoom,
-} from './actions';
+import { getListRoomTypeAPI, updateVisible, createRoom } from './actions';
 class ModalAddRoom extends Component {
   constructor(props) {
     super(props);
@@ -19,10 +15,10 @@ class ModalAddRoom extends Component {
       this.props.listRoom,
       (v) => +v.name.match(/\d+/g)
     );
-    if(this.state.form.current!==null){
-        this.state.form.current.setFieldsValue({
-            name:`Room ${Math.max(...roomName) + 1}`
-        })
+    if (this.state.form.current !== null) {
+      this.state.form.current.setFieldsValue({
+        name: `Room ${Math.max(...roomName) + 1}`,
+      });
     }
   };
   componentDidMount() {
@@ -47,23 +43,23 @@ class ModalAddRoom extends Component {
   render() {
     console.log('aaa');
     let roomName = Array.from(
-        this.props.listRoom,
-        (v) => +v.name.match(/\d+/g)
-      );
+      this.props.listRoom,
+      (v) => +v.name.match(/\d+/g)
+    );
     return (
       <Modal
         visible={this.props.visible}
-        title="Choose option"
+        title='Choose option'
         onCancel={() => {
           this.props.updateVisible();
         }}
         footer={[
-          <Button key="back" onClick={() => this.props.updateVisible()}>
+          <Button key='back' onClick={() => this.props.updateVisible()}>
             Cancel
           </Button>,
           <Button
-            key="submit"
-            type="primary"
+            key='submit'
+            type='primary'
             onClick={() => {
               this.state.form.current.submit();
             }}
@@ -76,24 +72,24 @@ class ModalAddRoom extends Component {
           onFinish={(fields) => {
             this.addRoom(fields);
           }}
-          layout="vertical"
+          layout='vertical'
           ref={this.state.form}
           initialValues={{ name: `Room ${Math.max(...roomName) + 1}` }}
         >
           <Row gutter={16}>
-            <Col span={10}>
-              <Form.Item name="name" label="Room name">
+            <Col span={12}>
+              <Form.Item name='name' label='Room name'>
                 <Input disabled />
               </Form.Item>
             </Col>
-            <Col span={14}>
+            <Col span={12}>
               <Form.Item
-                name="idType"
-                label="Room type"
+                name='idType'
+                label='Room type'
                 rules={[{ required: true, message: 'Room type is required!' }]}
               >
                 <Select
-                  placeholder="Choose room type"
+                  placeholder='Choose room type'
                   onChange={(value) => {
                     this.onChangeRoomType(value);
                   }}
@@ -109,13 +105,13 @@ class ModalAddRoom extends Component {
           </Row>
           <Row gutter={16}>
             <Col span={12}>
-              <Form.Item label="Price" name="price">
+              <Form.Item label='Price' name='price'>
                 <Input disabled />
               </Form.Item>
             </Col>
 
             <Col span={12}>
-              <Form.Item label="Max person" name="maxCustomer">
+              <Form.Item label='Max person' name='maxCustomer'>
                 <Input disabled />
               </Form.Item>
             </Col>
