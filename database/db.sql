@@ -11,7 +11,7 @@
  Target Server Version : 80020
  File Encoding         : 65001
 
- Date: 18/07/2020 13:30:06
+ Date: 14/08/2020 21:35:07
 */
 
 SET NAMES utf8mb4;
@@ -48,6 +48,7 @@ CREATE TABLE `BookReceipt` (
   `id` int NOT NULL AUTO_INCREMENT,
   `idCustomer` int DEFAULT NULL,
   `dateIn` datetime DEFAULT NULL,
+  `dateOut` datetime DEFAULT NULL,
   `status` int DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `idCustomer` (`idCustomer`),
@@ -93,7 +94,7 @@ CREATE TABLE `Customer` (
   PRIMARY KEY (`id`),
   KEY `idType` (`idType`),
   CONSTRAINT `customer_ibfk_1` FOREIGN KEY (`idType`) REFERENCES `CustomerType` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- ----------------------------
 -- Records of Customer
@@ -101,7 +102,8 @@ CREATE TABLE `Customer` (
 BEGIN;
 INSERT INTO `Customer` VALUES (1, 1, 'Nguyễn Hữu Gia Trí', '0931467534', '261457481', 0);
 INSERT INTO `Customer` VALUES (2, 2, 'Huỳnh Thái Anh', '0821457888', '261783812', 0);
-INSERT INTO `Customer` VALUES (3, 1, 'Lê Hoài Bảo', '0931532566', '253212222', 0);
+INSERT INTO `Customer` VALUES (3, 1, 'Lê Hoài Bảo', '0931532566', '273214222', 0);
+INSERT INTO `Customer` VALUES (5, 2, 'Lem Đẹp Trai Vô Cùng', '0944026118', '213212422', 0);
 COMMIT;
 
 -- ----------------------------
@@ -132,12 +134,13 @@ CREATE TABLE `RentReceipt` (
   `idUser` int DEFAULT NULL,
   `dateIn` datetime DEFAULT NULL,
   `dateOut` datetime DEFAULT NULL,
+  `price` int DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `idCustomer` (`idCustomer`),
   KEY `idUser` (`idUser`),
   CONSTRAINT `rentreceipt_ibfk_1` FOREIGN KEY (`idCustomer`) REFERENCES `Customer` (`id`),
   CONSTRAINT `rentreceipt_ibfk_2` FOREIGN KEY (`idUser`) REFERENCES `User` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- ----------------------------
 -- Records of RentReceipt
@@ -188,37 +191,37 @@ CREATE TABLE `Room` (
 -- ----------------------------
 BEGIN;
 INSERT INTO `Room` VALUES (1, 1, 'Room 1', 1, 0);
-INSERT INTO `Room` VALUES (2, 2, 'Room 2', 2, 0);
-INSERT INTO `Room` VALUES (3, 3, 'Room 3', 3, 0);
-INSERT INTO `Room` VALUES (4, 4, 'Room 4', 4, 0);
-INSERT INTO `Room` VALUES (5, 1, 'Room 5', 2, 0);
+INSERT INTO `Room` VALUES (2, 2, 'Room 2', 1, 0);
+INSERT INTO `Room` VALUES (3, 3, 'Room 3', 1, 0);
+INSERT INTO `Room` VALUES (4, 4, 'Room 4', 1, 0);
+INSERT INTO `Room` VALUES (5, 1, 'Room 5', 1, 0);
 INSERT INTO `Room` VALUES (6, 2, 'Room 6', 1, 0);
 INSERT INTO `Room` VALUES (7, 3, 'Room 7', 1, 0);
 INSERT INTO `Room` VALUES (8, 4, 'Room 8', 1, 0);
-INSERT INTO `Room` VALUES (9, 1, 'Room 9', 3, 0);
-INSERT INTO `Room` VALUES (10, 2, 'Room 10', 3, 0);
-INSERT INTO `Room` VALUES (11, 3, 'Room 11', 2, 0);
-INSERT INTO `Room` VALUES (12, 4, 'Room 12', 2, 0);
-INSERT INTO `Room` VALUES (13, 1, 'Room 13', 4, 0);
-INSERT INTO `Room` VALUES (14, 2, 'Room 14', 4, 0);
-INSERT INTO `Room` VALUES (15, 3, 'Room 15', 4, 0);
-INSERT INTO `Room` VALUES (16, 4, 'Room 16', 3, 0);
+INSERT INTO `Room` VALUES (9, 1, 'Room 9', 1, 0);
+INSERT INTO `Room` VALUES (10, 2, 'Room 10', 1, 0);
+INSERT INTO `Room` VALUES (11, 3, 'Room 11', 1, 0);
+INSERT INTO `Room` VALUES (12, 4, 'Room 12', 1, 0);
+INSERT INTO `Room` VALUES (13, 1, 'Room 13', 1, 0);
+INSERT INTO `Room` VALUES (14, 2, 'Room 14', 1, 0);
+INSERT INTO `Room` VALUES (15, 3, 'Room 15', 1, 0);
+INSERT INTO `Room` VALUES (16, 4, 'Room 16', 1, 0);
 INSERT INTO `Room` VALUES (17, 1, 'Room 17', 1, 0);
-INSERT INTO `Room` VALUES (18, 2, 'Room 18', 2, 0);
-INSERT INTO `Room` VALUES (19, 3, 'Room 19', 3, 0);
-INSERT INTO `Room` VALUES (20, 4, 'Room 20', 4, 0);
-INSERT INTO `Room` VALUES (21, 1, 'Room 21', 2, 0);
+INSERT INTO `Room` VALUES (18, 2, 'Room 18', 1, 0);
+INSERT INTO `Room` VALUES (19, 3, 'Room 19', 1, 0);
+INSERT INTO `Room` VALUES (20, 4, 'Room 20', 1, 0);
+INSERT INTO `Room` VALUES (21, 1, 'Room 21', 1, 0);
 INSERT INTO `Room` VALUES (22, 2, 'Room 22', 1, 0);
 INSERT INTO `Room` VALUES (23, 3, 'Room 23', 1, 0);
 INSERT INTO `Room` VALUES (24, 4, 'Room 24', 1, 0);
-INSERT INTO `Room` VALUES (25, 1, 'Room 25', 3, 0);
-INSERT INTO `Room` VALUES (26, 2, 'Room 26', 3, 0);
-INSERT INTO `Room` VALUES (27, 3, 'Room 27', 2, 0);
-INSERT INTO `Room` VALUES (28, 4, 'Room 28', 2, 0);
-INSERT INTO `Room` VALUES (29, 1, 'Room 29', 4, 0);
-INSERT INTO `Room` VALUES (30, 2, 'Room 30', 4, 0);
-INSERT INTO `Room` VALUES (31, 3, 'Room 31', 4, 0);
-INSERT INTO `Room` VALUES (32, 4, 'Room 32', 3, 0);
+INSERT INTO `Room` VALUES (25, 1, 'Room 25', 1, 0);
+INSERT INTO `Room` VALUES (26, 2, 'Room 26', 1, 0);
+INSERT INTO `Room` VALUES (27, 3, 'Room 27', 1, 0);
+INSERT INTO `Room` VALUES (28, 4, 'Room 28', 1, 0);
+INSERT INTO `Room` VALUES (29, 1, 'Room 29', 1, 0);
+INSERT INTO `Room` VALUES (30, 2, 'Room 30', 1, 0);
+INSERT INTO `Room` VALUES (31, 3, 'Room 31', 1, 0);
+INSERT INTO `Room` VALUES (32, 4, 'Room 32', 1, 0);
 COMMIT;
 
 -- ----------------------------
@@ -230,6 +233,7 @@ CREATE TABLE `RoomType` (
   `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
   `price` int DEFAULT NULL,
   `maxCustomer` int DEFAULT NULL,
+  `priceHour` int DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
@@ -237,10 +241,10 @@ CREATE TABLE `RoomType` (
 -- Records of RoomType
 -- ----------------------------
 BEGIN;
-INSERT INTO `RoomType` VALUES (1, 'Standard ', 200, 2);
-INSERT INTO `RoomType` VALUES (2, 'Superior', 400, 3);
-INSERT INTO `RoomType` VALUES (3, 'Deluxe', 600, 3);
-INSERT INTO `RoomType` VALUES (4, 'Suite', 800, 3);
+INSERT INTO `RoomType` VALUES (1, 'Standard ', 200, 2, 20);
+INSERT INTO `RoomType` VALUES (2, 'Superior', 400, 3, 40);
+INSERT INTO `RoomType` VALUES (3, 'Deluxe', 600, 3, 60);
+INSERT INTO `RoomType` VALUES (4, 'Suite', 800, 3, 80);
 COMMIT;
 
 -- ----------------------------
@@ -281,7 +285,7 @@ CREATE TABLE `ServiceReceipt` (
   PRIMARY KEY (`id`) USING BTREE,
   KEY `idService` (`idService`),
   CONSTRAINT `servicereceipt_ibfk_1` FOREIGN KEY (`idService`) REFERENCES `Service` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- ----------------------------
 -- Records of ServiceReceipt

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import FormCheckIn from './FormCheckIn';
+import FormCheckOut from './FormCheckOut';
 import { Drawer, Button, Result } from 'antd';
 import { STATUS } from './constants';
 import { connect } from 'react-redux';
@@ -11,13 +12,9 @@ import {
 } from './actions';
 import './styles.scss';
 
-const { AVAILABLE, RENT, CLEANING } = STATUS;
+const { AVAILABLE, RENT, CLEANING, RESERVED } = STATUS;
 
 class RoomDrawer extends Component {
-  handleOnCheckIn = (values) => {
-    console.log(values);
-  };
-
   handleClose = () => {
     const { onClose, deleteCheckInCustomer, deleteCheckInRoom } = this.props;
     onClose();
@@ -25,12 +22,26 @@ class RoomDrawer extends Component {
     deleteCheckInRoom();
   };
 
+  handleCheckInClicked = async () => {
+    const { checkInCustomer, checkInRoom, currentUser } = this.props;
+    await checkInAPI({
+      checkInCustomer,
+      checkInRoom,
+      currentUser,
+    });
+    this.handleClose();
+  };
+
+  handleCheckOutClicked = () => {
+    console.log('Check out');
+  };
+
   componentDidMount = () => {
     this.props.getListCustomerType();
   };
 
   render() {
-    const { visible, checkInRoom, checkInCustomer, currentUser } = this.props;
+    const { visible, checkInRoom } = this.props;
     const { status } = checkInRoom;
     return (
       <Drawer
@@ -54,17 +65,18 @@ class RoomDrawer extends Component {
             <Button onClick={this.handleClose} style={{ marginRight: 8 }}>
               Cancel
             </Button>
-            {status !== CLEANING && (
-              <Button
-                onClick={checkInAPI({
-                  checkInCustomer,
-                  checkInRoom,
-                  currentUser,
-                })}
-                type='primary'
-              >
-                {status === RENT ? 'Check out' : 'Check in'}
+            {status === RENT ? (
+              <Button onClick={this.handleCheckOutClicked} type='primary'>
+                Check out
               </Button>
+            ) : status === AVAILABLE ? (
+              <Button onClick={this.handleCheckInClicked} type='primary'>
+                Check in
+              </Button>
+            ) : status === RESERVED ? (
+              <></>
+            ) : (
+              <></>
             )}
           </div>
         }
@@ -81,7 +93,8 @@ class RoomDrawer extends Component {
             }
           />
         )) ||
-          (status === AVAILABLE && <FormCheckIn />) || <div>cc</div>}
+          (status === AVAILABLE && <FormCheckIn />) ||
+          (status === RENT && <FormCheckOut />)}
       </Drawer>
     );
   }

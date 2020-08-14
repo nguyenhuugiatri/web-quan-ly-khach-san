@@ -1,6 +1,8 @@
 const router = require('express').Router();
 const customerModel = require('../models/customer.model');
 const rentReceiptModel = require('../models/rentReceipt.model');
+const serviceModel = require('../models/service.model');
+const roomModel = require('../models/room.model');
 const moment = require('moment');
 
 router.post('/getByPhone', async (req, res, next) => {
@@ -27,32 +29,53 @@ router.get('/listType', async (req, res, next) => {
 });
 
 router.post('/checkIn', async (req, res, next) => {
-  const { checkInCustomer, checkInRoom, currentUser } = req.body;
-  const { phone } = checkInCustomer;
-  const { date } = checkInRoom;
+  try {
+    const { checkInCustomer, checkInRoom, currentUser } = req.body;
+    const { phone } = checkInCustomer;
+    const { date } = checkInRoom;
 
-  const dateIn = moment(date[0]).format('YYYY-MM-DD hh:mm:ss');
-  const dateOut = moment(date[1]).format('YYYY-MM-DD hh:mm:ss');
+    const dateIn = moment(date[0]).format('YYYY-MM-DD HH:mm');
+    const dateOut = moment(date[1]).format('YYYY-MM-DD HH:mm');
+    const checkExist = await customerModel.singleByPhone(phone);
+    if (checkExist === null) {
+      await customerModel.addCustomer(checkInCustomer);
+    } else {
+      await customerModel.updateCustomer(checkInCustomer);
+    }
+    const customer = await customerModel.singleByPhone(phone);
+    await rentReceiptModel.addRentReceipt({
+      id: customer.id,
+      idUser: currentUser.id,
+      price: checkInRoom.price,
+      dateIn,
+      dateOut,
+    });
+    const rentReceiptCurrent = await rentReceiptModel.singleByCustomer(
+      customer.id
+    );
+    await serviceModel.addServiceReceipt();
+    const serviceReceipt = await serviceModel.getNewServiceReceipt();
 
-  const checkExist = await customerModel.singleByPhone(phone);
-  if (checkExist === null) {
-    await customerModel.addCustomer(checkInCustomer);
-  } else {
-    await customerModel.updateCustomer(checkInCustomer);
+    await rentReceiptModel.addRentReceiptDetail({
+      id: rentReceiptCurrent.id,
+      idRoom: checkInRoom.id,
+      idServiceReceipt: serviceReceipt.id,
+    });
+    await rentReceiptModel.setStatusToRent(checkInRoom.id);
+    return res.status(200).json({ message: 'Check-in was successful !' });
+  } catch (err) {
+    return res.status(400).json({ message: 'Check-in was failed !' });
   }
-  const customer = await customerModel.singleByPhone(phone);
-  await rentReceiptModel.addRentReceipt({
-    id: customer.id,
-    idUser: currentUser.id,
-    dateIn,
-    dateOut,
-  });
+});
 
-  const billRent = await rentReceiptModel.singleByCustomer(checkInCustomer.id);
-  await rentReceiptModel.addRentReceiptDetail({
-    id: billRent.id,
-    idRoom: checkInRoom.id,
-  });
+router.post('/getCheckOutCustomerByPhone', async (req, res, next) => {
+  const { idRoom } = req.body;
+  const checkOutCustomer = await customerModel.singleByCheckOutRoom(idRoom);
+  if (checkOutCustomer === null)
+    return res.status(404).json({
+      message: 'Not found',
+    });
+  return res.status(200).json({ checkOutCustomer, message: 'Successful !' });
 });
 
 module.exports = router;

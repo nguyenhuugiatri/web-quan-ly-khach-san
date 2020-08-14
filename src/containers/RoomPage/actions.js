@@ -6,6 +6,8 @@ import {
   GET_LIST_CUSTOMER_TYPE,
   UPDATE_CHECK_IN_CUSTOMER,
   UPDATE_CHECK_IN_ROOM,
+  CHECK_OUT,
+  GET_LIST_SERVICE_TYPE,
 } from './constants';
 
 const URL = process.env.SERV_HOST || 'http://localhost:8000';
@@ -24,6 +26,13 @@ export const getCustomerType = (listCustomerType) => {
   };
 };
 
+export const getServiceType = (listServiceType) => {
+  return {
+    type: GET_LIST_SERVICE_TYPE,
+    listServiceType,
+  };
+};
+
 export const updateCheckInCustomer = (customer) => {
   return {
     type: UPDATE_CHECK_IN_CUSTOMER,
@@ -35,6 +44,13 @@ export const updateCheckInRoom = (room) => {
   return {
     type: UPDATE_CHECK_IN_ROOM,
     room,
+  };
+};
+
+export const checkOut = (checkOutInfo) => {
+  return {
+    type: CHECK_OUT,
+    checkOutInfo,
   };
 };
 
@@ -75,6 +91,26 @@ export const getListCustomerTypeAPI = () => {
   };
 };
 
+export const getListServiceTypeAPI = () => {
+  return (dispatch) => {
+    axios
+      .get(`${URL}/service/getList`)
+      .then((res) => {
+        if (res.data) {
+          const { serviceList } = res.data;
+          dispatch(getServiceType(serviceList));
+        }
+      })
+      .catch((err) => {
+        if (err && err.response) {
+          const { message } = err.response.data;
+          console.log('Error:', message);
+          // showNotification(STATUS.ERROR, message);
+        }
+      });
+  };
+};
+
 export const searchCustomerByPhoneAPI = (phone) => {
   return (dispatch) => {
     axios({
@@ -98,25 +134,92 @@ export const searchCustomerByPhoneAPI = (phone) => {
   };
 };
 
-export const checkInAPI = (data) => {
+export const fillCheckOutCustomerAPI = (idRoom) => {
   return (dispatch) => {
     axios({
       method: 'POST',
-      url: `${URL}/customer/checkIn`,
-      data,
-    }).then((result) => {
-      console.log(result.data);
-      // const { customer } = result.data;
-      // if (customer) {
-      //   dispatch(updateCheckInCustomer(customer));
-      // }
-    });
-    // .catch((err) => {
-    //   if (err && err.response) {
-    //     const { message } = err.response.data;
-    //     showNotification(STATUS.ERROR, message);
-    //     dispatch(updateCheckInCustomer({}));
-    //   }
-    // });
+      url: `${URL}/customer/getCheckOutCustomerByPhone`,
+      data: { idRoom },
+    })
+      .then((result) => {
+        const { checkOutCustomer } = result.data;
+        if (checkOutCustomer) {
+          dispatch(updateCheckInCustomer(checkOutCustomer));
+        }
+      })
+      .catch((err) => {
+        if (err && err.response) {
+          const { message } = err.response.data;
+          showNotification(STATUS.ERROR, message);
+        }
+      });
   };
+};
+
+const getListServiceAPI = (rentReceiptId) => {
+  return axios({
+    method: 'POST',
+    url: `${URL}/service/getListByRentReceiptId`,
+    data: { rentReceiptId },
+  })
+    .then((result) => {
+      const { serviceList, serviceCharge } = result.data;
+      if (serviceList) return { serviceList, serviceCharge };
+    })
+    .catch((err) => {
+      if (err && err.response) {
+        const { message } = err.response.data;
+        console.log('Error: ', message);
+        return [];
+      }
+    });
+};
+
+export const checkOutAPI = (idRoom) => {
+  return (dispatch) => {
+    axios({
+      method: 'POST',
+      url: `${URL}/room/checkOut`,
+      data: { idRoom },
+    })
+      .then(async (result) => {
+        const { roomCheckOut, total } = result.data;
+        if (roomCheckOut && total) {
+          const { serviceList, serviceCharge } = await getListServiceAPI(
+            roomCheckOut.rentReceiptId
+          );
+          dispatch(
+            checkOut({ ...roomCheckOut, serviceList, serviceCharge, total })
+          );
+        }
+      })
+
+      .catch((err) => {
+        if (err && err.response) {
+          const { message } = err.response.data;
+          showNotification(STATUS.ERROR, message);
+        }
+      });
+  };
+};
+
+export const checkInAPI = (data) => {
+  return axios({
+    method: 'POST',
+    url: `${URL}/customer/checkIn`,
+    data,
+  })
+    .then((result) => {
+      const { message } = result.data;
+      if (message) {
+        showNotification(STATUS.SUCCESS, message);
+      }
+    })
+    .catch((err) => {
+      if (err && err.response) {
+        console.log('err.response', err.response);
+        const { message } = err.response.data;
+        showNotification(STATUS.ERROR, message);
+      }
+    });
 };

@@ -15,6 +15,7 @@ import {
   updateCheckInCustomer,
   updateCheckInRoom,
 } from './actions';
+import moment from 'moment';
 import './styles.scss';
 
 class FormCheckIn extends Component {
@@ -53,6 +54,7 @@ class FormCheckIn extends Component {
       typeName: cusTypeName,
     } = checkInCustomer;
     const { name, typeName, price } = checkInRoom;
+
     return (
       <Form layout='vertical' hideRequiredMark>
         <Row gutter={16}>
@@ -110,12 +112,22 @@ class FormCheckIn extends Component {
         <Row gutter={16}>
           <Col span={12}>
             <Form.Item label='Room'>
-              <Input name='name' value={name || ''} disabled />
+              <Input
+                className='inputDisabled'
+                name='name'
+                value={name || ''}
+                disabled
+              />
             </Form.Item>
           </Col>
           <Col span={12}>
             <Form.Item label='Type'>
-              <Input name='type' value={typeName || ''} disabled />
+              <Input
+                className='inputDisabled'
+                name='type'
+                value={typeName || ''}
+                disabled
+              />
             </Form.Item>
           </Col>
         </Row>
@@ -135,10 +147,17 @@ class FormCheckIn extends Component {
             </Form.Item>
           </Col>
           <Col span={12}>
-            <Form.Item name='dateTime' label='DateTime'>
+            <Form.Item name='dateTime' label='Date'>
               <DatePicker.RangePicker
-                style={{ width: '100%' }}
-                getPopupContainer={(trigger) => trigger.parentElement}
+                ranges={{
+                  Today: [moment(), moment()],
+                  'This Month': [
+                    moment().startOf('month'),
+                    moment().endOf('month'),
+                  ],
+                }}
+                showTime
+                format='YYYY/MM/DD HH:mm'
                 onChange={this.handleOnChangeInputRoom}
               />
             </Form.Item>
