@@ -6,6 +6,7 @@ import {
   UserOutlined,
   VideoCameraOutlined,
   UploadOutlined,
+  HomeOutlined
 } from '@ant-design/icons';
 import * as PAGE from './constants';
 import './styles.scss';
@@ -28,6 +29,9 @@ class Sidebar extends Component {
           </Menu.Item>
           <Menu.Item key={PAGE.USER_PAGE} icon={<VideoCameraOutlined />}>
             <Link to='/users'>Users</Link>
+          </Menu.Item>
+          <Menu.Item key={PAGE.ROOM_LIST_PAGE} icon={<HomeOutlined />}>
+            <Link to='/room'>Rooms</Link>
           </Menu.Item>
         </Menu>
       </Sider>
