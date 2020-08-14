@@ -8,8 +8,13 @@ import {
   Divider,
   Select,
   InputNumber,
+  Typography,
+  Button,
+  Tooltip,
 } from 'antd';
+import { AppstoreAddOutlined } from '@ant-design/icons';
 import { connect } from 'react-redux';
+import TableService from './../../components/TableService';
 import {
   fillCheckOutCustomerAPI,
   updateCheckInCustomer,
@@ -144,6 +149,26 @@ class FormCheckOut extends Component {
             )}
           </Col>
         </Row>
+        <Divider></Divider>
+        <Row
+          justify='space-between'
+          align='middle'
+          style={{
+            marginBottom: '8px',
+          }}
+        >
+          <Typography.Text
+            style={{
+              color: 'rgba(0, 0, 0, 0.85)',
+            }}
+          >
+            Services
+          </Typography.Text>
+          <Tooltip title='Add service'>
+            <Button shape='circle' icon={<AppstoreAddOutlined />} />
+          </Tooltip>
+        </Row>
+        <TableService />
       </Form>
     );
   }
