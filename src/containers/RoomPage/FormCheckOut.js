@@ -24,7 +24,9 @@ import {
   getListServiceTypeAPI,
 } from './actions';
 import moment from 'moment';
+import axios from 'axios';
 import './styles.scss';
+const URL = process.env.SERV_HOST || 'http://localhost:8000';
 
 class FormCheckOut extends Component {
   constructor(props) {
@@ -41,11 +43,18 @@ class FormCheckOut extends Component {
     });
   };
 
-  handleOk = () => {
+  handleAddService = (newService) => {
     this.setState({ loading: true });
-    setTimeout(() => {
-      this.setState({ loading: false, visible: false });
-    }, 3000);
+    const { idService, amount } = newService;
+    const { checkInRoom, checkOut } = this.props;
+    const { rentReceiptId: idRentReceipt, id: idRoom } = checkInRoom;
+    axios({
+      method: 'POST',
+      url: `${URL}/service/add`,
+      data: { idService, amount, idRoom, idRentReceipt },
+    })
+      .then(this.setState({ loading: false, visible: false }, checkOut(idRoom)))
+      .catch((err) => console.log(err));
   };
 
   handleCancel = () => {
@@ -78,7 +87,14 @@ class FormCheckOut extends Component {
       typeName: cusTypeName,
     } = checkInCustomer;
 
-    let { name, typeName, dateIn, total, serviceList } = checkInRoom;
+    let {
+      name,
+      typeName,
+      dateIn,
+      total,
+      serviceList,
+      serviceCharge,
+    } = checkInRoom;
 
     return (
       <Form layout='vertical' hideRequiredMark>
@@ -144,7 +160,6 @@ class FormCheckOut extends Component {
                 disabled
                 name='name'
                 value={name || ''}
-                disabled
               />
             </Form.Item>
           </Col>
@@ -209,10 +224,10 @@ class FormCheckOut extends Component {
             />
           </Tooltip>
         </Row>
-        <TableService serviceList={serviceList} />
+        <TableService serviceList={serviceList} serviceCharge={serviceCharge} />
         <AddServiceForm
           modalData={{ ...this.state, listServiceType }}
-          handleOk={this.handleOk}
+          handleAddService={this.handleAddService}
           handleCancel={this.handleCancel}
         />
       </Form>

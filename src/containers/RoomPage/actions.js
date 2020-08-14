@@ -163,8 +163,8 @@ const getListServiceAPI = (rentReceiptId) => {
     data: { rentReceiptId },
   })
     .then((result) => {
-      const { serviceList } = result.data;
-      if (serviceList) return serviceList;
+      const { serviceList, serviceCharge } = result.data;
+      if (serviceList && serviceCharge) return { serviceList, serviceCharge };
     })
     .catch((err) => {
       if (err && err.response) {
@@ -185,10 +185,12 @@ export const checkOutAPI = (idRoom) => {
       .then(async (result) => {
         const { roomCheckOut, total } = result.data;
         if (roomCheckOut && total) {
-          const serviceList = await getListServiceAPI(
+          const { serviceList, serviceCharge } = await getListServiceAPI(
             roomCheckOut.rentReceiptId
           );
-          dispatch(checkOut({ ...roomCheckOut, serviceList, total }));
+          dispatch(
+            checkOut({ ...roomCheckOut, serviceList, serviceCharge, total })
+          );
         }
       })
 
