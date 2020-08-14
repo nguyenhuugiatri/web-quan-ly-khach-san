@@ -6,4 +6,10 @@ module.exports = {
     if (rows.length === 0) return null;
     return rows[rows.length - 1];
   },
+
+  deleteServiceReceipt: async (rentReceiptId) => {
+    await db.load(`UPDATE ServiceReceipt
+    SET amount = 0, total=0
+    WHERE id=${rentReceiptId};`);
+  },
 };

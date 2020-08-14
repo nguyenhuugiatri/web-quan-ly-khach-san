@@ -175,6 +175,21 @@ const getListServiceAPI = (rentReceiptId) => {
     });
 };
 
+const deleteServiceReceipt = (rentReceiptId) => {
+  return axios({
+    method: 'POST',
+    url: `${URL}/service/delete`,
+    data: { rentReceiptId },
+  })
+    .then((result) => {})
+    .catch((err) => {
+      if (err && err.response) {
+        const { message } = err.response.data;
+        console.log('Error: ', message);
+      }
+    });
+};
+
 export const checkOutAPI = (idRoom) => {
   return (dispatch) => {
     axios({
