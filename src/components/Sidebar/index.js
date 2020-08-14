@@ -32,6 +32,9 @@ class Sidebar extends Component {
           <Menu.Item key={PAGE.BOOKING_PAGE} icon={<VideoCameraOutlined />}>
             <Link to='/booking'>Booking</Link>
           </Menu.Item>
+          <Menu.Item key={PAGE.CUSTOMER_PAGE} icon={<VideoCameraOutlined />}>
+            <Link to='/customer'>Customer</Link>
+          </Menu.Item>
         </Menu>
       </Sider>
     );

@@ -8,6 +8,8 @@ import "antd/dist/antd.css";
 import { BOOKING_PAGE } from "../../components/Sidebar/constants";
 import BookDrawer from "./BookDrawer";
 import TableBooking from "./TableBooking";
+import showNotification from '../../utils/showNotification';
+import { STATUS } from '../../utils/constants';
 const URL = process.env.SERV_HOST || "http://localhost:8000";
 
 class Booking extends Component {
@@ -203,7 +205,17 @@ class Booking extends Component {
       data: dataSend,
     }).then((result) => {
       console.log(result.data);
-    });
+      const { message } = result.data;
+      showNotification(STATUS.SUCCESS, message);
+      this.handleOnClose();
+      this.getListBooking();
+    }).catch((err) => {
+      if (err && err.response) {
+        showNotification(STATUS.ERROR, message);
+        this.handleOnClose();
+        this.getListBooking();
+      }
+    });;
   };
   render() {
     return (

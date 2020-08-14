@@ -27,6 +27,15 @@ router.get('/listType', async (req, res, next) => {
 
   return res.status(200).json({ listCustomerType, message: 'Successful !' });
 });
+router.get('/listCustomer', async (req, res, next) => {
+  const listCustomer= await customerModel.getListCustomer();
+  if (listCustomer === null)
+    return res.status(404).json({
+      message: 'Not found',
+    });
+
+  return res.status(200).json({ listCustomer, message: 'Successful !' });
+});
 
 router.post('/checkIn', async (req, res, next) => {
   try {
@@ -53,7 +62,6 @@ router.post('/checkIn', async (req, res, next) => {
     const rentReceiptCurrent = await rentReceiptModel.singleByCustomer(
       customer.id
     );
-    await serviceModel.addServiceReceipt();
     const serviceReceipt = await serviceModel.getNewServiceReceipt();
 
     await rentReceiptModel.addRentReceiptDetail({

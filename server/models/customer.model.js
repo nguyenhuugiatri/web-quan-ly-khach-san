@@ -19,6 +19,11 @@ module.exports = {
     if (rows.length === 0) return null;
     return rows;
   },
+  getListCustomer: async () => {
+    const rows = await db.load('select c.name,c.phone,c.idNumber,ct.name as typeName from customer c, customertype ct where c.idType=ct.id');
+    if (rows.length === 0) return null;
+    return rows;
+  },
 
   addCustomer: async (customer) => {
     await db.load(

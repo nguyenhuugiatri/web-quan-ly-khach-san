@@ -17,7 +17,7 @@ module.exports = {
   addRentReceiptDetail: async (rentReceiptDetail) => {
     await db.load(
       `INSERT INTO RentReceiptDetail (idRentReceipt,idRoom,idServiceReceipt)
-      VALUES ('${rentReceiptDetail.id}','${rentReceiptDetail.idRoom}','${rentReceiptDetail.idServiceReceipt}')`
+      VALUES ('${rentReceiptDetail.id}','${rentReceiptDetail.idRoom}','1')`
     );
   },
   setStatusToRent: async (id) => {

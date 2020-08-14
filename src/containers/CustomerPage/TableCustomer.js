@@ -3,7 +3,7 @@ import { Table, Input, Button, Space } from "antd";
 import Highlighter from "react-highlight-words";
 import { SearchOutlined } from "@ant-design/icons";
 
-export default class TableBooking extends Component {
+export default class TableCustomer extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -94,73 +94,36 @@ export default class TableBooking extends Component {
     this.setState({ searchText: "" });
   };
   render() {
-    const { listBooking ,setStatusBook } = this.props;
-
+    const { listCustomer } = this.props;
     const columns = [
       {
         title: "Name",
         dataIndex: "name",
         key: "name",
-        width: "20%",
+        width: "30%",
         ...this.getColumnSearchProps("name"),
       },
       {
         title: "Phone",
         dataIndex: "phone",
         key: "phone",
-        width: "10%",
+        width: "20%",
         ...this.getColumnSearchProps("phone"),
       },
       {
         title: "ID Number",
         dataIndex: "idNumber",
         key: "idNumber",
-        width: "10%",
         ...this.getColumnSearchProps("idNumber"),
       },
       {
-        title: "Date In",
-        dataIndex: "dateIn",
-        key: "dateIn",
-        width: "15%",
-        ...this.getColumnSearchProps("dateIn"),
+        title: "Type",
+        dataIndex: "typeName",
+        key: "typeName",
+        ...this.getColumnSearchProps("typeName"),
       },
-      {
-        title: "Date Out",
-        dataIndex: "dateOut",
-        key: "dateOut",
-        width: "15%",
-        ...this.getColumnSearchProps("dateOut"),
-      },
-      {
-        title: "Room",
-        dataIndex: "nameRoom",
-        key: "nameRoom",
-        width: "20%",
-        ...this.getColumnSearchProps("nameRoom"),
-      },
-      {
-        title: "Status",
-        dataIndex: "status",
-        key: "status",
-        width: "30%",
-        ...this.getColumnSearchProps("status"),
-      },
-      {
-        title: "Action",
-        key: "opera",
-        render: (_, record) => (
-          <Space size="middle">
-            <Button type="primary" style={{ marginRight: 8 }} onClick={setStatusBook(record)}>
-              Accept
-            </Button>
-            <Button  style={{ marginRight: 8 }} onClick={setStatusBook(record)}>
-              Delete
-            </Button>
-          </Space>
-        ),
-      },
+    
     ];
-    return <Table columns={columns} dataSource={listBooking} />;
+    return <Table columns={columns} dataSource={listCustomer} />;
   }
 }
