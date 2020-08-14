@@ -8,25 +8,77 @@ import {
   Divider,
   Select,
   InputNumber,
+  Typography,
+  Button,
+  Tooltip,
 } from 'antd';
+import { AppstoreAddOutlined } from '@ant-design/icons';
 import { connect } from 'react-redux';
+import TableService from './../../components/TableService';
+import AddServiceForm from './../../components/AddServiceForm';
 import {
   fillCheckOutCustomerAPI,
   updateCheckInCustomer,
   updateCheckInRoom,
   checkOutAPI,
+  getListServiceTypeAPI,
 } from './actions';
 import moment from 'moment';
+import axios from 'axios';
 import './styles.scss';
+const URL = process.env.SERV_HOST || 'http://localhost:8000';
 
 class FormCheckOut extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      loading: false,
+      visible: false,
+    };
+  }
+
+  showModal = () => {
+    this.setState({
+      visible: true,
+    });
+  };
+
+  handleAddService = (newService) => {
+    this.setState({ loading: true });
+    const { idService, amount } = newService;
+    const { checkInRoom, checkOut } = this.props;
+    const { rentReceiptId: idRentReceipt, id: idRoom } = checkInRoom;
+    axios({
+      method: 'POST',
+      url: `${URL}/service/add`,
+      data: { idService, amount, idRoom, idRentReceipt },
+    })
+      .then(this.setState({ loading: false, visible: false }, checkOut(idRoom)))
+      .catch((err) => console.log(err));
+  };
+
+  handleCancel = () => {
+    this.setState({ visible: false });
+  };
+
   componentDidMount() {
-    const { checkInRoom, fillCheckOutCustomer, checkOut } = this.props;
+    const {
+      checkInRoom,
+      fillCheckOutCustomer,
+      checkOut,
+      getListServiceType,
+    } = this.props;
+    getListServiceType();
     fillCheckOutCustomer(checkInRoom.id);
     checkOut(checkInRoom.id);
   }
   render() {
-    const { checkInCustomer, checkInRoom, listCustomerType } = this.props;
+    const {
+      checkInCustomer,
+      checkInRoom,
+      listCustomerType,
+      listServiceType,
+    } = this.props;
 
     const {
       idNumber,
@@ -35,7 +87,14 @@ class FormCheckOut extends Component {
       typeName: cusTypeName,
     } = checkInCustomer;
 
-    let { name, typeName, dateIn, total } = checkInRoom;
+    let {
+      name,
+      typeName,
+      dateIn,
+      total,
+      serviceList,
+      serviceCharge,
+    } = checkInRoom;
 
     return (
       <Form layout='vertical' hideRequiredMark>
@@ -101,7 +160,6 @@ class FormCheckOut extends Component {
                 disabled
                 name='name'
                 value={name || ''}
-                disabled
               />
             </Form.Item>
           </Col>
@@ -118,7 +176,7 @@ class FormCheckOut extends Component {
         </Row>
         <Row gutter={16}>
           <Col span={12}>
-            <Form.Item label='Total'>
+            <Form.Item label='Room Charge'>
               <InputNumber
                 disabled
                 style={{ width: '100%' }}
@@ -144,6 +202,34 @@ class FormCheckOut extends Component {
             )}
           </Col>
         </Row>
+        <Divider></Divider>
+        <Row
+          justify='space-between'
+          align='middle'
+          style={{
+            marginBottom: '8px',
+          }}
+        >
+          <Typography.Text
+            style={{
+              color: 'rgba(0, 0, 0, 0.85)',
+            }}
+          >
+            Services
+          </Typography.Text>
+          <Tooltip title='Add service'>
+            <Button
+              shape='circle'
+              icon={<AppstoreAddOutlined onClick={this.showModal} />}
+            />
+          </Tooltip>
+        </Row>
+        <TableService serviceList={serviceList} serviceCharge={serviceCharge} />
+        <AddServiceForm
+          modalData={{ ...this.state, listServiceType }}
+          handleAddService={this.handleAddService}
+          handleCancel={this.handleCancel}
+        />
       </Form>
     );
   }
@@ -154,6 +240,7 @@ const mapStateToProps = (state) => {
     checkInCustomer: state.room.checkInCustomer,
     checkInRoom: state.room.checkInRoom,
     listCustomerType: state.room.listCustomerType,
+    listServiceType: state.room.listServiceType,
   };
 };
 
@@ -170,6 +257,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     checkOut: (idRoom) => {
       dispatch(checkOutAPI(idRoom));
+    },
+    getListServiceType: () => {
+      dispatch(getListServiceTypeAPI());
     },
   };
 };

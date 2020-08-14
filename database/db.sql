@@ -48,6 +48,7 @@ CREATE TABLE `BookReceipt` (
   `id` int NOT NULL AUTO_INCREMENT,
   `idCustomer` int DEFAULT NULL,
   `dateIn` datetime DEFAULT NULL,
+  `dateOut` datetime DEFAULT NULL,
   `status` int DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `idCustomer` (`idCustomer`),

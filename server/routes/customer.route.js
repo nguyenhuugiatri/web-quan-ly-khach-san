@@ -43,8 +43,8 @@ router.post('/checkIn', async (req, res, next) => {
     const { phone } = checkInCustomer;
     const { date } = checkInRoom;
 
-    const dateIn = moment(date[0]).format('YYYY-MM-DD hh:mm:ss');
-    const dateOut = moment(date[1]).format('YYYY-MM-DD hh:mm:ss');
+    const dateIn = moment(date[0]).format('YYYY-MM-DD HH:mm');
+    const dateOut = moment(date[1]).format('YYYY-MM-DD HH:mm');
     const checkExist = await customerModel.singleByPhone(phone);
     if (checkExist === null) {
       await customerModel.addCustomer(checkInCustomer);
@@ -62,6 +62,7 @@ router.post('/checkIn', async (req, res, next) => {
     const rentReceiptCurrent = await rentReceiptModel.singleByCustomer(
       customer.id
     );
+    await serviceModel.addServiceReceipt();
     const serviceReceipt = await serviceModel.getNewServiceReceipt();
 
     await rentReceiptModel.addRentReceiptDetail({

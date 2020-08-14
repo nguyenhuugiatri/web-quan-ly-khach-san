@@ -147,6 +147,7 @@ class UserList extends Component {
     axios.post(`${URL}/user/insert`, fields).then((value) => {
       if (value) {
         message.success('Insert user success');
+        this.state.formInsert.current.resetFields();
         this.getList();
       }
     });
@@ -158,9 +159,6 @@ class UserList extends Component {
           <Button
             icon={<UserAddOutlined />}
             type="primary"
-            style={{
-              marginBottom: 16,
-            }}
             onClick={() => {
               this.setState({ visible: true });
               let form = this.state.formInsert.current;

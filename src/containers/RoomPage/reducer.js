@@ -3,6 +3,7 @@ import {
   UPDATE_CHECK_IN_CUSTOMER,
   UPDATE_CHECK_IN_ROOM,
   GET_LIST_CUSTOMER_TYPE,
+  GET_LIST_SERVICE_TYPE,
   CHECK_OUT,
 } from './constants';
 
@@ -11,6 +12,7 @@ let initState = {
   listCustomerType: null,
   checkInCustomer: {},
   checkInRoom: {},
+  listServiceType: [],
 };
 
 const roomReducer = (state = initState, action) => {
@@ -21,6 +23,10 @@ const roomReducer = (state = initState, action) => {
 
     case GET_LIST_CUSTOMER_TYPE:
       state.listCustomerType = action.listCustomerType;
+      return { ...state };
+
+    case GET_LIST_SERVICE_TYPE:
+      state.listServiceType = action.listServiceType;
       return { ...state };
 
     case UPDATE_CHECK_IN_CUSTOMER:

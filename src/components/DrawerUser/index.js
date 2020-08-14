@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import { Drawer, Button, Form, Input, Col, Row, Select, message } from 'antd';
-import axios from 'axios';
-const URL = process.env.SERV_HOST || 'http://localhost:8000';
+import { Drawer, Button, Form, Input, Col, Row, Select } from 'antd';
+
 
 export default class DrawerUser extends Component {
   constructor(props) {

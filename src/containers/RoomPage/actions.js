@@ -7,6 +7,7 @@ import {
   UPDATE_CHECK_IN_CUSTOMER,
   UPDATE_CHECK_IN_ROOM,
   CHECK_OUT,
+  GET_LIST_SERVICE_TYPE,
 } from './constants';
 
 const URL = process.env.SERV_HOST || 'http://localhost:8000';
@@ -22,6 +23,13 @@ export const getCustomerType = (listCustomerType) => {
   return {
     type: GET_LIST_CUSTOMER_TYPE,
     listCustomerType,
+  };
+};
+
+export const getServiceType = (listServiceType) => {
+  return {
+    type: GET_LIST_SERVICE_TYPE,
+    listServiceType,
   };
 };
 
@@ -83,6 +91,26 @@ export const getListCustomerTypeAPI = () => {
   };
 };
 
+export const getListServiceTypeAPI = () => {
+  return (dispatch) => {
+    axios
+      .get(`${URL}/service/getList`)
+      .then((res) => {
+        if (res.data) {
+          const { serviceList } = res.data;
+          dispatch(getServiceType(serviceList));
+        }
+      })
+      .catch((err) => {
+        if (err && err.response) {
+          const { message } = err.response.data;
+          console.log('Error:', message);
+          // showNotification(STATUS.ERROR, message);
+        }
+      });
+  };
+};
+
 export const searchCustomerByPhoneAPI = (phone) => {
   return (dispatch) => {
     axios({
@@ -128,6 +156,25 @@ export const fillCheckOutCustomerAPI = (idRoom) => {
   };
 };
 
+const getListServiceAPI = (rentReceiptId) => {
+  return axios({
+    method: 'POST',
+    url: `${URL}/service/getListByRentReceiptId`,
+    data: { rentReceiptId },
+  })
+    .then((result) => {
+      const { serviceList, serviceCharge } = result.data;
+      if (serviceList) return { serviceList, serviceCharge };
+    })
+    .catch((err) => {
+      if (err && err.response) {
+        const { message } = err.response.data;
+        console.log('Error: ', message);
+        return [];
+      }
+    });
+};
+
 export const checkOutAPI = (idRoom) => {
   return (dispatch) => {
     axios({
@@ -135,12 +182,18 @@ export const checkOutAPI = (idRoom) => {
       url: `${URL}/room/checkOut`,
       data: { idRoom },
     })
-      .then((result) => {
+      .then(async (result) => {
         const { roomCheckOut, total } = result.data;
         if (roomCheckOut && total) {
-          dispatch(checkOut({ ...roomCheckOut, total }));
+          const { serviceList, serviceCharge } = await getListServiceAPI(
+            roomCheckOut.rentReceiptId
+          );
+          dispatch(
+            checkOut({ ...roomCheckOut, serviceList, serviceCharge, total })
+          );
         }
       })
+
       .catch((err) => {
         if (err && err.response) {
           const { message } = err.response.data;
@@ -164,6 +217,7 @@ export const checkInAPI = (data) => {
     })
     .catch((err) => {
       if (err && err.response) {
+        console.log('err.response', err.response);
         const { message } = err.response.data;
         showNotification(STATUS.ERROR, message);
       }

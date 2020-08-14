@@ -1,5 +1,5 @@
 .control-icon{
-    font-size: 13px;
+    font-size: 18px;
     transition: all ease-in 0.15s;
     &:hover{
         transform: scale(1.2);
@@ -8,8 +8,9 @@
         transform: scale(0.9);
     }
 }
-.header-table{
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 10px;
+.red{
+    color: #CF1322
+}
+.blue{
+    color: #096DD9
 }
