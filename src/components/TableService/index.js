@@ -5,7 +5,7 @@ import { Table, Popconfirm } from 'antd';
 const columns = [
   {
     title: 'No.',
-    dataIndex: 'no',
+    dataIndex: 'key',
     width: 100,
   },
   {
@@ -38,24 +38,17 @@ const columns = [
   },
 ];
 
-const data = [];
-for (let i = 0; i < 100; i++) {
-  data.push({
-    key: i,
-    no: i + 1,
-    name: `Snack ${i + 1}`,
-    amount: i + 2,
-    price: 200,
-  });
-}
-
 export default class TableService extends Component {
   render() {
+    let { serviceList } = this.props;
+    if (serviceList)
+      serviceList = serviceList.map((e, i) => ({ key: i + 1, ...e }));
     return (
       <div>
         <Table
+          locale={{ emptyText: 'No services have been added' }}
           columns={columns}
-          dataSource={data}
+          dataSource={serviceList}
           pagination={false}
           scroll={{ y: 300 }}
         />

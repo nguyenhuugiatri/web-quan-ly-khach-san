@@ -15,6 +15,7 @@ import {
 import { AppstoreAddOutlined } from '@ant-design/icons';
 import { connect } from 'react-redux';
 import TableService from './../../components/TableService';
+import AddServiceForm from './../../components/AddServiceForm';
 import {
   fillCheckOutCustomerAPI,
   updateCheckInCustomer,
@@ -25,6 +26,31 @@ import moment from 'moment';
 import './styles.scss';
 
 class FormCheckOut extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      loading: false,
+      visible: false,
+    };
+  }
+
+  showModal = () => {
+    this.setState({
+      visible: true,
+    });
+  };
+
+  handleOk = () => {
+    this.setState({ loading: true });
+    setTimeout(() => {
+      this.setState({ loading: false, visible: false });
+    }, 3000);
+  };
+
+  handleCancel = () => {
+    this.setState({ visible: false });
+  };
+
   componentDidMount() {
     const { checkInRoom, fillCheckOutCustomer, checkOut } = this.props;
     fillCheckOutCustomer(checkInRoom.id);
@@ -40,7 +66,7 @@ class FormCheckOut extends Component {
       typeName: cusTypeName,
     } = checkInCustomer;
 
-    let { name, typeName, dateIn, total } = checkInRoom;
+    let { name, typeName, dateIn, total, serviceList } = checkInRoom;
 
     return (
       <Form layout='vertical' hideRequiredMark>
@@ -165,10 +191,18 @@ class FormCheckOut extends Component {
             Services
           </Typography.Text>
           <Tooltip title='Add service'>
-            <Button shape='circle' icon={<AppstoreAddOutlined />} />
+            <Button
+              shape='circle'
+              icon={<AppstoreAddOutlined onClick={this.showModal} />}
+            />
           </Tooltip>
         </Row>
-        <TableService />
+        <TableService serviceList={serviceList} />
+        <AddServiceForm
+          modalData={this.state}
+          handleOk={this.handleOk}
+          handleCancel={this.handleCancel}
+        />
       </Form>
     );
   }

@@ -7,7 +7,7 @@ router.post('/getListByRentReceiptId', async (req, res, next) => {
     rentReceiptId
   );
   if (serviceList === null)
-    return res.status(404).json({
+    return res.status(200).json({
       message: 'Not found',
     });
   return res.status(200).json({ serviceList, message: 'Successful !' });

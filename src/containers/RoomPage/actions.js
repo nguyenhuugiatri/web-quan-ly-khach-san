@@ -133,7 +133,18 @@ const getListServiceAPI = (rentReceiptId) => {
     method: 'POST',
     url: `${URL}/service/getListByRentReceiptId`,
     data: { rentReceiptId },
-  });
+  })
+    .then((result) => {
+      const { serviceList } = result.data;
+      if (serviceList) return serviceList;
+    })
+    .catch((err) => {
+      if (err && err.response) {
+        const { message } = err.response.data;
+        console.log('Error: ', message);
+        return [];
+      }
+    });
 };
 
 export const checkOutAPI = (idRoom) => {
@@ -143,15 +154,16 @@ export const checkOutAPI = (idRoom) => {
       url: `${URL}/room/checkOut`,
       data: { idRoom },
     })
-      .then((result) => {
+      .then(async (result) => {
         const { roomCheckOut, total } = result.data;
         if (roomCheckOut && total) {
-          getListServiceAPI(roomCheckOut.rentReceiptId).then((result) => {
-            const { serviceList } = result.data;
-            dispatch(checkOut({ ...roomCheckOut, serviceList, total }));
-          });
+          const serviceList = await getListServiceAPI(
+            roomCheckOut.rentReceiptId
+          );
+          dispatch(checkOut({ ...roomCheckOut, serviceList, total }));
         }
       })
+
       .catch((err) => {
         if (err && err.response) {
           const { message } = err.response.data;

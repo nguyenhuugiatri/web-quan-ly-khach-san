@@ -33,7 +33,6 @@ const roomReducer = (state = initState, action) => {
 
     case CHECK_OUT:
       state.checkInRoom = { ...state.checkInRoom, ...action.checkOutInfo };
-      console.log('state.checkInRoom', state.checkInRoom);
 
       return { ...state };
 
