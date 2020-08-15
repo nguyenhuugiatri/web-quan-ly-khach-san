@@ -6,7 +6,7 @@ export default class AddServiceForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      idService: null,
+      idService: 1,
       amount: 1,
     };
   }
@@ -31,7 +31,6 @@ export default class AddServiceForm extends Component {
         <Modal
           visible={visible}
           title='New Service'
-          onOk={this.handleOk}
           onCancel={handleCancel}
           footer={[
             <Button key='back' onClick={handleCancel}>
@@ -41,7 +40,10 @@ export default class AddServiceForm extends Component {
               key='submit'
               type='primary'
               loading={loading}
-              onClick={() => handleAddService(this.state)}
+              onClick={async () => {
+                await handleAddService(this.state);
+                this.setState({ idService: 1 });
+              }}
             >
               Add
             </Button>,
@@ -53,6 +55,7 @@ export default class AddServiceForm extends Component {
                 <Select
                   placeholder='Service Name'
                   onChange={this.handleOnChangeSelect}
+                  value={this.state.idService}
                 >
                   {listServiceType.map((item) => (
                     <Select.Option key={item.id} value={item.id}>
