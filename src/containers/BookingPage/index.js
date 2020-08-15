@@ -10,6 +10,7 @@ import BookDrawer from "./BookDrawer";
 import TableBooking from "./TableBooking";
 import showNotification from '../../utils/showNotification';
 import { STATUS } from '../../utils/constants';
+import { connect } from 'react-redux';
 const URL = process.env.SERV_HOST || "http://localhost:8000";
 
 class Booking extends Component {
@@ -168,16 +169,24 @@ class Booking extends Component {
     this.getListTypeRoom();
     this.getListBooking();
   }
-  setStatusBook = (record) => {
+  checkInRoomBooked = (record) => {
     return ()=>{
       axios({
         method: "POST",
-        url: `${URL}/booking/setStatus`,
+        url: `${URL}/booking/checkinbooked`,
         data: {
-          id: record.id,
+          data: record,
+          currentUser:this.props.currentUser,
         }
       }).then((result) => {
+        const { message } = result.data;
+        showNotification(STATUS.SUCCESS, message);
         this.getListBooking();
+      }).catch((err) => {
+        if (err && err.response) {
+          showNotification(STATUS.ERROR, message);
+          this.getListBooking();
+        }
       });
     }
   };
@@ -214,7 +223,7 @@ class Booking extends Component {
         this.handleOnClose();
         this.getListBooking();
       }
-    });;
+    });
   };
   render() {
     return (
@@ -243,10 +252,19 @@ class Booking extends Component {
             handleOnChangeSelectRoom={this.handleOnChangeSelectRoom}
           ></BookDrawer>
         </div>
-        <TableBooking listBooking={this.state.listBooking} setStatusBook={this.setStatusBook}></TableBooking>
+        <TableBooking listBooking={this.state.listBooking} checkInRoomBooked={this.checkInRoomBooked}></TableBooking>
       </div>
     );
   }
 }
-const BookingPage = createPage(Booking, BOOKING_PAGE);
+
+const mapStateToProps = (state) => {
+  return {
+    currentUser: state.global.currentUser,
+  };
+};
+
+const BookingConnectRedux=connect(mapStateToProps,null)(Booking)
+
+const BookingPage = createPage(BookingConnectRedux, BOOKING_PAGE);
 export default BookingPage;

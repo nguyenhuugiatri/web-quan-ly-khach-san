@@ -43,18 +43,18 @@ class FormCheckOut extends Component {
     });
   };
 
-  handleAddService = (newService) => {
+  handleAddService = async (newService) => {
     this.setState({ loading: true });
     const { idService, amount } = newService;
     const { checkInRoom, checkOut } = this.props;
     const { rentReceiptId: idRentReceipt, id: idRoom } = checkInRoom;
-    axios({
+    await axios({
       method: 'POST',
       url: `${URL}/service/add`,
       data: { idService, amount, idRoom, idRentReceipt },
-    })
-      .then(this.setState({ loading: false, visible: false }, checkOut(idRoom)))
-      .catch((err) => console.log(err));
+    });
+    await checkOut(idRoom);
+    this.setState({ loading: false, visible: false });
   };
 
   handleDeleteService = (rentReceiptId) => {
@@ -113,7 +113,7 @@ class FormCheckOut extends Component {
       serviceList,
       serviceCharge,
     } = checkInRoom;
-
+    console.log('dateeee',dateIn);
     return (
       <Form layout='vertical' hideRequiredMark>
         <Row gutter={16}>

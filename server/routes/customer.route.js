@@ -62,18 +62,16 @@ router.post('/checkIn', async (req, res, next) => {
     const rentReceiptCurrent = await rentReceiptModel.singleByCustomer(
       customer.id
     );
-    await serviceModel.addServiceReceipt();
-    const serviceReceipt = await serviceModel.getNewServiceReceipt();
+
 
     await rentReceiptModel.addRentReceiptDetail({
       id: rentReceiptCurrent.id,
       idRoom: checkInRoom.id,
-      idServiceReceipt: serviceReceipt.id,
     });
     await rentReceiptModel.setStatusToRent(checkInRoom.id);
     return res.status(200).json({ message: 'Check-in was successful !' });
   } catch (err) {
-    console.log('Error:', err);
+    console.log(err);
     return res.status(400).json({ message: 'Check-in was failed !' });
   }
 });

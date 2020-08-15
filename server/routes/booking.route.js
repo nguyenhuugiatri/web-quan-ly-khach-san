@@ -1,7 +1,8 @@
-const router = require('express').Router();
-const customerModel = require('../models/customer.model');
-const bookingModel = require('../models/booking.model');
-const moment = require('moment');
+const router = require("express").Router();
+const customerModel = require("../models/customer.model");
+const bookingModel = require("../models/booking.model");
+const rentReceiptModel = require("../models/rentReceipt.model");
+const moment = require("moment");
 
 router.get('/listBooking', async (req, res) => {
   await bookingModel
@@ -13,15 +14,40 @@ router.get('/listBooking', async (req, res) => {
       res.status(400).json(e);
     });
 });
-router.post('/setStatus', async (req, res) => {
-  await bookingModel
-    .setStatusBookReceipt(req.body.id)
-    .then((result) => {
-      res.status(200).json(result);
-    })
-    .catch((e) => {
-      res.status(400).json(e);
+router.post("/checkinbooked", async (req, res) => {
+  try {
+    console.log('booked',req.body);
+    let {data, currentUser} = req.body;
+      // idCustomer - dateIn dateOut idUser price idroom idrentcepit
+    let roomBook = {
+      idRoom: data.idRoom,
+      price: data.price,
+      dateIn: data.dateIn,
+      dateOut: data.dateOut,
+    };
+    console.log('data:',data);
+    await bookingModel.setStatusBookReceipt(data.id);
+    await rentReceiptModel.addRentReceipt({
+      id: data.idCustomer,
+      idUser: currentUser.id,
+      price: roomBook.price,
+      dateIn : roomBook.dateIn,
+      dateOut: roomBook.dateOut,
     });
+    const rentReceiptCurrent = await rentReceiptModel.singleByCustomer(
+      data.idCustomer
+    );
+    await rentReceiptModel.addRentReceiptDetail({
+      id: rentReceiptCurrent.id,
+      idRoom: roomBook.idRoom,
+    });
+    await rentReceiptModel.setStatusToRent(roomBook.idRoom);
+    return res.status(200).json({ message: "Accept was successful !" });
+  }catch (err) {
+    console.log(err);
+    return res.status(400).json({ message: "Accept was failed !" });
+  }
+  
 });
 router.post('/bookRoom', async (req, res, next) => {
   try {
