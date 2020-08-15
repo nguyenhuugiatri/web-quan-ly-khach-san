@@ -249,7 +249,7 @@ class Booking extends Component {
       this.getListBooking();
     }).catch((err) => {
       if (err && err.response) {
-        showNotification(STATUS.ERROR, message);
+        showNotification(STATUS.ERROR, err.response.data.message);
         this.handleOnClose();
         this.getListBooking();
       }
