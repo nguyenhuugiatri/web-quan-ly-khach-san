@@ -32,6 +32,16 @@ router.get('/listTypeRoom', async (req, res) => {
       res.status(400).json(e);
     });
 });
+router.get('/listRoomRent', async (req, res) => {
+  await roomModel
+    .listRoomRent()
+    .then((result) => {
+      res.status(200).json(result);
+    })
+    .catch((e) => {
+      res.status(400).json(e);
+    });
+});
 router.post('/roomCurrent', async (req, res) => {
   const { id } = req.body;
   await roomModel
@@ -42,6 +52,28 @@ router.post('/roomCurrent', async (req, res) => {
     .catch((e) => {
       res.status(400).json(e);
     });
+});
+router.post('/dataRoom', async (req, res) => {
+  const { id } = req.body;
+  await roomModel
+    .getDataCurrRoom(id)
+    .then((result) => {
+      res.status(200).json(result);
+    })
+    .catch((e) => {
+      res.status(400).json(e);
+    });
+});
+router.post('/changeRoom', async (req, res) => {
+  try{
+    const { idRentReceipt,idRoom,idRoomCurrent } = req.body;
+    await roomModel.ChangeRoomInDetail(idRentReceipt,idRoom);
+    await roomModel.updateRoomAvailable(idRoomCurrent);
+    await roomModel.updateRoomRent(idRoom);
+    return res.status(200).json({ message: 'Change Room Success!' });
+  } catch (err) {
+    return res.status(400).json({ message: 'Change Room Fail!' });
+  }
 });
 router.post('/listRoomByType', async (req, res) => {
   const { id, dateIn, dateOut } = req.body;

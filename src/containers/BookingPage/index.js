@@ -116,8 +116,8 @@ class Booking extends Component {
            let listBooking  = res.data;
            for (let i=0;i<listBooking.length;i++){
             listBooking[i].key=listBooking[i].id;
-            listBooking[i].dateIn=moment(listBooking[i].dateIn).format("YYYY-MM-DD hh:mm");
-            listBooking[i].dateOut=moment(listBooking[i].dateOut).format("YYYY-MM-DD hh:mm");
+            listBooking[i].dateIn=moment(listBooking[i].dateIn).format("YYYY-MM-DD HH:mm");
+            listBooking[i].dateOut=moment(listBooking[i].dateOut).format("YYYY-MM-DD HH:mm");
            }
           this.setState({
             listBooking: listBooking,
