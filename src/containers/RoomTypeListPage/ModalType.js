@@ -18,7 +18,7 @@ class ModalType extends Component {
   render() {
     return (
       <Modal
-        title="Add room type"
+        title='ADD ROOM TYPE'
         visible={this.props.visible}
         onCancel={() => {
           this.props.updateVisibleFalse();
@@ -28,9 +28,9 @@ class ModalType extends Component {
         }}
       >
         <Form
-          layout="vertical"
+          layout='vertical'
           ref={this.state.formModal}
-          key="form-modal-type"
+          key='form-modal-type'
           onFinish={(fields) => {
             this.insertRoomType(fields);
           }}
@@ -38,9 +38,9 @@ class ModalType extends Component {
           <Row gutter={16}>
             <Col span={12}>
               <Form.Item
-                label="Type name"
-                name="name"
-                key="nameadd"
+                label='Type name'
+                name='name'
+                key='nameadd'
                 rules={[{ required: true, message: 'Type name is required' }]}
               >
                 <Input />
@@ -48,36 +48,36 @@ class ModalType extends Component {
             </Col>
             <Col span={12}>
               <Form.Item
-                label="Max customer"
-                name="maxCustomer"
+                label='Max customer'
+                name='maxCustomer'
                 rules={[
                   { required: true, message: 'Max customer is required' },
                 ]}
-                key="maxCustomeradd"
+                key='maxCustomeradd'
               >
-                <Input type="number" />
+                <Input type='number' />
               </Form.Item>
             </Col>
           </Row>
           <Row gutter={16}>
             <Col span={12}>
               <Form.Item
-                label="Price/Day $"
+                label='Price/Day $'
                 rules={[{ required: true, message: 'Price/Day is required' }]}
-                name="price"
-                key="price"
+                name='price'
+                key='price'
               >
-                <Input type="number" />
+                <Input type='number' />
               </Form.Item>
             </Col>
             <Col span={12}>
               <Form.Item
-                label="Price/Hour $"
+                label='Price/Hour $'
                 rules={[{ required: true, message: 'Price/Hour is required' }]}
-                name="priceHour"
-                key="Price/Hour"
+                name='priceHour'
+                key='Price/Hour'
               >
-                <Input type="number" />
+                <Input type='number' />
               </Form.Item>
             </Col>
           </Row>

@@ -23,7 +23,7 @@ class UserList extends Component {
       loading: false,
       visible: false,
       formInsert: React.createRef(),
-      pageSize:10
+      pageSize: 10,
     };
   }
 
@@ -143,7 +143,7 @@ class UserList extends Component {
         });
     };
   };
-  submitAdd=()=>{
+  submitAdd = () => {
     const fields = this.state.formInsert.current.getFieldsValue();
     axios.post(`${URL}/user/insert`, fields).then((value) => {
       if (value) {
@@ -152,14 +152,14 @@ class UserList extends Component {
         this.getList();
       }
     });
-  }
+  };
   render() {
     return (
       <div>
-        <div className="header-table">
+        <div className='header-table'>
           <Button
             icon={<UserAddOutlined />}
-            type="primary"
+            type='primary'
             onClick={() => {
               this.setState({ visible: true });
               let form = this.state.formInsert.current;
@@ -171,7 +171,7 @@ class UserList extends Component {
             Add User
           </Button>
           <DrawerUser
-            title="Add user"
+            title='ADD USER'
             visible={this.state.visible}
             onClose={() => {
               this.setState({ visible: false });
@@ -182,13 +182,17 @@ class UserList extends Component {
             onSuccess={this.getList}
           ></DrawerUser>
           <Pagination
-            size="medium"
+            size='medium'
             defaultPageSize={this.state.pageSize}
             current={this.state.currentPage}
             defaultCurrent={1}
             total={this.state.list.length}
-            onChange={(pageNumber,pageSize) => {
-              this.setState({ currentPage: pageNumber, isediting: '',pageSize });
+            onChange={(pageNumber, pageSize) => {
+              this.setState({
+                currentPage: pageNumber,
+                isediting: '',
+                pageSize,
+              });
             }}
           />
         </div>
