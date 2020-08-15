@@ -209,7 +209,7 @@ class FormCheckOut extends Component {
           </Col>
           <Col span={12}>
             {dateIn && (
-              <Form.Item name='dateTime' label='Date'>
+              <Form.Item label='Date'>
                 <DatePicker.RangePicker
                   defaultValue={[moment(moment(dateIn)), moment()]}
                   disabled

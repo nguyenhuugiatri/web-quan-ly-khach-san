@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import FormCheckIn from './FormCheckIn';
 import FormCheckOut from './FormCheckOut';
+import CheckOutConfirm from './CheckOutConfirm';
 import { Drawer, Button, Result } from 'antd';
 import { STATUS } from './constants';
 import { connect } from 'react-redux';
@@ -15,6 +16,13 @@ import './styles.scss';
 const { AVAILABLE, RENT, CLEANING, RESERVED } = STATUS;
 
 class RoomDrawer extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      visible: false,
+    };
+  }
+
   handleClose = () => {
     const { onClose, deleteCheckInCustomer, deleteCheckInRoom } = this.props;
     onClose();
@@ -33,11 +41,33 @@ class RoomDrawer extends Component {
   };
 
   handleCheckOutClicked = () => {
-    console.log('Check out');
+    this.showModal();
   };
 
   componentDidMount = () => {
     this.props.getListCustomerType();
+  };
+
+  showModal = () => {
+    this.setState({
+      visible: true,
+    });
+  };
+
+  handleOk = (e) => {
+    console.log(e);
+    this.setState(
+      {
+        visible: false,
+      },
+      this.handleClose()
+    );
+  };
+
+  handleCancel = () => {
+    this.setState({
+      visible: false,
+    });
   };
 
   render() {
@@ -94,7 +124,16 @@ class RoomDrawer extends Component {
           />
         )) ||
           (status === AVAILABLE && <FormCheckIn />) ||
-          (status === RENT && <FormCheckOut />)}
+          (status === RENT && (
+            <>
+              <FormCheckOut />
+              <CheckOutConfirm
+                modalData={this.state}
+                handleOk={this.handleOk}
+                handleCancel={this.handleCancel}
+              />
+            </>
+          ))}
       </Drawer>
     );
   }
