@@ -59,7 +59,6 @@ export default class Square extends Component {
       handleOnClick,
       roomCurrent,
     } = this.props;
-    console.log('this.props', this.props);
 
     return (
       <>

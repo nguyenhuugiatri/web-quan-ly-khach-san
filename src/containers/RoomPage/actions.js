@@ -232,7 +232,23 @@ export const checkInAPI = (data) => {
     })
     .catch((err) => {
       if (err && err.response) {
-        console.log('err.response', err.response);
+        console.log('Error:', err.response);
+        const { message } = err.response.data;
+        showNotification(STATUS.ERROR, message);
+      }
+    });
+};
+
+export const createBill = (checkOutRoom) => {
+  return axios({
+    method: 'POST',
+    url: `${URL}/bill/add`,
+    data: { checkOutRoom },
+  })
+    .then((result) => {})
+    .catch((err) => {
+      if (err && err.response) {
+        console.log('Error: ', err.response);
         const { message } = err.response.data;
         showNotification(STATUS.ERROR, message);
       }

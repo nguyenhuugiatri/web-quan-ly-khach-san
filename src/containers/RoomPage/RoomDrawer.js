@@ -55,6 +55,7 @@ class RoomDrawer extends Component {
   };
 
   handleConfirmCheckOut = (e) => {
+    console.log(e);
     this.setState(
       {
         visible: false,

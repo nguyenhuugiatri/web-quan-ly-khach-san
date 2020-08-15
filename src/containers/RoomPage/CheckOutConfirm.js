@@ -42,17 +42,12 @@ class CheckOutConfirm extends Component {
     if (paymentMethod === 'card') {
       this.showModal();
     } else {
-      handleConfirmCheckOut();
+      handleConfirmCheckOut(this.props.checkInRoom);
     }
   };
 
   render() {
-    const {
-      modalData,
-      handleCancel,
-      checkInRoom,
-      handleConfirmCheckOut,
-    } = this.props;
+    const { modalData, handleCancel, checkInRoom } = this.props;
     const { name, serviceCharge, total: roomCharge } = checkInRoom;
     const { visible } = modalData;
     return (
