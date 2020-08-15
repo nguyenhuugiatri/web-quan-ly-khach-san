@@ -18,6 +18,7 @@ class Booking extends Component {
     super(props);
     this.state = {
       visible: false,
+      visibleAccept:false,
       listCustomerType: [],
       listRoomByType: [],
       listTypeRoom: [],
@@ -169,8 +170,32 @@ class Booking extends Component {
     this.getListTypeRoom();
     this.getListBooking();
   }
+  deleteBooking = (record) => {
+    return ()=>{
+      axios({
+        method: "POST",
+        url: `${URL}/booking/deleteBooking`,
+        data: {
+          data: record,
+          currentUser:this.props.currentUser,
+        }
+      }).then((result) => {
+        const { message } = result.data;
+        showNotification(STATUS.SUCCESS, message);
+        this.getListBooking();
+      }).catch((err) => {
+        if (err && err.response) {
+          showNotification(STATUS.ERROR, message);
+          this.getListBooking();
+        }
+      });
+    }
+  };
   checkInRoomBooked = (record) => {
     return ()=>{
+      let dateBook = moment(record.dateIn,'YYYY-MM-DD');
+    let dateCurrent = moment(moment(),'YYYY-MM-DD');
+    if (dateBook.diff(dateCurrent,'days')==0){
       axios({
         method: "POST",
         url: `${URL}/booking/checkinbooked`,
@@ -188,6 +213,11 @@ class Booking extends Component {
           this.getListBooking();
         }
       });
+    }
+    else{
+      showNotification(STATUS.ERROR, "Today isn't date to check-in");
+    }
+      
     }
   };
   submitBooking = () => {
@@ -219,7 +249,7 @@ class Booking extends Component {
       this.getListBooking();
     }).catch((err) => {
       if (err && err.response) {
-        showNotification(STATUS.ERROR, message);
+        showNotification(STATUS.ERROR, err.response.data.message);
         this.handleOnClose();
         this.getListBooking();
       }
@@ -252,7 +282,7 @@ class Booking extends Component {
             handleOnChangeSelectRoom={this.handleOnChangeSelectRoom}
           ></BookDrawer>
         </div>
-        <TableBooking listBooking={this.state.listBooking} checkInRoomBooked={this.checkInRoomBooked}></TableBooking>
+        <TableBooking visibleAccept={this.state.visibleAccept} listBooking={this.state.listBooking} checkInRoomBooked={this.checkInRoomBooked} deleteBooking={this.deleteBooking}></TableBooking>
       </div>
     );
   }
