@@ -18,6 +18,7 @@ class Booking extends Component {
     super(props);
     this.state = {
       visible: false,
+      visibleAccept:false,
       listCustomerType: [],
       listRoomByType: [],
       listTypeRoom: [],
@@ -192,6 +193,9 @@ class Booking extends Component {
   };
   checkInRoomBooked = (record) => {
     return ()=>{
+      let dateBook = moment(record.dateIn,'YYYY-MM-DD');
+    let dateCurrent = moment(moment(),'YYYY-MM-DD');
+    if (dateBook.diff(dateCurrent,'days')==0){
       axios({
         method: "POST",
         url: `${URL}/booking/checkinbooked`,
@@ -209,6 +213,11 @@ class Booking extends Component {
           this.getListBooking();
         }
       });
+    }
+    else{
+      showNotification(STATUS.ERROR, "Today isn't date to check-in");
+    }
+      
     }
   };
   submitBooking = () => {
@@ -273,7 +282,7 @@ class Booking extends Component {
             handleOnChangeSelectRoom={this.handleOnChangeSelectRoom}
           ></BookDrawer>
         </div>
-        <TableBooking listBooking={this.state.listBooking} checkInRoomBooked={this.checkInRoomBooked} deleteBooking={this.deleteBooking}></TableBooking>
+        <TableBooking visibleAccept={this.state.visibleAccept} listBooking={this.state.listBooking} checkInRoomBooked={this.checkInRoomBooked} deleteBooking={this.deleteBooking}></TableBooking>
       </div>
     );
   }

@@ -148,7 +148,7 @@ export default class TableBooking extends Component {
       },
       {
         title: "Action",
-        key: "opera",
+        key: "visibleAccept",
         render: (_, record) => (
           <Space size="middle">
             <Button type="primary" style={{ marginRight: 8 }} onClick={checkInRoomBooked(record)}>

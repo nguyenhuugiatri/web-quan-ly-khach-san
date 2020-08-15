@@ -66,4 +66,16 @@ module.exports = {
       SET status = ${status}
       WHERE id=${idRoom};`);
   },
+  getRoomReserved: async (date) => {
+    const rows = await db.load(
+      `	select * from bookreceipt as b,bookreceiptdetail as brd where b.id = brd.idBookReceipt and b.status='0' and cast(b.dateIn as DATE) = '${date}'`
+    );
+    return rows;
+  },
+  updateRoomReserved: async (id) => {
+    await db.load(`Update room 
+    Set status = '3' 
+    WHERE id IN (${id});`);
+  },
+
 };
