@@ -23,6 +23,7 @@ class UserList extends Component {
       loading: false,
       visible: false,
       formInsert: React.createRef(),
+      pageSize:10
     };
   }
 
@@ -66,7 +67,7 @@ class UserList extends Component {
     return () => {
       this.setState({ loading: true, disable: false });
       axios
-        .patch(`${URL}/user/resetpassword`, { id: record.key })
+        .patch(`${URL}/user/resetpassword`, { id: record.id })
         .then((res) => {
           if (res.status === 200) {
             message.success({
@@ -182,12 +183,12 @@ class UserList extends Component {
           ></DrawerUser>
           <Pagination
             size="medium"
-            defaultPageSize={9}
+            defaultPageSize={this.state.pageSize}
             current={this.state.currentPage}
             defaultCurrent={1}
             total={this.state.list.length}
-            onChange={(pageNumber) => {
-              this.setState({ currentPage: pageNumber, isediting: '' });
+            onChange={(pageNumber,pageSize) => {
+              this.setState({ currentPage: pageNumber, isediting: '',pageSize });
             }}
           />
         </div>
@@ -205,6 +206,7 @@ class UserList extends Component {
           cancelEdit={this.cancelEdit}
           loading={this.state.loading}
           disable={this.state.disable}
+          pageSize={this.state.pageSize}
         ></TableUser>
       </div>
     );

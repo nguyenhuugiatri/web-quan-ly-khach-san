@@ -300,10 +300,11 @@ export default class TableUser extends Component {
               cell: this.EditableCell,
             },
           }}
+          size="middle"
           columns={mergeColumn}
           dataSource={this.props.listUser}
           pagination={{
-            pageSize: 9,
+            pageSize: this.props.pageSize,
             current: this.props.currentPage,
             style: { display: 'none' },
           }}

@@ -41,7 +41,6 @@ class ModalAddRoom extends Component {
     this.initialValues();
   };
   render() {
-    console.log('aaa');
     let roomName = Array.from(
       this.props.listRoom,
       (v) => +v.name.match(/\d+/g)

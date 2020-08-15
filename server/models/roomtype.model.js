@@ -3,6 +3,6 @@ const table = 'roomtype';
 
 module.exports={
     find:()=>query.find(table),
-    update:entity => query.update(table,entity),
+    updateById:(id,entity) => query.updateById(table,id,entity),
     insert:entity=>query.insert(table,entity)
 }

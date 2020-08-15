@@ -84,6 +84,9 @@ router.patch('/update', async (req, res) => {
 router.post('/insert', async (req, res) => {
   let value = req.body;
   value.isDelete = 0;
+  const salt = bcrypt.genSaltSync(10);
+  const newPassword = bcrypt.hashSync('password123', salt);
+  value.password=newPassword;
   await userModel.insert(value).then((re) => {
     if (re) {
       return res.status(200).json({ message: 'Created' });
