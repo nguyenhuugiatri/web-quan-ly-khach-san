@@ -233,6 +233,7 @@ class TableRoom extends Component {
         title: 'Name',
         dataIndex: 'name',
         key: 'name',
+        width: '20%',
         editable: true,
         ...this.getColumnSearchProps('name'),
       },
@@ -241,6 +242,7 @@ class TableRoom extends Component {
         dataIndex: 'typeName',
         key: 'typeName',
         editable: true,
+        width: '20%',
         filters:filterForType,
         onFilter:(value,record)=>record.typeName===value
       },
@@ -248,6 +250,7 @@ class TableRoom extends Component {
         title: 'Price (VND)',
         dataIndex: 'price',
         key: 'price',
+        width: '20%',
         editable: true,
         filterMultiple: true,
         sorter: (a, b) => a.price - b.price,
@@ -258,6 +261,7 @@ class TableRoom extends Component {
         title: 'Max person',
         dataIndex: 'maxCustomer',
         key: 'maxCustomer',
+        width: '16%',
         editable: true,
         sorter: (a, b) => a.maxCustomer - b.maxCustomer,
       },
@@ -265,6 +269,7 @@ class TableRoom extends Component {
         title: 'Status',
         dataIndex: 'status',
         key: 'status',
+        width: '18%',
         filters: [
           { text: 'Available', value: STATUS.AVAILABLE },
           { text: 'Rent', value: STATUS.RENT },
@@ -292,7 +297,7 @@ class TableRoom extends Component {
       },
       {
         title: 'Action',
-        with: '10%',
+        width: '10%',
 
         key: 'operation',
         align: 'center',
@@ -398,7 +403,7 @@ class TableRoom extends Component {
           dataSource={this.props.dataSource}
           columns={mergeColumn}
           pagination={{
-            pageSize: 11,
+            pageSize: this.props.pageSize,
             current: this.props.currentPage,
             style: { display: 'none' },
           }}

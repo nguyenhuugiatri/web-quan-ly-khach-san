@@ -3,7 +3,7 @@ import { ROOM_LIST_PAGE } from '../../components/Sidebar/constants';
 import createPage from '../../components/createPage';
 import { Button, Space, Pagination, } from 'antd';
 import { HomeOutlined } from '@ant-design/icons';
-import { getListRoomAPI, updateVisible } from './actions';
+import { getListRoomAPI, updateVisible,cancelEdit } from './actions';
 import { connect } from 'react-redux';
 import TableRoom from '../../components/TableRoom';
 import './style.scss';
@@ -15,6 +15,7 @@ class RoomListPage extends Component {
     this.state = {
       currentPage: 1,
       isediting: '',
+      pageSize:11
     };
   }
   componentDidMount() {
@@ -24,7 +25,6 @@ class RoomListPage extends Component {
     return (
       <div>
         <div className="header-table">
-          <Space style={{ width: '100%', justifyContent: 'space-between' }}>
             <Button
               type="primary"
               icon={<HomeOutlined />}
@@ -36,16 +36,18 @@ class RoomListPage extends Component {
             </Button>
             <Pagination
               defaultCurrent={1}
-              defaultPageSize={11}
+              defaultPageSize={this.state.pageSize}
+              pageSizeOptions={[10,11]}
               current={this.state.currentPage}
               total={this.props.total || this.props.tableListRoom.length}
-              onChange={(pageNumber) => {
+              onChange={(pageNumber,pageSize) => {
                 this.setState({
                   currentPage: pageNumber,
+                  pageSize:pageSize
                 });
+                this.props.cancelEditing()
               }}
             />
-          </Space>
         </div>
 
         <div>
@@ -55,6 +57,7 @@ class RoomListPage extends Component {
           <TableRoom
             dataSource={this.props.tableListRoom}
             currentPage={this.state.currentPage}
+            pageSize={this.state.pageSize}
           />
         </div>
       </div>
@@ -74,6 +77,9 @@ const mapDispatchToProps = (dispatch) => {
     updateVisible: () => {
       dispatch(updateVisible());
     },
+    cancelEditing:()=>{
+      dispatch(cancelEdit())
+    }
   };
 };
 const RoomListPageConnect = connect(
