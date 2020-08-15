@@ -54,9 +54,12 @@ export default class Square extends Component {
       name,
       status,
       typeName,
+      price,
+      maxCustomer,
       handleOnClick,
       roomCurrent,
     } = this.props;
+    console.log('this.props', this.props);
 
     return (
       <>
@@ -66,9 +69,8 @@ export default class Square extends Component {
           onClick={() => handleOnClick(roomCurrent)}
           hoverable
           actions={[
-            <SettingOutlined key='setting' />,
-            <EditOutlined key='edit' />,
-            <EllipsisOutlined key='ellipsis' />,
+            <div style={{ fontWeight: 500 }}>{`${maxCustomer} Adults`}</div>,
+            <div style={{ fontWeight: 500 }}>{`$${price}`}</div>,
           ]}
         >
           <>

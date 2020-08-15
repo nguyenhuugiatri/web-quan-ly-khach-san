@@ -4,7 +4,7 @@ import {
   EDITING,
   CANCEL_EDITING,
   GET_LIST_ROOM_TYPE,
-  UPDATE_VISIBLE
+  UPDATE_VISIBLE,
 } from './constants';
 import { message } from 'antd';
 import axios from 'axios';
@@ -62,35 +62,35 @@ export const updateInformationRoom = (fields) => {
   };
 };
 
-export const deleteRoom =(id)=>{
-  let key = 'DELETE_ROOM'
-  return(dispatch)=>{
+export const deleteRoom = (id) => {
+  let key = 'DELETE_ROOM';
+  return (dispatch) => {
     message.loading({ content: 'Updating', key });
-    axios.patch(`${URL}/room/delete`,{id}).then(r=>{
-      if(r.status===200){
-        message.success({content:r.data.message,key});
-        dispatch(getListRoomAPI())
-      }else if(r.status===400){
-        message.error({content:r.data.message,key});
-      }else if(r.status===404){
-        message.info({content:r.data.message,key});
+    axios.patch(`${URL}/room/delete`, { id }).then((r) => {
+      if (r.status === 200) {
+        message.success({ content: r.data.message, key });
+        dispatch(getListRoomAPI());
+      } else if (r.status === 400) {
+        message.error({ content: r.data.message, key });
+      } else if (r.status === 404) {
+        message.info({ content: r.data.message, key });
       }
-    })
-  }
-}
-export const createRoom=(fields)=>{
-  return(dispatch)=>{
-    axios.post(`${URL}/room/insert`,fields).then(res=>{
-      message.success({content:res.data.message})
-      dispatch(getListRoomAPI())
-    })
-  }
-}
-export const updateVisible = ()=>{
+    });
+  };
+};
+export const createRoom = (fields) => {
+  return (dispatch) => {
+    axios.post(`${URL}/room/insert`, fields).then((res) => {
+      message.success({ content: res.data.message });
+      dispatch(getListRoomAPI());
+    });
+  };
+};
+export const updateVisible = () => {
   return {
-    type:UPDATE_VISIBLE
-  }
-}
+    type: UPDATE_VISIBLE,
+  };
+};
 export const updateTotal = (total) => {
   return {
     type: UPDATE_TOTAL,
