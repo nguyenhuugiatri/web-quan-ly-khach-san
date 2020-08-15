@@ -24,11 +24,11 @@ class RoomDrawer extends Component {
     };
   }
 
-  handleClose = async () => {
+  handleClose = () => {
     const { onClose, deleteCheckInCustomer, deleteCheckInRoom } = this.props;
     onClose();
-    await deleteCheckInCustomer();
-    await deleteCheckInRoom();
+    deleteCheckInCustomer();
+    deleteCheckInRoom();
   };
 
   handleCheckInClicked = async () => {
