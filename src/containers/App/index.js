@@ -21,7 +21,6 @@ class App extends Component {
 
   render() {
     const { currentUser } = this.props;
-    console.log('currentUser', currentUser);
     if (currentUser && currentUser.permission === 1)
       return (
         <Router>

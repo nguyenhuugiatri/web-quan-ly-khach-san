@@ -81,12 +81,13 @@ router.patch('/update', async (req, res) => {
       }
     });
 });
+
 router.post('/insert', async (req, res) => {
   let value = req.body;
   value.isDelete = 0;
   const salt = bcrypt.genSaltSync(10);
   const newPassword = bcrypt.hashSync('password123', salt);
-  value.password=newPassword;
+  value.password = newPassword;
   await userModel.insert(value).then((re) => {
     if (re) {
       return res.status(200).json({ message: 'Created' });
@@ -94,5 +95,24 @@ router.post('/insert', async (req, res) => {
       return res.status(404).json({ message: 'Not created' });
     }
   });
+});
+
+router.post('/changePassword', async (req, res) => {
+  try {
+    let { username, password, newPassword } = req.body;
+    const user = await userModel.singleByUsername(username);
+    const rs = bcrypt.compareSync(password, user.password);
+    if (!rs)
+      return res.status(403).json({
+        message: 'Wrong password !',
+      });
+    const N = 10;
+    newPassword = bcrypt.hashSync(newPassword, N);
+    await userModel.changePassword(username, newPassword);
+    return res.status(200).json({ message: 'Change password successful !' });
+  } catch (err) {
+    console.log('Error: ', err);
+    return res.status(400).json({ message: 'Change password failed !' });
+  }
 });
 module.exports = router;
