@@ -76,7 +76,7 @@ class FormCheckOut extends Component {
   };
 
   handleCancel = () => {
-    this.setState({ visible: false });
+    this.setState({ visible: false, loading: false });
   };
 
   componentDidMount() {
