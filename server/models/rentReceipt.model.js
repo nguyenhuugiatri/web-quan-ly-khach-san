@@ -8,6 +8,7 @@ module.exports = {
     if (rows.length === 0) return null;
     return rows[rows.length - 1];
   },
+  //idCustomer - dateIn dateOut idUser price id room idrentcepit
   addRentReceipt: async (rentReceipt) => {
     await db.load(
       `INSERT INTO RentReceipt (idCustomer,dateIn,dateOut,idUser,price)

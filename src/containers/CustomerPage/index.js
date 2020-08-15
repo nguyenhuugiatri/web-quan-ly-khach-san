@@ -22,7 +22,10 @@ class Customer extends Component {
           .get(`${URL}/customer/listCustomer`)
           .then((res) => {
             if (res.data) {
-               let  {listCustomer } = res.data;
+               let {listCustomer } = res.data;
+               for (let i=0;i<listCustomer.length;i++){
+                 listCustomer[i].key=i;
+               }
               this.setState({
                 listCustomer: listCustomer,
               });

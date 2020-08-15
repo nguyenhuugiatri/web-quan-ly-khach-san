@@ -23,7 +23,7 @@ class App extends Component {
         <Router>
           <RoomPage path='/' />
           <UserListPage path='/users' />
-          <BookingPage path='/booking' />
+          <BookingPage  path='/booking' />
           <CustomerPage path='/customer' />
           <RoomListPage path='/room' />
         </Router>
