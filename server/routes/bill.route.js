@@ -6,12 +6,11 @@ const moment = require('moment');
 router.post('/add', async (req, res) => {
   try {
     const { checkOutRoom, currentUser } = req.body;
-    console.log('checkOutRoom', checkOutRoom);
     const {
       rentReceiptId,
-      total: roomCharge,
+      total: roomCharge = 0,
       id: idRoom,
-      serviceCharge,
+      serviceCharge = 0,
     } = checkOutRoom;
     const { id: idUser } = currentUser;
     const paymentDate = moment().format('YYYY-MM-DD HH:mm');
