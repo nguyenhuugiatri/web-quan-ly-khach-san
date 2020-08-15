@@ -10,6 +10,7 @@ import {
   updateCheckInRoom,
   checkInAPI,
   getListCustomerTypeAPI,
+  confirmCleaningAPI,
   createBillAPI,
 } from './actions';
 import './styles.scss';
@@ -31,8 +32,9 @@ class RoomDrawer extends Component {
     onClose();
   };
 
-  handleConfirmCleaning = () => {
-    console.log('123');
+  handleConfirmCleaning = async () => {
+    const { checkInRoom } = this.props;
+    await confirmCleaningAPI(checkInRoom.id);
     this.handleClose();
   };
 

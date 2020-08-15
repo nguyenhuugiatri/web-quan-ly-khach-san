@@ -174,9 +174,8 @@ router.post('/checkOut', async (req, res, next) => {
 
 router.post('/confirmCleaning', async (req, res, next) => {
   try {
-    const { roomCheckOut } = req.body;
-    const { id } = roomCheckOut;
-    await roomModel.updateRoomStatus(id, 1);
+    const { idRoom } = req.body;
+    await roomModel.updateRoomStatus(idRoom, 1);
     return res.status(200).json({ message: 'Successful !' });
   } catch (err) {
     console.log('Error:', err);
