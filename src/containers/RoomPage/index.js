@@ -4,7 +4,8 @@ import { HOME_PAGE } from '../../components/Sidebar/constants';
 import { connect } from 'react-redux';
 import { getListRoomAPI, updateCheckInRoom } from './actions';
 import Square from '../../components/Square';
-import { Col, Row, Radio, Typography } from 'antd';
+import { Col, Row, Radio, Typography, Input } from 'antd';
+import { AudioOutlined } from '@ant-design/icons';
 import RoomDrawer from './RoomDrawer.js';
 import { STATUS } from './constants';
 import './styles.scss';
@@ -15,6 +16,7 @@ class RoomList extends Component {
     this.state = {
       filter: 0,
       visible: false,
+      searchText: '',
     };
   }
 
@@ -37,7 +39,17 @@ class RoomList extends Component {
     );
   };
 
-  renderListRoom = (list, filter) => {
+  handleSearch = (input) => {
+    if (typeof input === 'string') this.setState({ searchText: input });
+    else this.setState({ searchText: input.target.value });
+  };
+
+  renderListRoom = (list, filter, searchText) => {
+    if (searchText)
+      list = list.filter(
+        (room) =>
+          room.name.toLowerCase().indexOf(searchText.toLowerCase()) !== -1
+      );
     if (!list) return { list: null, total: null };
     if (filter !== 0) list = list.filter((room) => room.status === filter);
     list = list.sort((a, b) => a.id - b.id);
@@ -69,24 +81,34 @@ class RoomList extends Component {
   };
 
   render() {
-    const { filter, visible } = this.state;
+    const { filter, visible, searchText } = this.state;
     const { listRoom } = this.props;
-    const { list, total } = this.renderListRoom(listRoom, filter);
+    const { list, total } = this.renderListRoom(listRoom, filter, searchText);
     return (
       <>
         <div className='list-container'>
           <Row className='filter-room' justify='space-between' align='middle'>
-            <Radio.Group
-              onChange={this.handleOnChangeRadio}
-              defaultValue={0}
-              buttonStyle='solid'
-            >
-              <Radio.Button value={0}>All</Radio.Button>
-              <Radio.Button value={STATUS.AVAILABLE}>Available</Radio.Button>
-              <Radio.Button value={STATUS.RENT}>Rent</Radio.Button>
-              <Radio.Button value={STATUS.RESERVED}>Reserved</Radio.Button>
-              <Radio.Button value={STATUS.CLEANING}>Cleaning</Radio.Button>
-            </Radio.Group>
+            <Col>
+              <Radio.Group
+                onChange={this.handleOnChangeRadio}
+                defaultValue={0}
+                buttonStyle='solid'
+              >
+                <Radio.Button value={0}>All</Radio.Button>
+                <Radio.Button value={STATUS.AVAILABLE}>Available</Radio.Button>
+                <Radio.Button value={STATUS.RENT}>Rent</Radio.Button>
+                <Radio.Button value={STATUS.RESERVED}>Reserved</Radio.Button>
+                <Radio.Button value={STATUS.CLEANING}>Cleaning</Radio.Button>
+              </Radio.Group>
+            </Col>
+            <Col flex={1} style={{ padding: '0 20px' }}>
+              <Input.Search
+                placeholder='Input search text'
+                onSearch={this.handleSearch}
+                onChange={this.handleSearch}
+                enterButton
+              />
+            </Col>
             <Col style={{ minWidth: '60px' }}>
               <Typography.Text>Total: {total}</Typography.Text>
             </Col>
