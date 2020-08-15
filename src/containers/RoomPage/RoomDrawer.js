@@ -31,6 +31,11 @@ class RoomDrawer extends Component {
     onClose();
   };
 
+  handleConfirmCleaning = () => {
+    console.log('123');
+    this.handleClose();
+  };
+
   handleCheckInClicked = async () => {
     const { checkInCustomer, checkInRoom, currentUser } = this.props;
     await checkInAPI({
@@ -119,7 +124,7 @@ class RoomDrawer extends Component {
             title='Did you confirm the room been cleaned ?'
             subTitle='Click confirm to change room status'
             extra={
-              <Button onClick={this.handleClose} type='primary'>
+              <Button onClick={this.handleConfirmCleaning} type='primary'>
                 Confirm
               </Button>
             }
