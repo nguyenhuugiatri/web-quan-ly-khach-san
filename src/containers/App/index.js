@@ -29,7 +29,7 @@ class App extends Component {
           <CustomerPage path='/customer' />
           <RoomListPage path='/room' />
           <RoomTypeListPage path='/roomtype' />
-          <BillPage path='/listbill' />
+          <BillPage path='/bill' />
         </Router>
       );
     else

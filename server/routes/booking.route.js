@@ -11,6 +11,7 @@ router.get('/listBooking', async (req, res) => {
       res.status(200).json(result);
     })
     .catch((e) => {
+      console.log('err',e);
       res.status(400).json(e);
     });
 });

@@ -207,7 +207,10 @@ class RoomList extends Component {
       {
         visible: false,
       },
-      this.props.getListRoom()
+      ()=>{
+        this.props.getListRoom();
+        this.getListRoomRent();
+      }
     );
   };
   onShowModal = () => {

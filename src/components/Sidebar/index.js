@@ -51,7 +51,7 @@ class Sidebar extends Component {
             <Link to='/roomtype'>Room Types</Link>
           </Menu.Item>
           <Menu.Item key={PAGE.BILL_PAGE} icon={<HomeOutlined />}>
-            <Link to='/listbill'>Bills</Link>
+            <Link to='/bill'>Bills</Link>
           </Menu.Item>
         </Menu>
       </Sider>
