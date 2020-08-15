@@ -53,7 +53,6 @@ class RoomList extends Component {
     if (!list) return { list: null, total: null };
     if (filter !== 0) list = list.filter((room) => room.status === filter);
     list = list.sort((a, b) => a.id - b.id);
-
     const rows = list.map((room) => (
       <Col key={room.id} style={{ padding: '15px' }} span={4}>
         <Square
