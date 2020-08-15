@@ -107,6 +107,7 @@ class RoomList extends Component {
                 onSearch={this.handleSearch}
                 onChange={this.handleSearch}
                 enterButton
+                allowClear
               />
             </Col>
             <Col style={{ minWidth: '60px' }}>

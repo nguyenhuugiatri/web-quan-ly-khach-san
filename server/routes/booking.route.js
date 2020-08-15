@@ -1,9 +1,9 @@
-const router = require("express").Router();
-const customerModel = require("../models/customer.model");
-const bookingModel = require("../models/booking.model");
-const moment = require("moment");
+const router = require('express').Router();
+const customerModel = require('../models/customer.model');
+const bookingModel = require('../models/booking.model');
+const moment = require('moment');
 
-router.get("/listBooking", async (req, res) => {
+router.get('/listBooking', async (req, res) => {
   await bookingModel
     .getListBooking()
     .then((result) => {
@@ -13,7 +13,7 @@ router.get("/listBooking", async (req, res) => {
       res.status(400).json(e);
     });
 });
-router.post("/setStatus", async (req, res) => {
+router.post('/setStatus', async (req, res) => {
   await bookingModel
     .setStatusBookReceipt(req.body.id)
     .then((result) => {
@@ -23,13 +23,13 @@ router.post("/setStatus", async (req, res) => {
       res.status(400).json(e);
     });
 });
-router.post("/bookRoom", async (req, res, next) => {
+router.post('/bookRoom', async (req, res, next) => {
   try {
     const { bookCustomer, bookRoom } = req.body;
     const { phone } = bookCustomer;
     const { date } = bookRoom;
-    const dateIn = moment(date[0]).format("YYYY-MM-DD hh:mm");
-    const dateOut = moment(date[1]).format("YYYY-MM-DD hh:mm");
+    const dateIn = moment(date[0]).format('YYYY-MM-DD hh:mm');
+    const dateOut = moment(date[1]).format('YYYY-MM-DD hh:mm');
 
     const checkExist = await customerModel.singleByPhone(phone);
     if (checkExist === null) {
@@ -42,8 +42,8 @@ router.post("/bookRoom", async (req, res, next) => {
       id: customer.id,
       dateIn,
       dateOut,
-      status: "0",
-      price:bookRoom.price,
+      status: '0',
+      price: bookRoom.price,
     });
 
     const bookReceipt = await bookingModel.singleByCustomer(customer.id);
@@ -51,9 +51,9 @@ router.post("/bookRoom", async (req, res, next) => {
       id: bookReceipt.id,
       idRoom: bookRoom.idRoom,
     });
-    return res.status(200).json({ message: "Booking was successful !" });
+    return res.status(200).json({ message: 'Booking was successful !' });
   } catch (err) {
-    return res.status(400).json({ message: "Booking was failed !" });
+    return res.status(400).json({ message: 'Booking was failed !' });
   }
 });
 

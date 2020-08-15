@@ -48,3 +48,30 @@
     height: 90%;
   }
 }
+
+.confirm-checkout {
+  .part {
+    margin-bottom: 7px;
+  }
+  .total-bill-confirm-title {
+    color: black;
+    font-weight: 500;
+  }
+
+  .total-bill-confirm-room {
+    padding-left: 10px;
+    font-weight: bold;
+  }
+
+  .total-bill-confirm {
+    // padding-top: 7px;
+    // margin-top: 10px;
+    // border-top: 1px solid #f0f0f0;
+    // height: 10%;
+
+    .ant-input-number-disabled .ant-input-number-input {
+      color: rgb(207, 19, 34);
+      font-weight: bold;
+    }
+  }
+}
