@@ -26,9 +26,9 @@ class RoomDrawer extends Component {
 
   handleClose = () => {
     const { onClose, deleteCheckInCustomer, deleteCheckInRoom } = this.props;
-    onClose();
     deleteCheckInCustomer();
     deleteCheckInRoom();
+    onClose();
   };
 
   handleCheckInClicked = async () => {
@@ -56,8 +56,8 @@ class RoomDrawer extends Component {
   };
 
   handleConfirmCheckOut = async (checkInRoom) => {
-    const { createBill, currentUser } = this.props;
-    await createBill(checkInRoom, currentUser);
+    const { currentUser } = this.props;
+    await createBillAPI(checkInRoom, currentUser);
     this.setState(
       {
         visible: false,
@@ -161,9 +161,9 @@ const mapDispatchToProps = (dispatch) => {
     getListCustomerType: () => {
       dispatch(getListCustomerTypeAPI());
     },
-    createBill: (checkOutRoom, currentUser) => {
-      dispatch(createBillAPI(checkOutRoom, currentUser));
-    },
+    // createBill: (checkOutRoom, currentUser) => {
+    //   dispatch(createBillAPI(checkOutRoom, currentUser));
+    // },
   };
 };
 

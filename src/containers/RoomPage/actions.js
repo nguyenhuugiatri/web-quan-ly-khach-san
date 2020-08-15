@@ -240,7 +240,7 @@ export const checkInAPI = (data) => {
 };
 
 export const createBillAPI = (checkOutRoom, currentUser) => {
-  return (dispatch) => {
+  // return (dispatch) => {
     return axios({
       method: 'POST',
       url: `${URL}/bill/add`,
@@ -259,5 +259,5 @@ export const createBillAPI = (checkOutRoom, currentUser) => {
           showNotification(STATUS.ERROR, message);
         }
       });
-  };
+  // };
 };
