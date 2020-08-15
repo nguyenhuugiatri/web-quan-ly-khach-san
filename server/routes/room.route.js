@@ -65,12 +65,12 @@ router.post('/dataRoom', async (req, res) => {
     });
 });
 router.post('/changeRoom', async (req, res) => {
-  try{
-    const { idRentReceipt,idRoom,idRoomCurrent,price } = req.body;
-     await roomModel.ChangeRoomInDetail(idRentReceipt,idRoom);
-     await roomModel.updateRoomAvailable(idRoomCurrent);
+  try {
+    const { idRentReceipt, idRoom, idRoomCurrent, price } = req.body;
+    await roomModel.ChangeRoomInDetail(idRentReceipt, idRoom);
+    await roomModel.updateRoomAvailable(idRoomCurrent);
     await roomModel.updateRoomRent(idRoom);
-    await roomModel.updateRoomRentChange(idRentReceipt,price);
+    await roomModel.updateRoomRentChange(idRentReceipt, price);
     return res.status(200).json({ message: 'Change Room Success!' });
   } catch (err) {
     console.log(err);
@@ -170,6 +170,17 @@ router.post('/checkOut', async (req, res, next) => {
   }
 
   return res.status(200).json({ roomCheckOut, total, message: 'Successful !' });
+});
+
+router.post('/confirmCleaning', async (req, res, next) => {
+  try {
+    const { idRoom } = req.body;
+    await roomModel.updateRoomStatus(idRoom, 1);
+    return res.status(200).json({ message: 'Successful !' });
+  } catch (err) {
+    console.log('Error:', err);
+    return res.status(400).json({ message: 'Failed !' });
+  }
 });
 
 module.exports = router;

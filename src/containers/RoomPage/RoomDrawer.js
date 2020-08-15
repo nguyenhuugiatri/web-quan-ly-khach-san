@@ -10,6 +10,7 @@ import {
   updateCheckInRoom,
   checkInAPI,
   getListCustomerTypeAPI,
+  confirmCleaningAPI,
   createBillAPI,
 } from './actions';
 import './styles.scss';
@@ -29,6 +30,12 @@ class RoomDrawer extends Component {
     deleteCheckInCustomer();
     deleteCheckInRoom();
     onClose();
+  };
+
+  handleConfirmCleaning = async () => {
+    const { checkInRoom } = this.props;
+    await confirmCleaningAPI(checkInRoom.id);
+    this.handleClose();
   };
 
   handleCheckInClicked = async () => {
@@ -119,7 +126,7 @@ class RoomDrawer extends Component {
             title='Did you confirm the room been cleaned ?'
             subTitle='Click confirm to change room status'
             extra={
-              <Button onClick={this.handleClose} type='primary'>
+              <Button onClick={this.handleConfirmCleaning} type='primary'>
                 Confirm
               </Button>
             }

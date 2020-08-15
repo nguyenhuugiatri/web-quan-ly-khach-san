@@ -241,23 +241,46 @@ export const checkInAPI = (data) => {
 
 export const createBillAPI = (checkOutRoom, currentUser) => {
   // return (dispatch) => {
-    return axios({
-      method: 'POST',
-      url: `${URL}/bill/add`,
-      data: { checkOutRoom, currentUser },
+  return axios({
+    method: 'POST',
+    url: `${URL}/bill/add`,
+    data: { checkOutRoom, currentUser },
+  })
+    .then((result) => {
+      const { message } = result.data;
+      if (message) {
+        showNotification(STATUS.SUCCESS, message);
+      }
     })
-      .then((result) => {
-        const { message } = result.data;
-        if (message) {
-          showNotification(STATUS.SUCCESS, message);
-        }
-      })
-      .catch((err) => {
-        if (err && err.response) {
-          console.log('Error: ', err.response);
-          const { message } = err.response.data;
-          showNotification(STATUS.ERROR, message);
-        }
-      });
+    .catch((err) => {
+      if (err && err.response) {
+        console.log('Error: ', err.response);
+        const { message } = err.response.data;
+        showNotification(STATUS.ERROR, message);
+      }
+    });
+  // };
+};
+
+export const confirmCleaningAPI = (idRoom) => {
+  // return (dispatch) => {
+  return axios({
+    method: 'POST',
+    url: `${URL}/room/confirmCleaning`,
+    data: { idRoom },
+  })
+    .then((result) => {
+      const { message } = result.data;
+      if (message) {
+        showNotification(STATUS.SUCCESS, message);
+      }
+    })
+    .catch((err) => {
+      if (err && err.response) {
+        console.log('Error: ', err.response);
+        const { message } = err.response.data;
+        showNotification(STATUS.ERROR, message);
+      }
+    });
   // };
 };
