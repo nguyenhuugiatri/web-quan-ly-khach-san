@@ -25,6 +25,7 @@ class RoomList extends Component {
       idRoomChange: "",
       idTypeRoom:"",
       idRentReceipt: "",
+      nameTypeRoom:"",
       price:"",
       priceHour:"",
       dateIn: "",
@@ -47,32 +48,29 @@ class RoomList extends Component {
       }
     );
   };
+  handleOnChangePrice=(value)=>{
+    this.setState({
+      price:value
+    });
+  }
   handleOnChangeRoomCurrent = (value) => {
     this.setState(
       {
         idRoomCurrent: value,
       },
-      () => {
-        this.getDataRoom();
-      }
-    );
-  };
-  handleOnChangeSelectTypeRoom = (value) => {
-    this.setState(
-      {
-        idTypeRoom: value,
-      },
-      () => {
-        this.getListRoomByType();
+      async () => {
+        await this.getDataRoom();
+        await this.getNameTypeAndPrice();
+        await this.getListRoomByType();
       }
     );
   };
   getNameTypeAndPrice = () => {
-    axios({
+   return axios({
       method: "POST",
       url: `${URL}/room/roomCurrent`,
       data: {
-        id: this.state.idRoomChange,
+        id: this.state.idRoomCurrent,
       },
     })
       .then((result) => {
@@ -81,6 +79,8 @@ class RoomList extends Component {
         this.setState({
           priceHour: data[0].priceHour,
           price: data[0].price,
+          nameTypeRoom: data[0].name,
+          idTypeRoom:data[0].id
         });
       })
       .catch((err) => {
@@ -89,7 +89,7 @@ class RoomList extends Component {
       });
   };
   getListRoomByType = () => {
-    axios({
+    return axios({
       method: "POST",
       url: `${URL}/room/listRoomByType`,
       data: {
@@ -125,7 +125,7 @@ class RoomList extends Component {
       });
   };
   getDataRoom = () => {
-    axios({
+   return axios({
       method: "POST",
       url: `${URL}/room/dataRoom`,
       data: {
@@ -169,7 +169,8 @@ class RoomList extends Component {
       data: {
         idRentReceipt: this.state.idRentReceipt,
         idRoom:this.state.idRoomChange,
-        idRoomCurrent:this.state.idRoomCurrent
+        idRoomCurrent:this.state.idRoomCurrent,
+        price:this.state.price
       },
     }).then((result) => {
       const { message } = result.data;
@@ -177,6 +178,9 @@ class RoomList extends Component {
       this.onCloseModal();
       this.props.getListRoom();
       this.getListRoomRent();
+      this.setState({
+        idRoomCurrent: null
+      });
     }).catch((err) => {
       if (err && err.response) {
         showNotification(STATUS.ERROR, "Change Room Fail!");
@@ -288,9 +292,11 @@ class RoomList extends Component {
                   valueForm={this.state.valueForm}
                   onCloseModal={this.onCloseModal}
                   handleOnChangeRoomCurrent={this.handleOnChangeRoomCurrent}
-                  handleOnChangeSelectTypeRoom={this.handleOnChangeSelectTypeRoom}
                   handleOnChangeSelectRoomChange={this.handleOnChangeSelectRoomChange}
                   acceptChangeRoom={this.acceptChangeRoom}
+                  handleOnChangePrice={this.handleOnChangePrice}
+                  nameTypeRoom={this.state.nameTypeRoom}
+                  idRoomCurrent={this.state.idRoomCurrent}
                   price={this.state.price}
                   priceHour={this.state.priceHour}
                   listRoomRent={this.state.listRoomRent}

@@ -66,12 +66,14 @@ router.post('/dataRoom', async (req, res) => {
 });
 router.post('/changeRoom', async (req, res) => {
   try{
-    const { idRentReceipt,idRoom,idRoomCurrent } = req.body;
-    await roomModel.ChangeRoomInDetail(idRentReceipt,idRoom);
-    await roomModel.updateRoomAvailable(idRoomCurrent);
+    const { idRentReceipt,idRoom,idRoomCurrent,price } = req.body;
+     await roomModel.ChangeRoomInDetail(idRentReceipt,idRoom);
+     await roomModel.updateRoomAvailable(idRoomCurrent);
     await roomModel.updateRoomRent(idRoom);
+    await roomModel.updateRoomRentChange(idRentReceipt,price);
     return res.status(200).json({ message: 'Change Room Success!' });
   } catch (err) {
+    console.log(err);
     return res.status(400).json({ message: 'Change Room Fail!' });
   }
 });

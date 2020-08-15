@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Modal, Form, Select, Input, Row, Col, Button } from "antd";
+import { InputNumber, Modal, Form, Select, Input, Row, Col, Button } from "antd";
 import { getListRoomTypeAPI, updateVisible, createRoom } from "./actions";
 import "./styles.scss";
 export default class ModalChangeRoom extends Component {
@@ -34,11 +34,10 @@ export default class ModalChangeRoom extends Component {
           >
             <Row gutter={16}>
               <Col span={12}>
-                <Form.Item name="name" label="Room name">
-                 <Select onChange={(value) => {
+                <Form.Item label="Room name">
+                 <Select value={this.props.idRoomCurrent || 'Select your room'} onChange={(value) => {
                          this.props.handleOnChangeRoomCurrent(value);
                        }}>
-                       
                  {this.props.listRoomRent.map((type) => (
                     <Select.Option key={type.id} value={type.id}>
                       {type.name}
@@ -51,34 +50,15 @@ export default class ModalChangeRoom extends Component {
             <Row gutter={16}>
             <Col span={12}>
                 <Form.Item
-                  name="roomType"
                   label="Room type"
-                  rules={[
-                    { required: true, message: "Room type is required!" },
-                  ]}
                 >
-                  <Select
-                    placeholder="Choose room type"
-                      onChange={(value) => {
-                        this.props.handleOnChangeSelectTypeRoom(value);
-                      }}
-                  >
-                    
-                    {this.props.listTypeRoom.map((type) => (
-                    <Select.Option key={type.id} value={type.id}>
-                      {type.name}
-                    </Select.Option>
-                  ))}
-                  </Select>
+                  <Input name="roomType" value={this.props.nameTypeRoom}   disabled />
                 </Form.Item>
               </Col>
               <Col span={12}>
                 <Form.Item
                   name="roomChange"
                   label="Room Change"
-                  rules={[
-                    { required: true, message: "Room type is required!" },
-                  ]}
                 >
                   <Select
                     placeholder="Choose room change"
@@ -98,13 +78,22 @@ export default class ModalChangeRoom extends Component {
             <Row gutter={16}>
               <Col span={12}>
                 <Form.Item label="Price/Day" >
-                <Input name="price" value={this.props.price} disabled />
+                <InputNumber
+                     value={this.props.price}
+                      style={{ width: "100%" }}
+                      
+                      formatter={(value) =>
+                        `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                      }
+                      parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+                       onChange={this.props.handleOnChangePrice}
+                    />
                 </Form.Item>
               </Col>
 
               <Col span={12}>
                 <Form.Item label="Price/Hour" >
-                  <Input name="pricehour" value={this.props.priceHour} disabled />
+                  <Input name="pricehour" value={this.props.priceHour}   disabled />
                 </Form.Item>
               </Col>
             </Row>

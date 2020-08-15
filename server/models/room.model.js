@@ -23,7 +23,11 @@ module.exports = {
   SET status = 1
   WHERE id= '${idRoom}'`);
   },
-  updateRoomRent: (idRoom) =>
+  updateRoomRentChange: (id,price) =>
+    db.load(`UPDATE rentreceipt
+    SET price = '${price}'
+    WHERE id='${id}'`),
+    updateRoomRent: (idRoom) =>
     db.load(`UPDATE room
     SET status = 2
     WHERE id= '${idRoom}'`),
@@ -47,7 +51,7 @@ module.exports = {
 
   roomById: (id) =>
     db.load(
-      `SELECT rt.name, rt.price, rt.priceHour FROM room as r ,roomtype as rt where r.idType = rt.id and r.id = '${id}'`
+      `SELECT rt.id, rt.name, rt.price, rt.priceHour FROM room as r ,roomtype as rt where r.idType = rt.id and r.id = '${id}'`
     ),
   listRoomByType: (id, dateIn, dateOut) =>
     db.load(
