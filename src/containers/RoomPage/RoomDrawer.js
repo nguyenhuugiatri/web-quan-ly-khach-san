@@ -79,8 +79,27 @@ class RoomDrawer extends Component {
     });
   };
 
+  checkEmpty = (input) => {
+    if (input) return input.length === 0;
+    return true;
+  };
+
+  checkAllowCheckIn = (input) => {
+    return input.some((e) => this.checkEmpty(e));
+  };
+
   render() {
-    const { visible, checkInRoom } = this.props;
+    const { visible, checkInRoom, checkInCustomer } = this.props;
+    const { name, idNumber, idType, phone } = checkInCustomer;
+    const { date, price } = checkInRoom;
+    const allowCheckIn = this.checkAllowCheckIn([
+      name,
+      idNumber,
+      idType,
+      phone,
+      date,
+      price,
+    ]);
     const { status } = checkInRoom;
     return (
       <Drawer
@@ -109,7 +128,11 @@ class RoomDrawer extends Component {
                 Check out
               </Button>
             ) : status === AVAILABLE ? (
-              <Button onClick={this.handleCheckInClicked} type='primary'>
+              <Button
+                onClick={this.handleCheckInClicked}
+                type='primary'
+                disabled={allowCheckIn}
+              >
                 Check in
               </Button>
             ) : status === RESERVED ? (

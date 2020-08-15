@@ -48,7 +48,7 @@ class ModalAddRoom extends Component {
     return (
       <Modal
         visible={this.props.visible}
-        title='Choose option'
+        title='ADD ROOM'
         onCancel={() => {
           this.props.updateVisible();
         }}

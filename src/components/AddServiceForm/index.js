@@ -30,7 +30,7 @@ export default class AddServiceForm extends Component {
       <>
         <Modal
           visible={visible}
-          title='New Service'
+          title='NEW SERVICE'
           onCancel={handleCancel}
           footer={[
             <Button key='back' onClick={handleCancel}>

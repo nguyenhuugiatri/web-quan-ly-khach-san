@@ -1,19 +1,28 @@
-import React, { Component } from "react";
-import createPage from "../../components/createPage";
-import { HOME_PAGE } from "../../components/Sidebar/constants";
-import { connect } from "react-redux";
-import { getListRoomAPI, updateCheckInRoom } from "./actions";
-import Square from "../../components/Square";
-import { Button, Col, Row, Radio, Typography, Input } from "antd";
-import { AudioOutlined } from "@ant-design/icons";
-import RoomDrawer from "./RoomDrawer.js";
-import { STATUS } from "./constants";
-import ModalChangeRoom from "./ModalChangeRoom";
+import React, { Component } from 'react';
+import createPage from '../../components/createPage';
+import { HOME_PAGE } from '../../components/Sidebar/constants';
+import { connect } from 'react-redux';
+import { getListRoomAPI, updateCheckInRoom } from './actions';
+import Square from '../../components/Square';
+import {
+  Button,
+  Col,
+  Row,
+  Radio,
+  Typography,
+  Input,
+  Dropdown,
+  Menu,
+} from 'antd';
+import { ToolOutlined } from '@ant-design/icons';
+import RoomDrawer from './RoomDrawer.js';
+import { STATUS } from './constants';
+import ModalChangeRoom from './ModalChangeRoom';
 import showNotification from '../../utils/showNotification';
-import moment from "moment";
-import axios from "axios";
-import "./styles.scss";
-const URL = process.env.SERV_HOST || "http://localhost:8000";
+import moment from 'moment';
+import axios from 'axios';
+import './styles.scss';
+const URL = process.env.SERV_HOST || 'http://localhost:8000';
 class RoomList extends Component {
   constructor(props) {
     super(props);
@@ -21,24 +30,24 @@ class RoomList extends Component {
       filter: 0,
       visible: false,
       visibleModal: false,
-      idRoomCurrent: "",
-      idRoomChange: "",
-      idTypeRoom:"",
-      idRentReceipt: "",
-      nameTypeRoom:"",
-      price:"",
-      priceHour:"",
-      dateIn: "",
-      dateOut: "",
+      idRoomCurrent: '',
+      idRoomChange: '',
+      idTypeRoom: '',
+      idRentReceipt: '',
+      nameTypeRoom: '',
+      price: '',
+      priceHour: '',
+      dateIn: '',
+      dateOut: '',
       valueForm: React.createRef(),
       listRoomRent: [],
-      listTypeRoom:[],
-      listRoomByType:[],
-      searchText: "",
+      listTypeRoom: [],
+      listRoomByType: [],
+      searchText: '',
     };
   }
   handleOnChangeSelectRoomChange = (value) => {
-    console.log('aaaaaaaa',value);
+    console.log('aaaaaaaa', value);
     this.setState(
       {
         idRoomChange: value,
@@ -48,11 +57,11 @@ class RoomList extends Component {
       }
     );
   };
-  handleOnChangePrice=(value)=>{
+  handleOnChangePrice = (value) => {
     this.setState({
-      price:value
+      price: value,
     });
-  }
+  };
   handleOnChangeRoomCurrent = (value) => {
     this.setState(
       {
@@ -66,8 +75,8 @@ class RoomList extends Component {
     );
   };
   getNameTypeAndPrice = () => {
-   return axios({
-      method: "POST",
+    return axios({
+      method: 'POST',
       url: `${URL}/room/roomCurrent`,
       data: {
         id: this.state.idRoomCurrent,
@@ -75,12 +84,12 @@ class RoomList extends Component {
     })
       .then((result) => {
         let data = result.data;
-        console.log('222222',data);
+        console.log('222222', data);
         this.setState({
           priceHour: data[0].priceHour,
           price: data[0].price,
           nameTypeRoom: data[0].name,
-          idTypeRoom:data[0].id
+          idTypeRoom: data[0].id,
         });
       })
       .catch((err) => {
@@ -90,7 +99,7 @@ class RoomList extends Component {
   };
   getListRoomByType = () => {
     return axios({
-      method: "POST",
+      method: 'POST',
       url: `${URL}/room/listRoomByType`,
       data: {
         id: this.state.idTypeRoom,
@@ -125,8 +134,8 @@ class RoomList extends Component {
       });
   };
   getDataRoom = () => {
-   return axios({
-      method: "POST",
+    return axios({
+      method: 'POST',
       url: `${URL}/room/dataRoom`,
       data: {
         id: this.state.idRoomCurrent,
@@ -134,12 +143,12 @@ class RoomList extends Component {
     })
       .then((result) => {
         let data = result.data;
-        let dateIn = moment(data.dateIn).format("YYYY-MM-DD HH:mm");
-        let dateOut = moment(data.dateOut).format("YYYY-MM-DD HH:mm");
+        let dateIn = moment(data.dateIn).format('YYYY-MM-DD HH:mm');
+        let dateOut = moment(data.dateOut).format('YYYY-MM-DD HH:mm');
         this.setState({
           idRentReceipt: data.id,
           dateIn: dateIn,
-          dateOut:dateOut,
+          dateOut: dateOut,
         });
       })
       .catch((err) => {
@@ -162,34 +171,36 @@ class RoomList extends Component {
         console.log(err);
       });
   };
-  acceptChangeRoom =()=>{
+  acceptChangeRoom = () => {
     axios({
-      method: "POST",
+      method: 'POST',
       url: `${URL}/room/changeRoom`,
       data: {
         idRentReceipt: this.state.idRentReceipt,
-        idRoom:this.state.idRoomChange,
-        idRoomCurrent:this.state.idRoomCurrent,
-        price:this.state.price
+        idRoom: this.state.idRoomChange,
+        idRoomCurrent: this.state.idRoomCurrent,
+        price: this.state.price,
       },
-    }).then((result) => {
-      const { message } = result.data;
-      showNotification(STATUS.SUCCESS, message);
-      this.onCloseModal();
-      this.props.getListRoom();
-      this.getListRoomRent();
-      this.setState({
-        idRoomCurrent: null
-      });
-    }).catch((err) => {
-      if (err && err.response) {
-        showNotification(STATUS.ERROR, "Change Room Fail!");
+    })
+      .then((result) => {
+        const { message } = result.data;
+        showNotification(STATUS.SUCCESS, message);
         this.onCloseModal();
         this.props.getListRoom();
         this.getListRoomRent();
-      }
-    });
-  }
+        this.setState({
+          idRoomCurrent: null,
+        });
+      })
+      .catch((err) => {
+        if (err && err.response) {
+          showNotification(STATUS.ERROR, 'Change Room Fail!');
+          this.onCloseModal();
+          this.props.getListRoom();
+          this.getListRoomRent();
+        }
+      });
+  };
   componentDidMount = () => {
     this.props.getListRoom();
     this.getListRoomRent();
@@ -207,7 +218,10 @@ class RoomList extends Component {
       {
         visible: false,
       },
-      this.props.getListRoom()
+      () => {
+        this.props.getListRoom();
+        this.getListRoomRent();
+      }
     );
   };
   onShowModal = () => {
@@ -222,7 +236,7 @@ class RoomList extends Component {
   };
 
   handleSearch = (input) => {
-    if (typeof input === "string") this.setState({ searchText: input });
+    if (typeof input === 'string') this.setState({ searchText: input });
     else this.setState({ searchText: input.target.value });
   };
 
@@ -236,11 +250,11 @@ class RoomList extends Component {
     if (filter !== 0) list = list.filter((room) => room.status === filter);
     list = list.sort((a, b) => a.id - b.id);
     const rows = list.map((room) => (
-      <Col key={room.id} style={{ padding: "15px" }} span={4}>
+      <Col key={room.id} style={{ padding: '15px' }} span={4}>
         <Square
           {...room}
           key={room.id}
-          name={room.name.replace("Room ", "")}
+          name={room.name.replace('Room ', '')}
           handleOnClick={() => {
             this.props.updateCheckInRoom(room);
             this.showDrawer();
@@ -249,7 +263,7 @@ class RoomList extends Component {
       </Col>
     ));
     return {
-      list: <Row align="middle">{rows}</Row>,
+      list: <Row align='middle'>{rows}</Row>,
       total: rows.length,
     };
   };
@@ -265,15 +279,31 @@ class RoomList extends Component {
     const { filter, visible, searchText } = this.state;
     const { listRoom } = this.props;
     const { list, total } = this.renderListRoom(listRoom, filter, searchText);
+
     return (
       <>
-        <div className="list-container">
-          <Row className="filter-room" justify="space-between" align="middle">
+        <div className='list-container'>
+          <Row className='filter-room' justify='space-between' align='middle'>
+            <Col style={{ padding: '0 17px' }}>
+              <Dropdown
+                overlay={
+                  <Menu>
+                    <Menu.Item onClick={this.onShowModal}>
+                      Change Room
+                    </Menu.Item>
+                  </Menu>
+                }
+              >
+                <Button>
+                  Tools <ToolOutlined />
+                </Button>
+              </Dropdown>
+            </Col>
             <Col>
               <Radio.Group
                 onChange={this.handleOnChangeRadio}
                 defaultValue={0}
-                buttonStyle="solid"
+                buttonStyle='solid'
               >
                 <Radio.Button value={0}>All</Radio.Button>
                 <Radio.Button value={STATUS.AVAILABLE}>Available</Radio.Button>
@@ -282,46 +312,40 @@ class RoomList extends Component {
                 <Radio.Button value={STATUS.CLEANING}>Cleaning</Radio.Button>
               </Radio.Group>
             </Col>
-            <Col flex={1} style={{ padding: "0 20px" }}>
-              <Button onClick={this.onShowModal} type="primary">
-                Change Room
-              </Button>
-              <div>
-                <ModalChangeRoom
-                  visibleModal={this.state.visibleModal}
-                  valueForm={this.state.valueForm}
-                  onCloseModal={this.onCloseModal}
-                  handleOnChangeRoomCurrent={this.handleOnChangeRoomCurrent}
-                  handleOnChangeSelectRoomChange={this.handleOnChangeSelectRoomChange}
-                  acceptChangeRoom={this.acceptChangeRoom}
-                  handleOnChangePrice={this.handleOnChangePrice}
-                  nameTypeRoom={this.state.nameTypeRoom}
-                  idRoomCurrent={this.state.idRoomCurrent}
-                  price={this.state.price}
-                  priceHour={this.state.priceHour}
-                  listRoomRent={this.state.listRoomRent}
-                  listTypeRoom={this.state.listTypeRoom}
-                  listRoomByType={this.state.listRoomByType}
-                ></ModalChangeRoom>
-              </div>
-            </Col>
-            <Col flex={1} style={{ padding: "0 20px" }}>
+            <Col flex={1} style={{ padding: '0 20px' }}>
               <Input.Search
-                placeholder="Input search text"
+                placeholder='Input search text'
                 onSearch={this.handleSearch}
                 onChange={this.handleSearch}
-                enterButton
                 allowClear
               />
             </Col>
-            <Col style={{ minWidth: "60px" }}>
+
+            <Col style={{ minWidth: '60px' }}>
               <Typography.Text>Total: {total}</Typography.Text>
             </Col>
           </Row>
-
-          <div className="list-room">{list}</div>
+          <div className='list-room'>{list}</div>
         </div>
         <RoomDrawer visible={visible} onClose={this.onClose} />
+        <div>
+          <ModalChangeRoom
+            visibleModal={this.state.visibleModal}
+            valueForm={this.state.valueForm}
+            onCloseModal={this.onCloseModal}
+            handleOnChangeRoomCurrent={this.handleOnChangeRoomCurrent}
+            handleOnChangeSelectRoomChange={this.handleOnChangeSelectRoomChange}
+            acceptChangeRoom={this.acceptChangeRoom}
+            handleOnChangePrice={this.handleOnChangePrice}
+            nameTypeRoom={this.state.nameTypeRoom}
+            idRoomCurrent={this.state.idRoomCurrent}
+            price={this.state.price}
+            priceHour={this.state.priceHour}
+            listRoomRent={this.state.listRoomRent}
+            listTypeRoom={this.state.listTypeRoom}
+            listRoomByType={this.state.listRoomByType}
+          ></ModalChangeRoom>
+        </div>
       </>
     );
   }

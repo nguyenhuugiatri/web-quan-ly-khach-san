@@ -164,7 +164,6 @@ const getListServiceAPI = (rentReceiptId) => {
   })
     .then((result) => {
       const { serviceList, serviceCharge } = result.data;
-      console.log('serviceCharge', serviceCharge);
       if (serviceList) return { serviceList, serviceCharge };
     })
     .catch((err) => {

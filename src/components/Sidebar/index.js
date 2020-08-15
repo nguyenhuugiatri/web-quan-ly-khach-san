@@ -29,7 +29,7 @@ class Sidebar extends Component {
           </Menu.Item>
 
           <Menu.Item key={PAGE.BOOKING_PAGE} icon={<UserOutlined />}>
-            <Link to='/'>Booking</Link>
+            <Link to='/booking'>Booking</Link>
           </Menu.Item>
 
           <Menu.Item key={PAGE.USER_PAGE} icon={<VideoCameraOutlined />}>
