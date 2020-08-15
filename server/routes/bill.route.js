@@ -6,10 +6,22 @@ const moment = require('moment');
 router.post('/add', async (req, res) => {
   try {
     const { checkOutRoom, currentUser } = req.body;
-    const { rentReceiptId, total, id: idRoom } = checkOutRoom;
+    console.log('checkOutRoom', checkOutRoom);
+    const {
+      rentReceiptId,
+      total: roomCharge,
+      id: idRoom,
+      serviceCharge,
+    } = checkOutRoom;
     const { id: idUser } = currentUser;
     const paymentDate = moment().format('YYYY-MM-DD HH:mm');
-    await billModel.createNewBill(rentReceiptId, idUser, paymentDate, total);
+    await billModel.createNewBill(
+      rentReceiptId,
+      idUser,
+      paymentDate,
+      roomCharge,
+      serviceCharge
+    );
     await roomModel.updateRoomStatus(idRoom, 4);
     return res.status(200).json({ message: 'Check out was successful !' });
   } catch (err) {
