@@ -7,6 +7,7 @@ import CustomerPage from '../CustomerPage';
 import RoomListPage from '../RoomListPage';
 import RoomTypeListPage from '../RoomTypeListPage';
 import NotFoundPage from './../../components/NotFound';
+import BillPage from '../BillPage'
 import { Router } from '@reach/router';
 import { connect } from 'react-redux';
 import { updateCurrentUser } from './actions';
@@ -24,21 +25,23 @@ class App extends Component {
     if (currentUser && currentUser.permission === 1)
       return (
         <Router>
+          <NotFoundPage default />
           <RoomPage path='/' />
           <BookingPage path='/booking' />
           <UserListPage path='/users' />
           <CustomerPage path='/customer' />
           <RoomListPage path='/room' />
           <RoomTypeListPage path='/roomtype' />
-          <NotFoundPage default />
+          <BillPage path='/bill' />
         </Router>
       );
     else if (currentUser && currentUser.permission === 0) {
       return (
         <Router>
+          <NotFoundPage default />
           <RoomPage path='/' />
           <BookingPage path='/booking' />
-          <NotFoundPage default />
+          <BillPage path='/bill' />
         </Router>
       );
     } else {
