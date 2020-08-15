@@ -10,6 +10,7 @@ import {
   updateCheckInRoom,
   checkInAPI,
   getListCustomerTypeAPI,
+  createBillAPI,
 } from './actions';
 import './styles.scss';
 
@@ -54,7 +55,9 @@ class RoomDrawer extends Component {
     });
   };
 
-  handleConfirmCheckOut = (e) => {
+  handleConfirmCheckOut = async (checkInRoom) => {
+    const { createBill, currentUser } = this.props;
+    await createBill(checkInRoom, currentUser);
     this.setState(
       {
         visible: false,
@@ -157,6 +160,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     getListCustomerType: () => {
       dispatch(getListCustomerTypeAPI());
+    },
+    createBill: (checkOutRoom, currentUser) => {
+      dispatch(createBillAPI(checkOutRoom, currentUser));
     },
   };
 };

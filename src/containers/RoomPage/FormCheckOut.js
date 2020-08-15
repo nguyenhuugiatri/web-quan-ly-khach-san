@@ -113,7 +113,6 @@ class FormCheckOut extends Component {
       serviceList,
       serviceCharge,
     } = checkInRoom;
-    console.log('dateeee',dateIn);
     return (
       <Form layout='vertical' hideRequiredMark>
         <Row gutter={16}>

@@ -24,16 +24,25 @@ module.exports = {
   },
 
   listRoom: () => db.load(`select * from room`),
+
   listTypeRoom: () => db.load(`select * from roomtype`),
+
   roomById: (id) =>
     db.load(
       `SELECT rt.name, rt.price FROM room as r ,roomtype as rt where r.idType = rt.id and r.id = '${id}'`
     ),
-    listRoomByType: (id,dateIn,dateOut) =>
+
+  listRoomByType: (id, dateIn, dateOut) =>
     db.load(
       `SELECT  r.name,r.id,r.idType,rt.price,rt.priceHour from (SELECT * FROM room where id NOT IN
         (SELECT r.id from room as r, bookreceipt as br,bookreceiptdetail as brd where brd.idBookReceipt=br.id and brd.idRoom=r.id and (dateOut>'${dateIn}' and dateIn<'${dateOut}')
         UNION 
         SELECT r.id from room as r, rentreceipt as rr,rentreceiptdetail as rrd where rrd.idRentReceipt=rr.id and rrd.idRoom=r.id and (dateOut>'${dateIn}' and dateIn<'${dateOut}'))) as r,roomtype as rt where r.idType=rt.id and rt.id='${id}' `
     ),
+
+  updateRoomStatus: async (idRoom, status) => {
+    await db.load(`UPDATE room
+      SET status = ${status}
+      WHERE id=${idRoom};`);
+  },
 };

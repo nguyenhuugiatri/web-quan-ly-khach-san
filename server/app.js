@@ -11,6 +11,7 @@ const serviceRouter = require('./routes/service.route');
 const customerRouter = require('./routes/customer.route');
 const bookingRouter = require('./routes/booking.route');
 const roomTypeRouter = require('./routes/roomtype.route');
+const billRouter = require('./routes/bill.route');
 const PORT = process.env.PORT || 3002;
 const app = express();
 
@@ -44,6 +45,7 @@ app.use('/service', serviceRouter);
 app.use('/customer', customerRouter);
 app.use('/booking', bookingRouter);
 app.use('/roomtype', roomTypeRouter);
+app.use('/bill', billRouter);
 
 app.listen(PORT, () => {
   console.log(`App is listening on port: ${PORT}`);
