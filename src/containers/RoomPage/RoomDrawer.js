@@ -54,8 +54,7 @@ class RoomDrawer extends Component {
     });
   };
 
-  handleOk = (e) => {
-    console.log(e);
+  handleConfirmCheckOut = (e) => {
     this.setState(
       {
         visible: false,
@@ -128,8 +127,9 @@ class RoomDrawer extends Component {
             <>
               <FormCheckOut />
               <CheckOutConfirm
+                checkInRoom={checkInRoom}
                 modalData={this.state}
-                handleOk={this.handleOk}
+                handleConfirmCheckOut={this.handleConfirmCheckOut}
                 handleCancel={this.handleCancel}
               />
             </>

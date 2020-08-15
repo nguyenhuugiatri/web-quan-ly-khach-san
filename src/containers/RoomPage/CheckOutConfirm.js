@@ -5,21 +5,72 @@ import './styles.scss';
 const { Option, OptGroup } = Select;
 
 class CheckOutConfirm extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { visible: false, paymentMethod: 'cash' };
+  }
+
+  showModal = () => {
+    this.setState({
+      visible: true,
+    });
+  };
+
+  handleDoneClicked = () => {
+    const { handleConfirmCheckOut } = this.props;
+    this.setState({
+      visible: false,
+    });
+    handleConfirmCheckOut();
+  };
+
+  handleCancel = (e) => {
+    console.log(e);
+    this.setState({
+      visible: false,
+    });
+  };
+
+  handleChangePaymentMethod = (value) => {
+    this.setState({ paymentMethod: value });
+  };
+
+  handleConfirmClicked = () => {
+    const { paymentMethod } = this.state;
+    const { handleConfirmCheckOut } = this.props;
+
+    if (paymentMethod === 'card') {
+      this.showModal();
+    } else {
+      handleConfirmCheckOut();
+    }
+  };
+
   render() {
-    const { modalData, handleCancel, handleOk } = this.props;
+    const {
+      modalData,
+      handleCancel,
+      checkInRoom,
+      handleConfirmCheckOut,
+    } = this.props;
+    const { name, serviceCharge, total: roomCharge } = checkInRoom;
     const { visible } = modalData;
     return (
       <div>
         <Modal
           visible={visible}
           title='CHECK OUT'
-          onOk={handleOk}
+          onOk={this.handleConfirmClicked}
           onCancel={handleCancel}
           footer={[
             <Button key='back' onClick={handleCancel}>
               Cancel
             </Button>,
-            <Button key='submit' type='primary' onClick={handleOk}>
+            <Button
+              key='submit'
+              type='primary'
+              onClick={this.handleConfirmClicked}
+            >
               Confirm
             </Button>,
           ]}
@@ -28,10 +79,10 @@ class CheckOutConfirm extends Component {
             <div className='confirm-checkout'>
               <Row className='part' justify='space-between' align='middle'>
                 <Col className='total-bill-confirm-title' span={12}>
-                  Room:
+                  Name:
                 </Col>
                 <Col span={12} className='total-bill-confirm-room'>
-                  12
+                  {name}
                 </Col>
               </Row>
               <Row className='part' justify='space-between' align='middle'>
@@ -42,7 +93,7 @@ class CheckOutConfirm extends Component {
                   <InputNumber
                     className='serviceCharge'
                     disabled
-                    value={420}
+                    value={roomCharge}
                     formatter={(value) =>
                       `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
                     }
@@ -58,7 +109,7 @@ class CheckOutConfirm extends Component {
                   <InputNumber
                     className='serviceCharge'
                     disabled
-                    value={60}
+                    value={serviceCharge}
                     formatter={(value) =>
                       `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
                     }
@@ -78,7 +129,7 @@ class CheckOutConfirm extends Component {
                   <InputNumber
                     className='serviceCharge'
                     disabled
-                    value={480}
+                    value={serviceCharge + roomCharge}
                     formatter={(value) =>
                       `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
                     }
@@ -92,9 +143,9 @@ class CheckOutConfirm extends Component {
                 </Col>
                 <Col span={12}>
                   <Select
-                    defaultValue='cash'
+                    value={this.state.paymentMethod}
                     style={{ width: 200 }}
-                    // onChange={handleChange}
+                    onChange={this.handleChangePaymentMethod}
                   >
                     <Option value='cash'>Cash</Option>
                     <Option value='card'>Card</Option>
@@ -103,6 +154,31 @@ class CheckOutConfirm extends Component {
               </Row>
             </div>
           </Form>
+        </Modal>
+        <Modal
+          title='SWIPE CARD'
+          visible={this.state.visible}
+          onOk={this.handleDoneClicked}
+          onCancel={this.handleCancel}
+          footer={[
+            <Button key='back' onClick={this.handleCancel}>
+              Cancel
+            </Button>,
+            <Button
+              key='submit'
+              type='primary'
+              onClick={this.handleDoneClicked}
+            >
+              Done
+            </Button>,
+          ]}
+        >
+          <img
+            width='100%'
+            height='100%'
+            src='https://i.pinimg.com/originals/f8/b0/a2/f8b0a277e663688f577cf09101d1d1fe.gif'
+            alt=''
+          />
         </Modal>
       </div>
     );
