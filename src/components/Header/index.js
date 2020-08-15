@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import MenuBar from '../MenuBar';
 import 'antd/dist/antd.css';
-import { Layout, Row, Button } from 'antd';
+import { Layout, Row, Button, Col, Avatar } from 'antd';
 import {
   MenuUnfoldOutlined,
   MenuFoldOutlined,
   LogoutOutlined,
+  UserOutlined,
 } from '@ant-design/icons';
 import { logout } from './../../containers/App/actions';
 import { connect } from 'react-redux';
@@ -15,11 +16,11 @@ const { Header: HeaderAntd } = Layout;
 
 class Header extends Component {
   render() {
-    const { collapsed, handleOnToggle, handleLogout } = this.props;
+    const { collapsed, handleOnToggle, handleLogout, currentUser } = this.props;
     return (
       <HeaderAntd className='site-layout-background' style={{ padding: 0 }}>
         <Row justify='space-between' align='middle'>
-          <Row>
+          <Row align='middle'>
             {React.createElement(
               collapsed ? MenuUnfoldOutlined : MenuFoldOutlined,
               {
@@ -29,19 +30,35 @@ class Header extends Component {
             )}
             <MenuBar />
           </Row>
-          <Button
-            className='logout-button'
-            type='text'
-            icon={<LogoutOutlined />}
-            onClick={handleLogout}
-          >
-            Log out
-          </Button>
+          <Row align='middle'>
+            <Row justify='center' align='middle' style={{ marginRight: 10 }}>
+              <Avatar
+                size='small'
+                icon={<UserOutlined />}
+                style={{ marginRight: 7 }}
+              />
+              <div>{currentUser.username}</div>
+            </Row>
+            <Button
+              className='logout-button'
+              type='text'
+              icon={<LogoutOutlined />}
+              onClick={handleLogout}
+            >
+              Log out
+            </Button>
+          </Row>
         </Row>
       </HeaderAntd>
     );
   }
 }
+const mapStateToProps = (state) => {
+  return {
+    currentUser: state.global.currentUser,
+  };
+};
+
 const mapDispatchToProps = (dispatch) => {
   return {
     handleLogout: () => {
@@ -50,4 +67,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(null, mapDispatchToProps)(Header);
+export default connect(mapStateToProps, mapDispatchToProps)(Header);

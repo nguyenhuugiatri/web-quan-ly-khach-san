@@ -25,7 +25,6 @@ router.post('/login', async (req, res, next) => {
   });
 
   delete user.password;
-  delete user.username;
 
   return res.status(200).json({ user, token, message: 'Login successful !' });
 });
@@ -43,7 +42,8 @@ router.get('/list', async (req, res, next) => {
       user.password = '********';
       return user;
     });
-    if (listUser) return res.status(200).json({ listUser, message: 'Successful !' });
+    if (listUser)
+      return res.status(200).json({ listUser, message: 'Successful !' });
     else return res.status(403).json({ message: 'Somethings went wrongs!' });
   } else {
     res.status(204).json({ message: 'No content' });
@@ -69,14 +69,17 @@ router.patch('/delete', async (req, res) => {
   }
 });
 router.patch('/update', async (req, res) => {
-  await userModel.update(req.body.id, req.body).then((result) => {
-    if (result) return res.status(200).json({ message: 'Update success!' });
-    return res.status(400).json({ message: 'Something went wrongs!' });
-  }).catch(err=>{
-    if(err){
-      res.status(404).json({message:err})
-    }
-  });
+  await userModel
+    .update(req.body.id, req.body)
+    .then((result) => {
+      if (result) return res.status(200).json({ message: 'Update success!' });
+      return res.status(400).json({ message: 'Something went wrongs!' });
+    })
+    .catch((err) => {
+      if (err) {
+        res.status(404).json({ message: err });
+      }
+    });
 });
 router.post('/insert', async (req, res) => {
   let value = req.body;
