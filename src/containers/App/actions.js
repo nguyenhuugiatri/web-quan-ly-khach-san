@@ -2,10 +2,12 @@ import axios from 'axios';
 import showNotification from '../../utils/showNotification';
 import { STATUS } from '../../utils/constants';
 import { UPDATE_CURRENT_USER } from './constants';
+import { navigate } from '@reach/router';
 
 const URL = process.env.SERV_HOST || 'http://localhost:8000';
 
 export const updateCurrentUser = (user) => {
+  navigate('/');
   return {
     type: UPDATE_CURRENT_USER,
     user,

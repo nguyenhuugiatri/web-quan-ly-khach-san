@@ -11,7 +11,7 @@
  Target Server Version : 80020
  File Encoding         : 65001
 
- Date: 15/08/2020 21:07:23
+ Date: 16/08/2020 00:32:28
 */
 
 SET NAMES utf8mb4;
@@ -51,6 +51,7 @@ CREATE TABLE `BookReceipt` (
   `dateIn` datetime DEFAULT NULL,
   `dateOut` datetime DEFAULT NULL,
   `status` int DEFAULT NULL,
+  `price` decimal(10,2) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `idCustomer` (`idCustomer`),
   CONSTRAINT `bookreceipt_ibfk_1` FOREIGN KEY (`idCustomer`) REFERENCES `Customer` (`id`)

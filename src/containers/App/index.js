@@ -4,8 +4,9 @@ import UserListPage from '../UserListPage';
 import BookingPage from '../BookingPage';
 import RoomPage from '../RoomPage';
 import CustomerPage from '../CustomerPage';
-import RoomListPage from '../RoomListPage'
-import RoomTypeListPage from '../RoomTypeListPage'
+import RoomListPage from '../RoomListPage';
+import RoomTypeListPage from '../RoomTypeListPage';
+import NotFoundPage from './../../components/NotFound';
 import { Router } from '@reach/router';
 import { connect } from 'react-redux';
 import { updateCurrentUser } from './actions';
@@ -19,23 +20,34 @@ class App extends Component {
 
   render() {
     const { currentUser } = this.props;
-    if (currentUser)
+    console.log('currentUser', currentUser);
+    if (currentUser && currentUser.permission === 1)
       return (
         <Router>
           <RoomPage path='/' />
+          <BookingPage path='/booking' />
           <UserListPage path='/users' />
-          <BookingPage  path='/booking' />
           <CustomerPage path='/customer' />
           <RoomListPage path='/room' />
           <RoomTypeListPage path='/roomtype' />
+          <NotFoundPage default />
         </Router>
       );
-    else
+    else if (currentUser && currentUser.permission === 0) {
+      return (
+        <Router>
+          <RoomPage path='/' />
+          <BookingPage path='/booking' />
+          <NotFoundPage default />
+        </Router>
+      );
+    } else {
       return (
         <Router>
           <LoginPage default />
         </Router>
       );
+    }
   }
 }
 
