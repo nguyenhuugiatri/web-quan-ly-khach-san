@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import 'antd/dist/antd.css';
 import { Modal, Button, Form, Row, Col, InputNumber, Select } from 'antd';
 import './styles.scss';
-const { Option, OptGroup } = Select;
+const { Option } = Select;
 
 class CheckOutConfirm extends Component {
   constructor(props) {
@@ -21,7 +21,7 @@ class CheckOutConfirm extends Component {
     this.setState({
       visible: false,
     });
-    handleConfirmCheckOut();
+    handleConfirmCheckOut(this.props.checkInRoom);
   };
 
   handleCancel = (e) => {

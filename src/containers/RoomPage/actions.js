@@ -239,18 +239,25 @@ export const checkInAPI = (data) => {
     });
 };
 
-export const createBill = (checkOutRoom) => {
-  return axios({
-    method: 'POST',
-    url: `${URL}/bill/add`,
-    data: { checkOutRoom },
-  })
-    .then((result) => {})
-    .catch((err) => {
-      if (err && err.response) {
-        console.log('Error: ', err.response);
-        const { message } = err.response.data;
-        showNotification(STATUS.ERROR, message);
-      }
-    });
+export const createBillAPI = (checkOutRoom, currentUser) => {
+  return (dispatch) => {
+    return axios({
+      method: 'POST',
+      url: `${URL}/bill/add`,
+      data: { checkOutRoom, currentUser },
+    })
+      .then((result) => {
+        const { message } = result.data;
+        if (message) {
+          showNotification(STATUS.SUCCESS, message);
+        }
+      })
+      .catch((err) => {
+        if (err && err.response) {
+          console.log('Error: ', err.response);
+          const { message } = err.response.data;
+          showNotification(STATUS.ERROR, message);
+        }
+      });
+  };
 };

@@ -1,11 +1,11 @@
 const db = require('../database');
 
 module.exports = {
-  createNewBill: async (checkOutRoom) => {
-    // const rows = await db.load(
-    //   `select * from RentReceipt where idCustomer = '${id}'`
-    // );
-    // if (rows.length === 0) return null;
-    // return rows[rows.length - 1];
+  createNewBill: async (idRentReceipt, idUser, paymentDate, total) => {
+    await db.load(
+      `INSERT INTO Bill (idRentReceipt, idUser, paymentDate, total)
+      VALUES ('${idRentReceipt}', '${idUser}', '${paymentDate}', '${total}');
+      `
+    );
   },
 };
