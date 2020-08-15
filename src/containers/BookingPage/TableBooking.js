@@ -94,7 +94,7 @@ export default class TableBooking extends Component {
     this.setState({ searchText: "" });
   };
   render() {
-    const { listBooking ,checkInRoomBooked } = this.props;
+    const { listBooking ,checkInRoomBooked,deleteBooking } = this.props;
 
     const columns = [
       {
@@ -154,7 +154,7 @@ export default class TableBooking extends Component {
             <Button type="primary" style={{ marginRight: 8 }} onClick={checkInRoomBooked(record)}>
               Accept
             </Button>
-            <Button  style={{ marginRight: 8 }} onClick={checkInRoomBooked(record)}>
+            <Button  style={{ marginRight: 8 }} onClick={deleteBooking(record)}>
               Delete
             </Button>
           </Space>

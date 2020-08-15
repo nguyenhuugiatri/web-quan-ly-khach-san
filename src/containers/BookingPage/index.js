@@ -169,6 +169,27 @@ class Booking extends Component {
     this.getListTypeRoom();
     this.getListBooking();
   }
+  deleteBooking = (record) => {
+    return ()=>{
+      axios({
+        method: "POST",
+        url: `${URL}/booking/deleteBooking`,
+        data: {
+          data: record,
+          currentUser:this.props.currentUser,
+        }
+      }).then((result) => {
+        const { message } = result.data;
+        showNotification(STATUS.SUCCESS, message);
+        this.getListBooking();
+      }).catch((err) => {
+        if (err && err.response) {
+          showNotification(STATUS.ERROR, message);
+          this.getListBooking();
+        }
+      });
+    }
+  };
   checkInRoomBooked = (record) => {
     return ()=>{
       axios({
@@ -252,7 +273,7 @@ class Booking extends Component {
             handleOnChangeSelectRoom={this.handleOnChangeSelectRoom}
           ></BookDrawer>
         </div>
-        <TableBooking listBooking={this.state.listBooking} checkInRoomBooked={this.checkInRoomBooked}></TableBooking>
+        <TableBooking listBooking={this.state.listBooking} checkInRoomBooked={this.checkInRoomBooked} deleteBooking={this.deleteBooking}></TableBooking>
       </div>
     );
   }

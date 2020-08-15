@@ -15,6 +15,30 @@ router.get('/listBooking', async (req, res) => {
       res.status(400).json(e);
     });
 });
+router.post("/deleteBooking", async (req, res) => {
+  try {
+    console.log('booked',req.body);
+    let {data, currentUser} = req.body;
+      // idCustomer - dateIn dateOut idUser price idroom idrentcepit
+    let roomBook = {
+      idRoom: data.idRoom,
+      price: data.price,
+      dateIn: data.dateIn,
+      dateOut: data.dateOut,
+    };
+     await bookingModel.setStatusBookReceipt(data.id);
+    let date = moment(roomBook.dateIn,'YYYY-MM-DD');
+    let dateCurrent = moment(moment(),'YYYY-MM-DD');
+    if (date.diff(dateCurrent,'days')==0){
+         await rentReceiptModel.setStatusToAvailable(roomBook.idRoom);
+    }
+    return res.status(200).json({ message: "Delete was successful !" });
+  }catch (err) {
+    console.log(err);
+    return res.status(400).json({ message: "Delete was failed !" });
+  }
+  
+});
 router.post("/checkinbooked", async (req, res) => {
   try {
     console.log('booked',req.body);

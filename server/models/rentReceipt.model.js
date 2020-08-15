@@ -28,4 +28,11 @@ module.exports = {
       WHERE id='${id}';`
     );
   },
+  setStatusToAvailable: async (id) => {
+    await db.load(
+      `UPDATE room
+      SET status='1'
+      WHERE id='${id}';`
+    );
+  },
 };
