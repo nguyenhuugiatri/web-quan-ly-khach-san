@@ -7,3 +7,5 @@ export const ROOM_LIST_PAGE = 4;
 export const ROOM_TYPE_LIST_PAGE = 7;
 export const BILL_PAGE = 8;
 export const SERVICE_PAGE = 9;
+export const REVENUE_PAGE_MONTH = 11;
+export const REVENUE_PAGE_YEAR = 10;

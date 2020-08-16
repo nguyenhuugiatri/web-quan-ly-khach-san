@@ -1,5 +1,5 @@
 const db = require('../database');
-
+const tableName = 'Bill';
 module.exports = {
   createNewBill: async (
     idRentReceipt,
@@ -28,4 +28,11 @@ module.exports = {
     if (rows.length === 0) return [];
     return rows;
   },
+  find: () => db.find(tableName),
+  insert: (entity) => db.insert(tableName, entity),
+  insertS: (values) =>
+    db.loadWithFields(
+      `INSERT INTO bill (idRentReceipt, idUser, paymentDate,roomCharge,serviceCharge) VALUES ?`,
+      [values]
+    ),
 };
