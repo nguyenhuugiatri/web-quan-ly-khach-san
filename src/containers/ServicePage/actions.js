@@ -60,3 +60,18 @@ export const addServiceAPI = (service) => {
     }
   };
 };
+
+export const deleteServiceAPI = (id) => {
+  return async (dispatch) => {
+    try {
+      await axios({
+        method: 'POST',
+        url: `${URL}/service/delete-service`,
+        data: { id },
+      });
+      dispatch(getListAPI());
+    } catch (err) {
+      console.log('Error:', err);
+    }
+  };
+};

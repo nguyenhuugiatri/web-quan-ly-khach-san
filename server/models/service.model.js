@@ -2,7 +2,7 @@ const db = require('../database');
 
 module.exports = {
   getList: async () => {
-    const rows = await db.load(`select * from Service`);
+    const rows = await db.load(`select * from Service where isDelete=0`);
     if (rows.length === 0) return null;
     return rows;
   },
@@ -54,13 +54,12 @@ module.exports = {
 
   getListService: async () => {
     const rows = await db.load(`select s.id, idType, st.name as typeName, s.name, price from service s, ServiceType st
-    where s.idType=st.id`);
+    where s.idType=st.id and s.isDelete=0`);
     if (rows.length === 0) return [];
     return rows;
   },
 
-  addService: async ({ idType, name, price }) => {
-    await db.load(`INSERT INTO Service (idType,name,price)
-    VALUES (${idType}, '${name}', ${price})`);
+  deleteService: async (id) => {
+    await db.load(`update Service set isDelete = 1 where id = ${id}`);
   },
 };

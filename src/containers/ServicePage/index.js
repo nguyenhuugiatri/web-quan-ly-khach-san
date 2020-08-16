@@ -7,7 +7,7 @@ import { PlusOutlined } from '@ant-design/icons';
 // import TableType from './TableType';
 import ModalAddService from './ModalAddService';
 import TableService from './TableService';
-import { addServiceAPI, getListAPI } from './actions';
+import { addServiceAPI, getListAPI, deleteServiceAPI } from './actions';
 
 class Service extends Component {
   constructor(props) {
@@ -32,6 +32,10 @@ class Service extends Component {
   handleAddClicked = (values) => {
     this.props.addService(values);
     this.setState({ visible: false });
+  };
+
+  handleDeleteClicked = (service) => {
+    this.props.deleteService(service);
   };
 
   handleCancelClicked = () => {
@@ -74,7 +78,7 @@ class Service extends Component {
             pageSize={this.state.defaultPageSize}
             currentPage={this.state.currentPage}
           /> */}
-          <TableService />
+          <TableService handleDeleteClicked={this.handleDeleteClicked} />
         </div>
       </div>
     );
@@ -87,6 +91,9 @@ const mapDispatchToProps = (dispatch) => {
   return {
     addService: (service) => {
       dispatch(addServiceAPI(service));
+    },
+    deleteService: (id) => {
+      dispatch(deleteServiceAPI(id));
     },
     getList: () => {
       dispatch(getListAPI());

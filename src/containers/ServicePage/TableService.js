@@ -9,7 +9,7 @@ class TableService extends Component {
   }
 
   render() {
-    let { listService } = this.props;
+    let { listService, handleDeleteClicked } = this.props;
 
     const columns = [
       {
@@ -48,7 +48,7 @@ class TableService extends Component {
           listService.length >= 1 ? (
             <Popconfirm
               title='Sure to delete?'
-              // onConfirm={() => handleDeleteService(record.id)}
+              onConfirm={() => handleDeleteClicked(record.id)}
             >
               <a>Delete</a>
             </Popconfirm>

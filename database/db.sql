@@ -11,7 +11,7 @@
  Target Server Version : 80020
  File Encoding         : 65001
 
- Date: 16/08/2020 00:32:28
+ Date: 16/08/2020 15:33:27
 */
 
 SET NAMES utf8mb4;
@@ -258,6 +258,7 @@ CREATE TABLE `Service` (
   `idType` int DEFAULT NULL,
   `name` varchar(255) DEFAULT NULL,
   `price` int DEFAULT NULL,
+  `isDelete` int DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `idType` (`idType`),
   CONSTRAINT `service_ibfk_1` FOREIGN KEY (`idType`) REFERENCES `ServiceType` (`id`)
@@ -267,12 +268,12 @@ CREATE TABLE `Service` (
 -- Records of Service
 -- ----------------------------
 BEGIN;
-INSERT INTO `Service` VALUES (1, 1, 'Snack', 5);
-INSERT INTO `Service` VALUES (2, 1, 'Noodles', 10);
-INSERT INTO `Service` VALUES (3, 1, 'Candy', 2);
-INSERT INTO `Service` VALUES (4, 2, 'Beer', 25);
-INSERT INTO `Service` VALUES (5, 2, 'Pepsi', 15);
-INSERT INTO `Service` VALUES (6, 2, 'Sting', 15);
+INSERT INTO `Service` VALUES (1, 1, 'Snack', 5, 0);
+INSERT INTO `Service` VALUES (2, 1, 'Noodles', 10, 0);
+INSERT INTO `Service` VALUES (3, 1, 'Candy', 2, 0);
+INSERT INTO `Service` VALUES (4, 2, 'Beer', 25, 0);
+INSERT INTO `Service` VALUES (5, 2, 'Pepsi', 15, 0);
+INSERT INTO `Service` VALUES (6, 2, 'Sting', 15, 0);
 COMMIT;
 
 -- ----------------------------
