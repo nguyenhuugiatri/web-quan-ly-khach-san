@@ -6,7 +6,7 @@ export default class AddServiceForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      idService: 1,
+      idService: null,
       amount: 1,
     };
   }

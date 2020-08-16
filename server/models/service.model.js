@@ -2,7 +2,7 @@ const db = require('../database');
 
 module.exports = {
   getList: async () => {
-    const rows = await db.load(`select * from Service`);
+    const rows = await db.load(`select * from Service where isDelete=0`);
     if (rows.length === 0) return null;
     return rows;
   },
@@ -44,5 +44,33 @@ module.exports = {
     where rr.id=rrd.idRentReceipt and rrd.idServiceReceipt=sr.id  and rr.id = ${rentReceiptId}`);
     if (rows.length === 0) return null;
     return rows[0];
+  },
+
+  getListType: async () => {
+    const rows = await db.load(`select * from serviceType`);
+    if (rows.length === 0) return [];
+    return rows;
+  },
+
+  getListService: async () => {
+    const rows = await db.load(`select s.id, idType, st.name as typeName, s.name, price from service s, ServiceType st
+    where s.idType=st.id and s.isDelete=0`);
+    if (rows.length === 0) return [];
+    return rows;
+  },
+
+  addService: async ({ idType, name, price }) => {
+    await db.load(`INSERT INTO Service (idType,name,price)
+       VALUES (${idType}, '${name}', ${price})`);
+  },
+
+  deleteService: async (id) => {
+    await db.load(`update Service set isDelete = 1 where id = ${id}`);
+  },
+
+  editService: async (id, { name, idType, price }) => {
+    await db.load(
+      `update Service set name = '${name}', idType='${idType}', price='${price}' where id = ${id}`
+    );
   },
 };

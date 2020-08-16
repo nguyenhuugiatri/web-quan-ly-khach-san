@@ -77,4 +77,64 @@ router.post('/total', async (req, res, next) => {
   }
 });
 
+router.get('/list-type', async (req, res, next) => {
+  try {
+    const listType = await serviceModel.getListType();
+    return res.status(200).json({ listType, message: 'Successful !' });
+  } catch (err) {
+    return res.status(400).json({
+      message: 'Failed !',
+    });
+  }
+});
+
+router.get('/list', async (req, res, next) => {
+  try {
+    const listService = await serviceModel.getListService();
+    return res.status(200).json({ listService, message: 'Successful !' });
+  } catch (err) {
+    return res.status(400).json({
+      message: 'Failed !',
+    });
+  }
+});
+
+router.post('/add-service', async (req, res, next) => {
+  try {
+    await serviceModel.addService(req.body);
+    return res.status(200).json({ message: 'Successful !' });
+  } catch (err) {
+    console.log('Error: ', err);
+    return res.status(400).json({
+      message: 'Failed !',
+    });
+  }
+});
+
+router.post('/delete-service', async (req, res, next) => {
+  try {
+    const { id } = req.body;
+    await serviceModel.deleteService(id);
+    return res.status(200).json({ message: 'Successful !' });
+  } catch (err) {
+    console.log('Error: ', err);
+    return res.status(400).json({
+      message: 'Failed !',
+    });
+  }
+});
+
+router.post('/edit-service', async (req, res, next) => {
+  try {
+    const { id, editedService } = req.body;
+    await serviceModel.editService(id, editedService);
+    return res.status(200).json({ message: 'Successful !' });
+  } catch (err) {
+    console.log('Error: ', err);
+    return res.status(400).json({
+      message: 'Failed !',
+    });
+  }
+});
+
 module.exports = router;
