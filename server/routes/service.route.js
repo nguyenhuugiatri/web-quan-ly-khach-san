@@ -88,4 +88,29 @@ router.get('/list-type', async (req, res, next) => {
   }
 });
 
+router.get('/list', async (req, res, next) => {
+  try {
+    const listService = await serviceModel.getListService();
+    return res.status(200).json({ listService, message: 'Successful !' });
+  } catch (err) {
+    return res.status(400).json({
+      message: 'Failed !',
+    });
+  }
+});
+
+router.post('/add-service', async (req, res, next) => {
+  try {
+    console.log('req.body', req.body);
+
+    await serviceModel.addService(req.body);
+    return res.status(200).json({ message: 'Successful !' });
+  } catch (err) {
+    console.log('Error: ', err);
+    return res.status(400).json({
+      message: 'Failed !',
+    });
+  }
+});
+
 module.exports = router;

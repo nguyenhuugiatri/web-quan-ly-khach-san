@@ -38,7 +38,10 @@ class ModalAddService extends Component {
           visible={visible}
           title='ADD NEW SERVICE'
           onOk={() => form.current.submit()}
-          onCancel={handleCancelClicked}
+          onCancel={() => {
+            form.current.resetFields();
+            handleCancelClicked();
+          }}
           footer={[
             <Button key='cancel' onClick={handleCancelClicked}>
               Cancel
@@ -55,7 +58,10 @@ class ModalAddService extends Component {
           <Row justify='center' align='middle'>
             <Col span={22}>
               <Form
-                onFinish={handleAddClicked}
+                onFinish={(values) => {
+                  handleAddClicked(values);
+                  form.current.resetFields();
+                }}
                 ref={form}
                 labelCol={{ span: 4 }}
                 wrapperCol={{ span: 20 }}

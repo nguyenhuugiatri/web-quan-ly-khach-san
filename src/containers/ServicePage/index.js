@@ -6,7 +6,8 @@ import { Button, Pagination } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 // import TableType from './TableType';
 import ModalAddService from './ModalAddService';
-// import { updateVisible } from './actions';
+import TableService from './TableService';
+import { addServiceAPI, getListAPI } from './actions';
 
 class Service extends Component {
   constructor(props) {
@@ -18,6 +19,10 @@ class Service extends Component {
     };
   }
 
+  componentDidMount() {
+    this.props.getList();
+  }
+
   showModal = () => {
     this.setState({
       visible: true,
@@ -25,7 +30,7 @@ class Service extends Component {
   };
 
   handleAddClicked = (values) => {
-    console.log('values', values);
+    this.props.addService(values);
     this.setState({ visible: false });
   };
 
@@ -69,22 +74,23 @@ class Service extends Component {
             pageSize={this.state.defaultPageSize}
             currentPage={this.state.currentPage}
           /> */}
+          <TableService />
         </div>
       </div>
     );
   }
 }
 
-const mapStateToProps = (state) => ({
-  // total: state.roomType.total,
-  // visible: state.roomType.visible,
-});
+const mapStateToProps = (state) => ({});
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    // updateVisible: () => {
-    //     dispatch(updateVisible());
-    // },
+    addService: (service) => {
+      dispatch(addServiceAPI(service));
+    },
+    getList: () => {
+      dispatch(getListAPI());
+    },
   };
 };
 

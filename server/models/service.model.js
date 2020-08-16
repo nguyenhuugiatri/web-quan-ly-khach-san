@@ -51,4 +51,16 @@ module.exports = {
     if (rows.length === 0) return [];
     return rows;
   },
+
+  getListService: async () => {
+    const rows = await db.load(`select s.id, idType, st.name as typeName, s.name, price from service s, ServiceType st
+    where s.idType=st.id`);
+    if (rows.length === 0) return [];
+    return rows;
+  },
+
+  addService: async ({ idType, name, price }) => {
+    await db.load(`INSERT INTO Service (idType,name,price)
+    VALUES (${idType}, '${name}', ${price})`);
+  },
 };
