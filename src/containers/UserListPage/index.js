@@ -59,7 +59,7 @@ class UserList extends Component {
       });
 
       this.state.formRef.current.setFieldsValue({
-        username: record.username,
+        ...record
       });
     };
   };

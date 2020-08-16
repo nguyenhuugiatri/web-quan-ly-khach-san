@@ -40,7 +40,6 @@ class RevenueMonth extends Component {
     });
   }
   lineChartConfig = (aspectRatio) => {
-    console.log(this.state.datasets);
     let datasets = Array.from(this.state.datasets, (v) => {
       let obj = {
         fill: false,

@@ -155,7 +155,7 @@ export default class TableUser extends Component {
       );
     } else if (inputType === 2) {
       inputNode = (
-        <Select defaultValue={record.permission}>
+        <Select >
           <Select.Option value="Manager">Manager</Select.Option>
           <Select.Option value="Reception">Receptionist</Select.Option>
         </Select>

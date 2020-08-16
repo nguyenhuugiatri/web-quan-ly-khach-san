@@ -1,7 +1,7 @@
 import React from 'react';
 import { Bar, Line, Area, Doughnut } from 'react-chartjs-2';
 
-export const BarChart = ({ ref, labels, datasets, aspectRatio, onClick }) => {
+export const BarChart = ({ ref, labels, datasets, aspectRatio, onClick,title }) => {
   return (
     <Bar
       height={null}
@@ -22,7 +22,7 @@ export const BarChart = ({ ref, labels, datasets, aspectRatio, onClick }) => {
         },
         title: {
           display: true,
-          text: 'Revenue in hotel by month',
+          text: title||'Revenue in hotel by month',
         },
         scales: {
           xAxes: [
@@ -38,7 +38,7 @@ export const BarChart = ({ ref, labels, datasets, aspectRatio, onClick }) => {
   );
 };
 
-export const LineChart = ({ ref, labels, datasets, aspectRatio }) => {
+export const LineChart = ({ ref, labels, datasets, aspectRatio,title }) => {
   return (
     <Line
       height={null}
@@ -56,13 +56,13 @@ export const LineChart = ({ ref, labels, datasets, aspectRatio }) => {
         },
         title: {
           display: true,
-          text: 'Revenue in hotel by month',
+          text: title||'Revenue in hotel by month',
         },
       }}
     />
   );
 };
-export const DoughnutChart = ({ ref, labels, datasets, aspectRatio }) => {
+export const DoughnutChart = ({ ref, labels, datasets, aspectRatio,onClick }) => {
   datasets = datasets.map((v, i) => {
     return {
       hoverOffset: 10,
