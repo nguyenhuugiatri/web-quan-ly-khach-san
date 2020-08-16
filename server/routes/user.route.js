@@ -85,8 +85,10 @@ router.post('/insert', async (req, res) => {
   let value = req.body;
   value.isDelete = 0;
   const salt = bcrypt.genSaltSync(10);
-  const newPassword = bcrypt.hashSync('password123', salt);
+  const newPassword = bcrypt.hashSync(req.body.password, salt);
   value.password=newPassword;
+  console.log(value)
+
   await userModel.insert(value).then((re) => {
     if (re) {
       return res.status(200).json({ message: 'Created' });
