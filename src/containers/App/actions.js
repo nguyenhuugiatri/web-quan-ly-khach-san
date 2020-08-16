@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from './../../utils/callAPI';
 import showNotification from '../../utils/showNotification';
 import { STATUS } from '../../utils/constants';
 import { UPDATE_CURRENT_USER } from './constants';

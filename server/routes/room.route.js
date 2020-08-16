@@ -3,15 +3,15 @@ const roomModel = require('../models/room.model');
 const moment = require('moment');
 
 router.get('/list', async (req, res) => {
-  
-  const listRoomReserved = await roomModel.getRoomReserved(moment().format("YYYY-MM-DD"));
-  if (listRoomReserved.length!==0)
-  {
+  const listRoomReserved = await roomModel.getRoomReserved(
+    moment().format('YYYY-MM-DD')
+  );
+  if (listRoomReserved.length !== 0) {
     console.log('okkk');
-     let idRoom = listRoomReserved.map(e=>e.idRoom).join(',');
+    let idRoom = listRoomReserved.map((e) => e.idRoom).join(',');
     await roomModel.updateRoomReserved(idRoom);
   }
- 
+
   await roomModel
     .find()
     .then((result) => {

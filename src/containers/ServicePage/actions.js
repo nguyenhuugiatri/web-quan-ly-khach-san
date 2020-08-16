@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from './../../utils/callAPI';
 import * as TYPE from './constants';
 const URL = process.env.SERV_HOST || 'http://localhost:8000';
 

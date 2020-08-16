@@ -7,7 +7,7 @@ import {
   UPDATE_VISIBLE,
 } from './constants';
 import { message } from 'antd';
-import axios from 'axios';
+import axios from './../../utils/callAPI';
 const URL = process.env.SERV_HOST || 'http://localhost:8000';
 
 export const getListRoom = (listRoom) => {

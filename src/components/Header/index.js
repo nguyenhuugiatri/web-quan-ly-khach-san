@@ -25,7 +25,7 @@ import showNotification from '../../utils/showNotification';
 import { STATUS } from '../../utils/constants';
 import { logout } from './../../containers/App/actions';
 import { connect } from 'react-redux';
-import axios from 'axios';
+import axios from './../../utils/callAPI';
 import './styles.scss';
 
 const { Header: HeaderAntd } = Layout;

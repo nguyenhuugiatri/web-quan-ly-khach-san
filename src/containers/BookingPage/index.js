@@ -1,41 +1,41 @@
-import React, { Component } from "react";
-import { Row,Col,DatePicker,Button, message, Pagination } from "antd";
-import moment from "moment";
-import { UserAddOutlined } from "@ant-design/icons";
-import createPage from "../../components/createPage";
-import axios from "axios";
-import "antd/dist/antd.css";
-import { BOOKING_PAGE } from "../../components/Sidebar/constants";
-import BookDrawer from "./BookDrawer";
-import TableBooking from "./TableBooking";
+import React, { Component } from 'react';
+import { Row, Col, DatePicker, Button, message, Pagination } from 'antd';
+import moment from 'moment';
+import { UserAddOutlined } from '@ant-design/icons';
+import createPage from '../../components/createPage';
+import axios from './../../utils/callAPI';
+import 'antd/dist/antd.css';
+import { BOOKING_PAGE } from '../../components/Sidebar/constants';
+import BookDrawer from './BookDrawer';
+import TableBooking from './TableBooking';
 import showNotification from '../../utils/showNotification';
 import { STATUS } from '../../utils/constants';
 import { connect } from 'react-redux';
-const URL = process.env.SERV_HOST || "http://localhost:8000";
+const URL = process.env.SERV_HOST || 'http://localhost:8000';
 
 class Booking extends Component {
   constructor(props) {
     super(props);
     this.state = {
       visible: false,
-      visibleAccept:false,
+      visibleAccept: false,
       listCustomerType: [],
       listRoomByType: [],
       listTypeRoom: [],
-      listBooking:[],
-      array:[],
+      listBooking: [],
+      array: [],
       dateTime: [],
-      idRoom: "",
-      idTypeRoom: "",
-      typeRoom: "",
-      priceRoom: "",
+      idRoom: '',
+      idTypeRoom: '',
+      typeRoom: '',
+      priceRoom: '',
       valueForm: React.createRef(),
     };
   }
 
   handleOnChangeDateTime = (value) => {
-    const dateIn = moment(value[0]).format("YYYY-MM-DD hh:mm");
-    const dateOut = moment(value[1]).format("YYYY-MM-DD hh:mm");
+    const dateIn = moment(value[0]).format('YYYY-MM-DD hh:mm');
+    const dateOut = moment(value[1]).format('YYYY-MM-DD hh:mm');
     this.setState({
       dateTime: [dateIn, dateOut],
     });
@@ -43,11 +43,11 @@ class Booking extends Component {
   handleOnClose = () => {
     this.setState({ visible: false });
   };
-  handleOnChangePrice=(value)=>{
+  handleOnChangePrice = (value) => {
     this.setState({
-      priceRoom:value
+      priceRoom: value,
     });
-  }
+  };
   handleOnChangeSelectRoom = (value) => {
     this.setState(
       {
@@ -57,7 +57,6 @@ class Booking extends Component {
         this.getNameTypeAndPrice();
       }
     );
-    
   };
   handleOnChangeSelectTypeRoom = (value) => {
     this.setState(
@@ -71,7 +70,7 @@ class Booking extends Component {
   };
   getListRoomByType = () => {
     axios({
-      method: "POST",
+      method: 'POST',
       url: `${URL}/room/listRoomByType`,
       data: {
         id: this.state.idTypeRoom,
@@ -111,12 +110,12 @@ class Booking extends Component {
       });
   };
   showListBooking = () => {
-    console.log("aaa", "1" + this.state.array[0] + "1", this.state.array[1]);
+    console.log('aaa', '1' + this.state.array[0] + '1', this.state.array[1]);
     if (this.state.array[0]) {
-      const dateFrom = moment(this.state.array[0]).format("YYYY-MM-DD");
-      const dateTo = moment(this.state.array[1]).format("YYYY-MM-DD");
+      const dateFrom = moment(this.state.array[0]).format('YYYY-MM-DD');
+      const dateTo = moment(this.state.array[1]).format('YYYY-MM-DD');
       axios({
-        method: "POST",
+        method: 'POST',
         url: `${URL}/booking/listBookingFilter`,
         data: {
           dateFrom: dateFrom,
@@ -125,12 +124,16 @@ class Booking extends Component {
       })
         .then((result) => {
           const { listBooking } = result.data;
-          console.log("data", listBooking);
-          for (let i=0;i<listBooking.length;i++){
-            listBooking[i].key=listBooking[i].id;
-            listBooking[i].dateIn=moment(listBooking[i].dateIn).format("YYYY-MM-DD HH:mm");
-            listBooking[i].dateOut=moment(listBooking[i].dateOut).format("YYYY-MM-DD HH:mm");
-           }
+          console.log('data', listBooking);
+          for (let i = 0; i < listBooking.length; i++) {
+            listBooking[i].key = listBooking[i].id;
+            listBooking[i].dateIn = moment(listBooking[i].dateIn).format(
+              'YYYY-MM-DD HH:mm'
+            );
+            listBooking[i].dateOut = moment(listBooking[i].dateOut).format(
+              'YYYY-MM-DD HH:mm'
+            );
+          }
           this.setState({
             listBooking: listBooking,
           });
@@ -139,8 +142,7 @@ class Booking extends Component {
           if (err && err.response) {
           }
         });
-    }
-    else{
+    } else {
       this.getListBooking();
     }
   };
@@ -149,15 +151,19 @@ class Booking extends Component {
       .get(`${URL}/booking/listBooking`)
       .then((res) => {
         if (res.data) {
-           let listBooking  = res.data;
-           for (let i=0;i<listBooking.length;i++){
-            listBooking[i].key=listBooking[i].id;
-            listBooking[i].dateIn=moment(listBooking[i].dateIn).format("YYYY-MM-DD HH:mm");
-            listBooking[i].dateOut=moment(listBooking[i].dateOut).format("YYYY-MM-DD HH:mm");
-           }
+          let listBooking = res.data;
+          for (let i = 0; i < listBooking.length; i++) {
+            listBooking[i].key = listBooking[i].id;
+            listBooking[i].dateIn = moment(listBooking[i].dateIn).format(
+              'YYYY-MM-DD HH:mm'
+            );
+            listBooking[i].dateOut = moment(listBooking[i].dateOut).format(
+              'YYYY-MM-DD HH:mm'
+            );
+          }
           this.setState({
             listBooking: listBooking,
-            array: []
+            array: [],
           });
         }
       })
@@ -183,7 +189,7 @@ class Booking extends Component {
   };
   getNameTypeAndPrice = () => {
     axios({
-      method: "POST",
+      method: 'POST',
       url: `${URL}/room/roomCurrent`,
       data: {
         id: this.state.idRoom,
@@ -207,54 +213,56 @@ class Booking extends Component {
     this.getListBooking();
   }
   deleteBooking = (record) => {
-    return ()=>{
+    return () => {
       axios({
-        method: "POST",
+        method: 'POST',
         url: `${URL}/booking/deleteBooking`,
         data: {
           data: record,
-          currentUser:this.props.currentUser,
-        }
-      }).then((result) => {
-        const { message } = result.data;
-        showNotification(STATUS.SUCCESS, message);
-        this.getListBooking();
-      }).catch((err) => {
-        if (err && err.response) {
-          showNotification(STATUS.ERROR, message);
+          currentUser: this.props.currentUser,
+        },
+      })
+        .then((result) => {
+          const { message } = result.data;
+          showNotification(STATUS.SUCCESS, message);
           this.getListBooking();
-        }
-      });
-    }
+        })
+        .catch((err) => {
+          if (err && err.response) {
+            showNotification(STATUS.ERROR, message);
+            this.getListBooking();
+          }
+        });
+    };
   };
   checkInRoomBooked = (record) => {
-    return ()=>{
-      let dateBook = moment(record.dateIn,'YYYY-MM-DD');
-    let dateCurrent = moment(moment(),'YYYY-MM-DD');
-    if (dateBook.diff(dateCurrent,'days')==0){
-      axios({
-        method: "POST",
-        url: `${URL}/booking/checkinbooked`,
-        data: {
-          data: record,
-          currentUser:this.props.currentUser,
-        }
-      }).then((result) => {
-        const { message } = result.data;
-        showNotification(STATUS.SUCCESS, message);
-        this.getListBooking();
-      }).catch((err) => {
-        if (err && err.response) {
-          showNotification(STATUS.ERROR, message);
-          this.getListBooking();
-        }
-      });
-    }
-    else{
-      showNotification(STATUS.ERROR, "Today isn't date to check-in");
-    }
-      
-    }
+    return () => {
+      let dateBook = moment(record.dateIn, 'YYYY-MM-DD');
+      let dateCurrent = moment(moment(), 'YYYY-MM-DD');
+      if (dateBook.diff(dateCurrent, 'days') == 0) {
+        axios({
+          method: 'POST',
+          url: `${URL}/booking/checkinbooked`,
+          data: {
+            data: record,
+            currentUser: this.props.currentUser,
+          },
+        })
+          .then((result) => {
+            const { message } = result.data;
+            showNotification(STATUS.SUCCESS, message);
+            this.getListBooking();
+          })
+          .catch((err) => {
+            if (err && err.response) {
+              showNotification(STATUS.ERROR, message);
+              this.getListBooking();
+            }
+          });
+      } else {
+        showNotification(STATUS.ERROR, "Today isn't date to check-in");
+      }
+    };
   };
   handleOnChangeDateTimeFilter = (value) => {
     try {
@@ -282,33 +290,35 @@ class Booking extends Component {
       bookRoom: roomBook,
     };
     axios({
-      method: "POST",
+      method: 'POST',
       url: `${URL}/booking/bookRoom`,
       data: dataSend,
-    }).then((result) => {
-      this.state.valueForm.current.resetFields();
-      this.setState({
-        priceRoom:'',
-      });
-      const { message } = result.data;
-      showNotification(STATUS.SUCCESS, message);
-      this.handleOnClose();
-      this.getListBooking();
-    }).catch((err) => {
-      if (err && err.response) {
-        showNotification(STATUS.ERROR, err.response.data.message);
+    })
+      .then((result) => {
+        this.state.valueForm.current.resetFields();
+        this.setState({
+          priceRoom: '',
+        });
+        const { message } = result.data;
+        showNotification(STATUS.SUCCESS, message);
         this.handleOnClose();
         this.getListBooking();
-      }
-    });
+      })
+      .catch((err) => {
+        if (err && err.response) {
+          showNotification(STATUS.ERROR, err.response.data.message);
+          this.handleOnClose();
+          this.getListBooking();
+        }
+      });
   };
   render() {
     return (
       <div>
-        <div className="header-table">
+        <div className='header-table'>
           <Button
             icon={<UserAddOutlined />}
-            type="primary"
+            type='primary'
             style={{
               marginBottom: 16,
             }}
@@ -332,35 +342,40 @@ class Booking extends Component {
         <Row gutter={[16, 16]}>
           <Col span={8}>
             <DatePicker.RangePicker
-              style={{ width: "100%" }}
+              style={{ width: '100%' }}
               ranges={{
                 Today: [moment(), moment()],
-                "This Month": [
-                  moment().startOf("month"),
-                  moment().endOf("month"),
+                'This Month': [
+                  moment().startOf('month'),
+                  moment().endOf('month'),
                 ],
               }}
               showTime
               value={this.state.array}
               allowClear={false}
-              format="YYYY/MM/DD "
+              format='YYYY/MM/DD '
               onChange={this.handleOnChangeDateTimeFilter}
             />
           </Col>
           <Col span={16}>
-            <Button onClick={this.getListBooking} type="primary">
+            <Button onClick={this.getListBooking} type='primary'>
               Clear
             </Button>
             <Button
-              style={{ marginLeft: "5px" }}
-               onClick={this.showListBooking}
-              type="primary"
+              style={{ marginLeft: '5px' }}
+              onClick={this.showListBooking}
+              type='primary'
             >
               Filter
             </Button>
           </Col>
         </Row>
-        <TableBooking visibleAccept={this.state.visibleAccept} listBooking={this.state.listBooking} checkInRoomBooked={this.checkInRoomBooked} deleteBooking={this.deleteBooking}></TableBooking>
+        <TableBooking
+          visibleAccept={this.state.visibleAccept}
+          listBooking={this.state.listBooking}
+          checkInRoomBooked={this.checkInRoomBooked}
+          deleteBooking={this.deleteBooking}
+        ></TableBooking>
       </div>
     );
   }
@@ -372,7 +387,7 @@ const mapStateToProps = (state) => {
   };
 };
 
-const BookingConnectRedux=connect(mapStateToProps,null)(Booking)
+const BookingConnectRedux = connect(mapStateToProps, null)(Booking);
 
 const BookingPage = createPage(BookingConnectRedux, BOOKING_PAGE);
 export default BookingPage;
