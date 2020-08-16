@@ -24,7 +24,7 @@ import {
   getListServiceTypeAPI,
 } from './actions';
 import moment from 'moment';
-import axios from 'axios';
+import axios from './../../utils/callAPI';
 import './styles.scss';
 const URL = process.env.SERV_HOST || 'http://localhost:8000';
 

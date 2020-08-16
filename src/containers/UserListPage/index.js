@@ -4,7 +4,7 @@ import DrawerUser from '../../components/DrawerUser';
 import TableUser from '../../components/TableUser';
 import { UserAddOutlined } from '@ant-design/icons';
 import createPage from '../../components/createPage';
-import axios from 'axios';
+import axios from './../../utils/callAPI';
 import 'antd/dist/antd.css';
 import './styles.scss';
 import { USER_PAGE } from '../../components/Sidebar/constants';
@@ -59,7 +59,7 @@ class UserList extends Component {
       });
 
       this.state.formRef.current.setFieldsValue({
-        ...record
+        ...record,
       });
     };
   };

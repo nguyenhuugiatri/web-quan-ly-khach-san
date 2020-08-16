@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from './../../utils/callAPI';
 import * as TYPE from './constants';
 import { message } from 'antd';
 const URL = process.env.SERV_HOST || 'http://localhost:8000';
@@ -59,16 +59,16 @@ export const updateVisibleFalse = () => {
   return {
     type: TYPE.VISIBLE_FALSE,
   };
-}
+};
 export const insertRoomType = (fields) => {
-    return(dispatch)=>{
-      axios.post(`${URL}/roomtype/insert`,fields).then(r=>{
-        if(r.status===200){
-          message.success({content:r.data.message})
-          dispatch(fetchRoomTypeAPI())
-        }else{
-          message.error({content:r.data.message})
-        }
-      })
-    }
-}
+  return (dispatch) => {
+    axios.post(`${URL}/roomtype/insert`, fields).then((r) => {
+      if (r.status === 200) {
+        message.success({ content: r.data.message });
+        dispatch(fetchRoomTypeAPI());
+      } else {
+        message.error({ content: r.data.message });
+      }
+    });
+  };
+};

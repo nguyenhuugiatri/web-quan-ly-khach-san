@@ -29,7 +29,7 @@ router.post('/login', async (req, res, next) => {
   return res.status(200).json({ user, token, message: 'Login successful !' });
 });
 
-router.get('/list', async (req, res, next) => {
+router.get('/list', requireToken, async (req, res, next) => {
   let listUser = await userModel.getAllUser();
   if (listUser !== null) {
     listUser = listUser.map((user, i) => {
@@ -50,7 +50,7 @@ router.get('/list', async (req, res, next) => {
   }
 });
 
-router.patch('/resetpassword', async (req, res) => {
+router.patch('/resetpassword', requireToken, async (req, res) => {
   const salt = bcrypt.genSaltSync(10);
   const newPassword = bcrypt.hashSync('password123', salt);
   await userModel.resetPassword(req.body.id, newPassword).then((result) => {
@@ -58,7 +58,8 @@ router.patch('/resetpassword', async (req, res) => {
     res.status(200).json({ message: 'Reset password success!' });
   });
 });
-router.patch('/delete', async (req, res) => {
+
+router.patch('/delete', requireToken, async (req, res) => {
   try {
     await userModel.delete(req.body.id).then((result) => {
       if (result) return res.status(200).json({ message: 'Delete success!' });
@@ -68,7 +69,8 @@ router.patch('/delete', async (req, res) => {
     res.status(403).json({ message: error });
   }
 });
-router.patch('/update', async (req, res) => {
+
+router.patch('/update', requireToken, async (req, res) => {
   await userModel
     .update(req.body.id, req.body)
     .then((result) => {
@@ -82,12 +84,12 @@ router.patch('/update', async (req, res) => {
     });
 });
 
-router.post('/insert', async (req, res) => {
+router.post('/insert', requireToken, async (req, res) => {
   let value = req.body;
   value.isDelete = 0;
   const salt = bcrypt.genSaltSync(10);
   const newPassword = bcrypt.hashSync(req.body.password, salt);
-  value.password=newPassword;
+  value.password = newPassword;
 
   await userModel.insert(value).then((re) => {
     if (re) {
@@ -98,7 +100,7 @@ router.post('/insert', async (req, res) => {
   });
 });
 
-router.post('/changePassword', async (req, res) => {
+router.post('/changePassword', requireToken, async (req, res) => {
   try {
     let { username, password, newPassword } = req.body;
     const user = await userModel.singleByUsername(username);

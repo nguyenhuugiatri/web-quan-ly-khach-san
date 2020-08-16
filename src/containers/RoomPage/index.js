@@ -20,7 +20,7 @@ import { STATUS } from './constants';
 import ModalChangeRoom from './ModalChangeRoom';
 import showNotification from '../../utils/showNotification';
 import moment from 'moment';
-import axios from 'axios';
+import axios from './../../utils/callAPI';
 import './styles.scss';
 const URL = process.env.SERV_HOST || 'http://localhost:8000';
 class RoomList extends Component {
@@ -218,7 +218,7 @@ class RoomList extends Component {
       {
         visible: false,
       },
-      ()=>{
+      () => {
         this.props.getListRoom();
         this.getListRoomRent();
       }

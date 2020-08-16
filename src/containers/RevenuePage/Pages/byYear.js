@@ -4,7 +4,7 @@ import createPage from '../../../components/createPage';
 import { connect } from 'react-redux';
 import { Col, Row, Typography, Divider } from 'antd';
 import { MoneyCollectOutlined } from '@ant-design/icons';
-import axios from 'axios';
+import axios from './../../../utils/callAPI';
 import { REVENUE_PAGE_YEAR } from '../../../components/Sidebar/constants';
 const COLOR = ['#00b7c2', '#e8505b', '#f6ab6c', '#ff5f40'];
 const URL = process.env.SERV_HOST || 'http://localhost:8000';
@@ -77,9 +77,9 @@ class RevenueYear extends Component {
             >
               <MoneyCollectOutlined
                 style={{ fontSize: '2rem', marginRight: '10px' }}
-                className="red"
+                className='red'
               />
-              <Title level={2} className="revenue-value display-revenue">
+              <Title level={2} className='revenue-value display-revenue'>
                 {this.state.display.total}
               </Title>
             </Row>

@@ -1,14 +1,14 @@
-import React, { Component } from "react";
-import { Row, Col, DatePicker, Button, message, Pagination } from "antd";
-import moment from "moment";
-import { UserAddOutlined } from "@ant-design/icons";
-import createPage from "../../components/createPage";
-import axios from "axios";
-import "antd/dist/antd.css";
-import { BILL_PAGE } from "../../components/Sidebar/constants";
-import TableBill from "./TableBill";
+import React, { Component } from 'react';
+import { Row, Col, DatePicker, Button, message, Pagination } from 'antd';
+import moment from 'moment';
+import { UserAddOutlined } from '@ant-design/icons';
+import createPage from '../../components/createPage';
+import axios from './../../utils/callAPI';
+import 'antd/dist/antd.css';
+import { BILL_PAGE } from '../../components/Sidebar/constants';
+import TableBill from './TableBill';
 
-const URL = process.env.SERV_HOST || "http://localhost:8000";
+const URL = process.env.SERV_HOST || 'http://localhost:8000';
 class Bill extends Component {
   constructor(props) {
     super(props);
@@ -37,12 +37,12 @@ class Bill extends Component {
       });
   };
   showListBill = () => {
-    console.log("aaa", "1" + this.state.array[0] + "1", this.state.array[1]);
+    console.log('aaa', '1' + this.state.array[0] + '1', this.state.array[1]);
     if (this.state.array[0]) {
-      const dateFrom = moment(this.state.array[0]).format("YYYY-MM-DD");
-      const dateTo = moment(this.state.array[1]).format("YYYY-MM-DD");
+      const dateFrom = moment(this.state.array[0]).format('YYYY-MM-DD');
+      const dateTo = moment(this.state.array[1]).format('YYYY-MM-DD');
       axios({
-        method: "POST",
+        method: 'POST',
         url: `${URL}/bill/listBill`,
         data: {
           dateFrom: dateFrom,
@@ -51,7 +51,7 @@ class Bill extends Component {
       })
         .then((result) => {
           const { listBill } = result.data;
-          console.log("data", listBill);
+          console.log('data', listBill);
           this.setState({
             listBill: listBill,
           });
@@ -60,8 +60,7 @@ class Bill extends Component {
           if (err && err.response) {
           }
         });
-    }
-    else{
+    } else {
       this.getAllBill();
     }
   };
@@ -81,29 +80,29 @@ class Bill extends Component {
         <Row gutter={[16, 16]}>
           <Col span={8}>
             <DatePicker.RangePicker
-              style={{ width: "100%" }}
+              style={{ width: '100%' }}
               ranges={{
                 Today: [moment(), moment()],
-                "This Month": [
-                  moment().startOf("month"),
-                  moment().endOf("month"),
+                'This Month': [
+                  moment().startOf('month'),
+                  moment().endOf('month'),
                 ],
               }}
               showTime
               value={this.state.array}
               allowClear={false}
-              format="YYYY/MM/DD "
+              format='YYYY/MM/DD '
               onChange={this.handleOnChangeDateTime}
             />
           </Col>
           <Col span={16}>
-            <Button onClick={this.getAllBill} type="primary">
+            <Button onClick={this.getAllBill} type='primary'>
               Clear
             </Button>
             <Button
-              style={{ marginLeft: "5px" }}
+              style={{ marginLeft: '5px' }}
               onClick={this.showListBill}
-              type="primary"
+              type='primary'
             >
               Filter
             </Button>

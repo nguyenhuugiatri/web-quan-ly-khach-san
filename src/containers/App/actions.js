@@ -7,14 +7,14 @@ import { navigate } from '@reach/router';
 const URL = process.env.SERV_HOST || 'http://localhost:8000';
 
 export const updateCurrentUser = (user) => {
-  navigate('/');
+  // navigate('/');
   return {
     type: UPDATE_CURRENT_USER,
     user,
   };
 };
 
-export const login = (user) => {
+export const loginAPI = (user) => {
   return (dispatch) => {
     axios({
       method: 'POST',

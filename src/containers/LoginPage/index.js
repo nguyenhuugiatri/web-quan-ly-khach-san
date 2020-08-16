@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Row, Col, Form, Input, Button, Checkbox, Typography } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
-import { login } from '../App/actions';
+import { loginAPI } from '../App/actions';
 
 import 'antd/dist/antd.css';
 import './styles.scss';
@@ -124,7 +124,7 @@ class LoginPage extends Component {
 const mapDispatchToProps = (dispatch) => {
   return {
     login: (user) => {
-      dispatch(login(user));
+      dispatch(loginAPI(user));
     },
   };
 };

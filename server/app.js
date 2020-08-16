@@ -4,7 +4,7 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const session = require('express-session');
 const morgan = require('morgan');
-
+const requireToken = require('./middlewares/auth.mdw');
 const userRouter = require('./routes/user.route');
 const roomRouter = require('./routes/room.route');
 const serviceRouter = require('./routes/service.route');
@@ -40,12 +40,13 @@ app.use(
 );
 
 app.use('/user', userRouter);
-app.use('/room', roomRouter);
-app.use('/service', serviceRouter);
-app.use('/customer', customerRouter);
-app.use('/booking', bookingRouter);
-app.use('/roomtype', roomTypeRouter);
-app.use('/bill', billRouter);
+app.use('/room', requireToken, roomRouter);
+app.use('/service', requireToken, serviceRouter);
+app.use('/customer', requireToken, customerRouter);
+app.use('/booking', requireToken, bookingRouter);
+app.use('/roomtype', requireToken, roomTypeRouter);
+app.use('/bill', requireToken, billRouter);
+// app.user(requireToken);
 
 app.listen(PORT, () => {
   console.log(`App is listening on port: ${PORT}`);
