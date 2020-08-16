@@ -5,6 +5,7 @@ import CheckOutConfirm from './CheckOutConfirm';
 import { Drawer, Button, Result } from 'antd';
 import { STATUS } from './constants';
 import { connect } from 'react-redux';
+import { SmileOutlined, CalendarOutlined } from '@ant-design/icons';
 import {
   updateCheckInCustomer,
   updateCheckInRoom,
@@ -108,7 +109,9 @@ class RoomDrawer extends Component {
             ? 'CHECK OUT'
             : status === CLEANING
             ? 'CONFIRM CLEANING'
-            : 'CHECK IN'
+            : status === AVAILABLE
+            ? 'CHECK IN'
+            : 'RESERVED'
         }
         width={720}
         onClose={this.handleClose}
@@ -136,7 +139,7 @@ class RoomDrawer extends Component {
                 Check in
               </Button>
             ) : status === RESERVED ? (
-              <></>
+              <>,</>
             ) : (
               <></>
             )}
@@ -167,6 +170,17 @@ class RoomDrawer extends Component {
                 handleCancel={this.handleCancel}
               />
             </>
+          )) ||
+          (status === RESERVED && (
+            <Result
+              icon={<CalendarOutlined />}
+              title='Room has been reserved !'
+              extra={
+                <Button onClick={this.handleClose} type='primary'>
+                  Confirm
+                </Button>
+              }
+            />
           ))}
       </Drawer>
     );
