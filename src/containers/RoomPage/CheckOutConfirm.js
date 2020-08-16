@@ -1,13 +1,19 @@
 import React, { Component } from 'react';
 import 'antd/dist/antd.css';
 import { Modal, Button, Form, Row, Col, InputNumber, Select } from 'antd';
+import moment from 'moment';
+import Pdf from 'react-to-pdf';
 import './styles.scss';
 const { Option } = Select;
 
 class CheckOutConfirm extends Component {
   constructor(props) {
     super(props);
-    this.state = { visible: false, paymentMethod: 'cash' };
+    this.state = {
+      visible: false,
+      paymentMethod: 'cash',
+      ref: React.createRef(),
+    };
   }
 
   showModal = () => {
@@ -47,108 +53,146 @@ class CheckOutConfirm extends Component {
   };
 
   render() {
-    const { modalData, handleCancel, checkInRoom } = this.props;
+    const { modalData, handleCancel, checkInRoom, currentUser } = this.props;
     const { name, serviceCharge, total: roomCharge } = checkInRoom;
     const { visible } = modalData;
     return (
       <div>
         <Modal
+          className='confirm-container'
           visible={visible}
-          title='CHECK OUT'
+          title='BILL'
           onOk={this.handleConfirmClicked}
           onCancel={handleCancel}
-          footer={[
-            <Button key='back' onClick={handleCancel}>
-              Cancel
-            </Button>,
-            <Button
-              key='submit'
-              type='primary'
-              onClick={this.handleConfirmClicked}
-            >
-              Confirm
-            </Button>,
-          ]}
+          footer={
+            <Row justify='space-between' align='middle'>
+              <Button key='back' onClick={handleCancel}>
+                Cancel
+              </Button>
+              <Row>
+                <Pdf targetRef={this.state.ref} filename='bill.pdf' x={0} y={0}>
+                  {({ toPdf }) => (
+                    <Button key='back' type='primary' onClick={toPdf}>
+                      Export to PDF
+                    </Button>
+                  )}
+                </Pdf>
+                <Button
+                  key='submit'
+                  type='primary'
+                  onClick={this.handleConfirmClicked}
+                >
+                  Confirm
+                </Button>
+              </Row>
+            </Row>
+          }
         >
-          <Form>
-            <div className='confirm-checkout'>
-              <Row className='part' justify='space-between' align='middle'>
-                <Col className='total-bill-confirm-title' span={12}>
-                  Name:
-                </Col>
-                <Col span={12} className='total-bill-confirm-room'>
-                  {name}
-                </Col>
-              </Row>
-              <Row className='part' justify='space-between' align='middle'>
-                <Col className='total-bill-confirm-title' span={12}>
-                  Room Charge:
-                </Col>
-                <Col span={12}>
-                  <InputNumber
-                    className='serviceCharge'
-                    disabled
-                    value={roomCharge}
-                    formatter={(value) =>
-                      `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-                    }
-                    parser={(value) => value.replace(/\$\s?|(,*)/g, '')}
-                  />
-                </Col>
-              </Row>
-              <Row className='part' justify='space-between' align='middle'>
-                <Col className='total-bill-confirm-title' span={12}>
-                  Service Charge:
-                </Col>
-                <Col span={12}>
-                  <InputNumber
-                    className='serviceCharge'
-                    disabled
-                    value={serviceCharge}
-                    formatter={(value) =>
-                      `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-                    }
-                    parser={(value) => value.replace(/\$\s?|(,*)/g, '')}
-                  />
-                </Col>
-              </Row>
-              <Row
-                className='part total-bill-confirm'
-                justify='space-between'
-                align='middle'
-              >
-                <Col className='total-bill-confirm-title' span={12}>
-                  Total Cost:
-                </Col>
-                <Col span={12}>
-                  <InputNumber
-                    className='serviceCharge'
-                    disabled
-                    value={serviceCharge + roomCharge}
-                    formatter={(value) =>
-                      `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-                    }
-                    parser={(value) => value.replace(/\$\s?|(,*)/g, '')}
-                  />
-                </Col>
-              </Row>
-              <Row justify='space-between' align='middle'>
-                <Col className='total-bill-confirm-title' span={12}>
-                  Payment Method:
-                </Col>
-                <Col span={12}>
-                  <Select
-                    value={this.state.paymentMethod}
-                    style={{ width: 200 }}
-                    onChange={this.handleChangePaymentMethod}
+          <div ref={this.state.ref} style={{ padding: '50px' }}>
+            <div
+              style={{
+                padding: '15px',
+                border: '1px rgba(82, 82, 82, 0.7) dashed',
+                borderRadius: '5px',
+              }}
+            >
+              <Form>
+                <div className='confirm-checkout'>
+                  <Row className='part' justify='space-between' align='middle'>
+                    <Col className='total-bill-confirm-title' span={12}>
+                      Room Name:
+                    </Col>
+                    <Col span={12} className='total-bill-confirm-room'>
+                      {name}
+                    </Col>
+                  </Row>
+                  <Row className='part' justify='space-between' align='middle'>
+                    <Col className='total-bill-confirm-title' span={12}>
+                      Payment Date:
+                    </Col>
+                    <Col span={12} className='total-bill-confirm-normal'>
+                      {moment().format('YYYY-MM-DD HH:mm')}
+                    </Col>
+                  </Row>
+                  <Row className='part' justify='space-between' align='middle'>
+                    <Col className='total-bill-confirm-title' span={12}>
+                      Receptionist:
+                    </Col>
+                    <Col span={12} className='total-bill-confirm-normal'>
+                      {currentUser.username}
+                    </Col>
+                  </Row>
+                  <Row className='part' justify='space-between' align='middle'>
+                    <Col className='total-bill-confirm-title' span={12}>
+                      Room Charge:
+                    </Col>
+                    <Col span={12}>
+                      <InputNumber
+                        className='serviceCharge'
+                        disabled
+                        value={roomCharge}
+                        formatter={(value) =>
+                          `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                        }
+                        parser={(value) => value.replace(/\$\s?|(,*)/g, '')}
+                      />
+                    </Col>
+                  </Row>
+                  <Row className='part' justify='space-between' align='middle'>
+                    <Col className='total-bill-confirm-title' span={12}>
+                      Service Charge:
+                    </Col>
+                    <Col span={12}>
+                      <InputNumber
+                        className='serviceCharge'
+                        disabled
+                        value={serviceCharge}
+                        formatter={(value) =>
+                          `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                        }
+                        parser={(value) => value.replace(/\$\s?|(,*)/g, '')}
+                      />
+                    </Col>
+                  </Row>
+                  <Row
+                    className='part total-bill-confirm'
+                    justify='space-between'
+                    align='middle'
                   >
-                    <Option value='cash'>Cash</Option>
-                    <Option value='card'>Card</Option>
-                  </Select>
-                </Col>
-              </Row>
+                    <Col className='total-bill-confirm-title' span={12}>
+                      Total Cost:
+                    </Col>
+                    <Col span={12}>
+                      <InputNumber
+                        className='serviceCharge'
+                        disabled
+                        value={serviceCharge + roomCharge}
+                        formatter={(value) =>
+                          `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                        }
+                        parser={(value) => value.replace(/\$\s?|(,*)/g, '')}
+                      />
+                    </Col>
+                  </Row>
+                  <Row className='part' justify='space-between' align='middle'>
+                    <Col className='total-bill-confirm-title' span={12}>
+                      Payment Method:
+                    </Col>
+                    <Col span={12}>
+                      <Select
+                        value={this.state.paymentMethod}
+                        style={{ width: 200 }}
+                        onChange={this.handleChangePaymentMethod}
+                      >
+                        <Option value='cash'>Cash</Option>
+                        <Option value='card'>Card</Option>
+                      </Select>
+                    </Col>
+                  </Row>
+                </div>
+              </Form>
             </div>
-          </Form>
+          </div>
         </Modal>
         <Modal
           title='SWIPE CARD'
