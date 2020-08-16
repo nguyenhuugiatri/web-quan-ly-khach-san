@@ -124,4 +124,17 @@ router.post('/delete-service', async (req, res, next) => {
   }
 });
 
+router.post('/edit-service', async (req, res, next) => {
+  try {
+    const { id, editedService } = req.body;
+    await serviceModel.editService(id, editedService);
+    return res.status(200).json({ message: 'Successful !' });
+  } catch (err) {
+    console.log('Error: ', err);
+    return res.status(400).json({
+      message: 'Failed !',
+    });
+  }
+});
+
 module.exports = router;

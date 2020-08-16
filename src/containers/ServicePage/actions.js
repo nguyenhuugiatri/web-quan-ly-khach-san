@@ -75,3 +75,18 @@ export const deleteServiceAPI = (id) => {
     }
   };
 };
+
+export const editServiceAPI = ({ id, editedService }) => {
+  return async (dispatch) => {
+    try {
+      await axios({
+        method: 'POST',
+        url: `${URL}/service/edit-service`,
+        data: { id, editedService },
+      });
+      dispatch(getListAPI());
+    } catch (err) {
+      console.log('Error:', err);
+    }
+  };
+};

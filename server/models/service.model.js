@@ -59,7 +59,18 @@ module.exports = {
     return rows;
   },
 
+  addService: async ({ idType, name, price }) => {
+    await db.load(`INSERT INTO Service (idType,name,price)
+       VALUES (${idType}, '${name}', ${price})`);
+  },
+
   deleteService: async (id) => {
     await db.load(`update Service set isDelete = 1 where id = ${id}`);
+  },
+
+  editService: async (id, { name, idType, price }) => {
+    await db.load(
+      `update Service set name = '${name}', idType='${idType}', price='${price}' where id = ${id}`
+    );
   },
 };
