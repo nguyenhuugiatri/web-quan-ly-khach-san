@@ -11,6 +11,8 @@ import {
   CalendarOutlined,
   NumberOutlined,
   MoneyCollectOutlined,
+  BarChartOutlined,
+  GiftOutlined
 } from '@ant-design/icons';
 import * as PAGE from './constants';
 import './styles.scss';
@@ -53,13 +55,26 @@ class Sidebar extends Component {
               <Link to='/roomtype'>Room Types</Link>
             </Menu.Item>
 
-            <Menu.Item key={PAGE.SERVICE_PAGE} icon={<MoneyCollectOutlined />}>
+            <Menu.Item key={PAGE.SERVICE_PAGE} icon={<GiftOutlined />}>
               <Link to='/service'>Services</Link>
             </Menu.Item>
 
             <Menu.Item key={PAGE.BILL_PAGE} icon={<MoneyCollectOutlined />}>
               <Link to='/bill'>Bills</Link>
             </Menu.Item>
+
+            <Menu.SubMenu
+            key="submenurevenue"
+            title="Revenue statistics"
+            icon={<BarChartOutlined />}
+          >
+            <Menu.Item icon={<BarChartOutlined />} key={PAGE.REVENUE_PAGE_MONTH}>
+              <Link to="/revenue/month">By month</Link>
+            </Menu.Item>
+            <Menu.Item icon={<BarChartOutlined />} key={PAGE.REVENUE_PAGE_YEAR}>
+              <Link to="/revenue/year">By year</Link>
+            </Menu.Item>
+          </Menu.SubMenu>
           </Menu>
         </Sider>
       );

@@ -1,0 +1,22 @@
+h2 {
+  margin: 0;
+  padding: 0;
+}
+.header-chart {
+  margin-bottom: 10px;
+}
+.display-revenue{
+    display: flex;
+    align-items: center;
+}
+.revenue-value{
+    margin: 0 !important;
+    &::after{
+        content: '$';
+    }
+}
+.horizontal-display{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
