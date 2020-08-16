@@ -5,3 +5,5 @@ export const CHECKIN_PAGE = 3;
 export const CUSTOMER_PAGE = 6;
 export const ROOM_LIST_PAGE = 4;
 export const ROOM_TYPE_LIST_PAGE = 7;
+export const REVENUE_PAGE_MONTH = 9;
+export const REVENUE_PAGE_YEAR = 10;

@@ -29,4 +29,5 @@ module.exports = {
     insert: (tableName, entity) => mysql_query(`insert into ${tableName} set ?`, entity),
     updateById: (tableName,id,entity)=>mysql_query(`update ${tableName} set ? where id=${id}`,entity),
     deleteById:(tableName,id)=>mysql_query(`delete from ${tableName} where id=${id}`),
+    loadWithFields:(sql,fields)=>mysql_query(sql,fields)
 }

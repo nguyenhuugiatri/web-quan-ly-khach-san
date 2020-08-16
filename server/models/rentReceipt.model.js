@@ -28,4 +28,5 @@ module.exports = {
       WHERE id='${id}';`
     );
   },
+  insert:(entity)=>db.insert(`RentReceipt`,entity),
 };

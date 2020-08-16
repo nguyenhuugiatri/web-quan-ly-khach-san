@@ -6,6 +6,8 @@ import RoomPage from '../RoomPage';
 import CustomerPage from '../CustomerPage';
 import RoomListPage from '../RoomListPage'
 import RoomTypeListPage from '../RoomTypeListPage'
+import RevenueMonth from '../RevenuePage/Pages/byMonth'
+import RevenueYear from '../RevenuePage/Pages/byYear'
 import { Router } from '@reach/router';
 import { connect } from 'react-redux';
 import { updateCurrentUser } from './actions';
@@ -28,6 +30,8 @@ class App extends Component {
           <CustomerPage path='/customer' />
           <RoomListPage path='/room' />
           <RoomTypeListPage path='/roomtype' />
+          <RevenueMonth path='/revenue/month' />
+          <RevenueYear path='/revenue/year' />
         </Router>
       );
     else
