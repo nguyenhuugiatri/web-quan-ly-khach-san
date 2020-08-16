@@ -12,7 +12,8 @@ router.post('/getListByRentReceiptId', async (req, res, next) => {
 
     const getTotalCharges = await serviceModel.getTotalCharges(rentReceiptId);
     let serviceCharge = 0;
-    if (getTotalCharges.length !== null) serviceCharge = getTotalCharges.total;
+    if (getTotalCharges && getTotalCharges.total)
+      serviceCharge = getTotalCharges.total;
     return res
       .status(200)
       .json({ serviceList, serviceCharge, message: 'Successful !' });

@@ -31,16 +31,17 @@ router.post('/add', async (req, res) => {
   }
 });
 router.post('/listBill', async (req, res, next) => {
-  
-  const {dateFrom,dateTo}=req.body;
-  const listBill = await billModel.getListBill(dateFrom,dateTo);
-  for (let i=0;i<listBill.length;i++){
-    listBill[i].key=i;
-    listBill[i].total=listBill[i].serviceCharge + listBill[i].roomCharge;
-    listBill[i].dateIn=moment(listBill[i].dateIn).format('YYYY-MM-DD HH:mm');
-    listBill[i].dateOut=moment(listBill[i].dateOut).format('YYYY-MM-DD HH:mm');
+  const { dateFrom, dateTo } = req.body;
+  const listBill = await billModel.getListBill(dateFrom, dateTo);
+  for (let i = 0; i < listBill.length; i++) {
+    listBill[i].key = i;
+    listBill[i].total = listBill[i].serviceCharge + listBill[i].roomCharge;
+    listBill[i].dateIn = moment(listBill[i].dateIn).format('YYYY-MM-DD HH:mm');
+    listBill[i].dateOut = moment(listBill[i].dateOut).format(
+      'YYYY-MM-DD HH:mm'
+    );
   }
-  console.log('get',listBill);
+  console.log('get', listBill);
   if (listBill === null)
     return res.status(404).json({
       message: 'Not found',
@@ -51,13 +52,18 @@ router.post('/listBill', async (req, res, next) => {
 router.get('/allBill', async (req, res, next) => {
   // const {dateFrom,dateTo}=req.body;
   // const listBill = await billModel.getListBill(dateFrom,dateTo);
-  
+
   const listAllBill = await billModel.getAllBill();
-  for (let i=0;i<listAllBill.length;i++){
-    listAllBill[i].key=i;
-    listAllBill[i].total=listAllBill[i].serviceCharge + listAllBill[i].roomCharge;
-    listAllBill[i].dateIn=moment(listAllBill[i].dateIn).format('YYYY-MM-DD HH:mm');
-    listAllBill[i].dateOut=moment(listAllBill[i].dateOut).format('YYYY-MM-DD HH:mm');
+  for (let i = 0; i < listAllBill.length; i++) {
+    listAllBill[i].key = i;
+    listAllBill[i].total =
+      listAllBill[i].serviceCharge + listAllBill[i].roomCharge;
+    listAllBill[i].dateIn = moment(listAllBill[i].dateIn).format(
+      'YYYY-MM-DD HH:mm'
+    );
+    listAllBill[i].dateOut = moment(listAllBill[i].dateOut).format(
+      'YYYY-MM-DD HH:mm'
+    );
   }
   if (listAllBill === null)
     return res.status(404).json({
@@ -109,34 +115,35 @@ router.post('/', async (req, res) => {
         backgroundColor = [];
       }
     } else if (req.body.type === 'year') {
-      labels=year.map(v=>`Year ${v}`)
-      let mainlabel = [`Total room charge`,`Total service charge`];
+      labels = year.map((v) => `Year ${v}`);
+      let mainlabel = [`Total room charge`, `Total service charge`];
       let label = [];
       //get room charge
-      for(let k = 0;k<2;k++){
-        for(let i = 0 ;i<year.length;i++){
+      for (let k = 0; k < 2; k++) {
+        for (let i = 0; i < year.length; i++) {
           let color = COLOR[i];
-          let total = Bills.map(value=>{
-            if(parseInt(moment(value.paymentDate).format('YYYY'))===year[i]){
-              if(k===0)
-              return value.roomCharge;
+          let total = Bills.map((value) => {
+            if (
+              parseInt(moment(value.paymentDate).format('YYYY')) === year[i]
+            ) {
+              if (k === 0) return value.roomCharge;
               return value.serviceCharge;
             }
             return 0;
-          }).reduce((a,b)=>a+b,0)
-          backgroundColor.push(color)
-          label.push(`${mainlabel[k]} ${year[i]}`)
-          data.push(total)
+          }).reduce((a, b) => a + b, 0);
+          backgroundColor.push(color);
+          label.push(`${mainlabel[k]} ${year[i]}`);
+          data.push(total);
         }
         datasets.push({
           backgroundColor,
           label,
-          data
-        })
-        data=[];
-        label=[];
-        data=[];
-        backgroundColor=[]
+          data,
+        });
+        data = [];
+        label = [];
+        data = [];
+        backgroundColor = [];
       }
     }
     res.send({ datasets, labels });
@@ -223,34 +230,35 @@ router.post('/', async (req, res) => {
         backgroundColor = [];
       }
     } else if (req.body.type === 'year') {
-      labels=year.map(v=>`Year ${v}`)
-      let mainlabel = [`Total room charge`,`Total service charge`];
+      labels = year.map((v) => `Year ${v}`);
+      let mainlabel = [`Total room charge`, `Total service charge`];
       let label = [];
       //get room charge
-      for(let k = 0;k<2;k++){
-        for(let i = 0 ;i<year.length;i++){
+      for (let k = 0; k < 2; k++) {
+        for (let i = 0; i < year.length; i++) {
           let color = COLOR[i];
-          let total = Bills.map(value=>{
-            if(parseInt(moment(value.paymentDate).format('YYYY'))===year[i]){
-              if(k===0)
-              return value.roomCharge;
+          let total = Bills.map((value) => {
+            if (
+              parseInt(moment(value.paymentDate).format('YYYY')) === year[i]
+            ) {
+              if (k === 0) return value.roomCharge;
               return value.serviceCharge;
             }
             return 0;
-          }).reduce((a,b)=>a+b,0)
-          backgroundColor.push(color)
-          label.push(`${mainlabel[k]} ${year[i]}`)
-          data.push(total)
+          }).reduce((a, b) => a + b, 0);
+          backgroundColor.push(color);
+          label.push(`${mainlabel[k]} ${year[i]}`);
+          data.push(total);
         }
         datasets.push({
           backgroundColor,
           label,
-          data
-        })
-        data=[];
-        label=[];
-        data=[];
-        backgroundColor=[]
+          data,
+        });
+        data = [];
+        label = [];
+        data = [];
+        backgroundColor = [];
       }
     }
     res.send({ datasets, labels });
