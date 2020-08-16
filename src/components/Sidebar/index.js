@@ -10,7 +10,7 @@ import {
   ScheduleOutlined,
   CalendarOutlined,
   NumberOutlined,
-  MoneyCollectOutlined
+  MoneyCollectOutlined,
 } from '@ant-design/icons';
 import * as PAGE from './constants';
 import './styles.scss';
@@ -54,8 +54,8 @@ class Sidebar extends Component {
             </Menu.Item>
 
             <Menu.Item key={PAGE.BILL_PAGE} icon={<MoneyCollectOutlined />}>
-            <Link to='/bill'>Bills</Link>
-          </Menu.Item>
+              <Link to='/bill'>Bills</Link>
+            </Menu.Item>
           </Menu>
         </Sider>
       );
@@ -77,8 +77,8 @@ class Sidebar extends Component {
             </Menu.Item>
 
             <Menu.Item key={PAGE.BILL_PAGE} icon={<MoneyCollectOutlined />}>
-            <Link to='/bill'>Bills</Link>
-          </Menu.Item>
+              <Link to='/bill'>Bills</Link>
+            </Menu.Item>
           </Menu>
         </Sider>
       );

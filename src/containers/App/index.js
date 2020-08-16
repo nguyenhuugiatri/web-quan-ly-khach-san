@@ -7,7 +7,7 @@ import CustomerPage from '../CustomerPage';
 import RoomListPage from '../RoomListPage';
 import RoomTypeListPage from '../RoomTypeListPage';
 import NotFoundPage from './../../components/NotFound';
-import BillPage from '../BillPage'
+import BillPage from '../BillPage';
 import { Router } from '@reach/router';
 import { connect } from 'react-redux';
 import { updateCurrentUser } from './actions';

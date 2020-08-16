@@ -89,7 +89,7 @@ class RoomDrawer extends Component {
   };
 
   render() {
-    const { visible, checkInRoom, checkInCustomer } = this.props;
+    const { visible, checkInRoom, checkInCustomer, currentUser } = this.props;
     const { name, idNumber, idType, phone } = checkInCustomer;
     const { date, price } = checkInRoom;
     const allowCheckIn = this.checkAllowCheckIn([
@@ -160,6 +160,7 @@ class RoomDrawer extends Component {
             <>
               <FormCheckOut />
               <CheckOutConfirm
+                currentUser={currentUser}
                 checkInRoom={checkInRoom}
                 modalData={this.state}
                 handleConfirmCheckOut={this.handleConfirmCheckOut}
