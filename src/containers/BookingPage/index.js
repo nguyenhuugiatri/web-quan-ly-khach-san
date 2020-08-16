@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Button, message, Pagination } from "antd";
+import { Row,Col,DatePicker,Button, message, Pagination } from "antd";
 import moment from "moment";
 import { UserAddOutlined } from "@ant-design/icons";
 import createPage from "../../components/createPage";
@@ -23,6 +23,7 @@ class Booking extends Component {
       listRoomByType: [],
       listTypeRoom: [],
       listBooking:[],
+      array:[],
       dateTime: [],
       idRoom: "",
       idTypeRoom: "",
@@ -109,6 +110,40 @@ class Booking extends Component {
         console.log(err);
       });
   };
+  showListBooking = () => {
+    console.log("aaa", "1" + this.state.array[0] + "1", this.state.array[1]);
+    if (this.state.array[0]) {
+      const dateFrom = moment(this.state.array[0]).format("YYYY-MM-DD");
+      const dateTo = moment(this.state.array[1]).format("YYYY-MM-DD");
+      axios({
+        method: "POST",
+        url: `${URL}/booking/listBookingFilter`,
+        data: {
+          dateFrom: dateFrom,
+          dateTo: dateTo,
+        },
+      })
+        .then((result) => {
+          const { listBooking } = result.data;
+          console.log("data", listBooking);
+          for (let i=0;i<listBooking.length;i++){
+            listBooking[i].key=listBooking[i].id;
+            listBooking[i].dateIn=moment(listBooking[i].dateIn).format("YYYY-MM-DD HH:mm");
+            listBooking[i].dateOut=moment(listBooking[i].dateOut).format("YYYY-MM-DD HH:mm");
+           }
+          this.setState({
+            listBooking: listBooking,
+          });
+        })
+        .catch((err) => {
+          if (err && err.response) {
+          }
+        });
+    }
+    else{
+      this.getListBooking();
+    }
+  };
   getListBooking = () => {
     axios
       .get(`${URL}/booking/listBooking`)
@@ -122,6 +157,7 @@ class Booking extends Component {
            }
           this.setState({
             listBooking: listBooking,
+            array: []
           });
         }
       })
@@ -220,6 +256,13 @@ class Booking extends Component {
       
     }
   };
+  handleOnChangeDateTimeFilter = (value) => {
+    try {
+      this.setState({
+        array: [value[0], value[1]],
+      });
+    } catch (err) {}
+  };
   submitBooking = () => {
     var data = this.state.valueForm.current.getFieldsValue();
     let customerBook = {
@@ -243,6 +286,10 @@ class Booking extends Component {
       url: `${URL}/booking/bookRoom`,
       data: dataSend,
     }).then((result) => {
+      this.state.valueForm.current.resetFields();
+      this.setState({
+        priceRoom:'',
+      });
       const { message } = result.data;
       showNotification(STATUS.SUCCESS, message);
       this.handleOnClose();
@@ -282,6 +329,37 @@ class Booking extends Component {
             handleOnChangeSelectRoom={this.handleOnChangeSelectRoom}
           ></BookDrawer>
         </div>
+        <Row gutter={[16, 16]}>
+          <Col span={8}>
+            <DatePicker.RangePicker
+              style={{ width: "100%" }}
+              ranges={{
+                Today: [moment(), moment()],
+                "This Month": [
+                  moment().startOf("month"),
+                  moment().endOf("month"),
+                ],
+              }}
+              showTime
+              value={this.state.array}
+              allowClear={false}
+              format="YYYY/MM/DD "
+              onChange={this.handleOnChangeDateTimeFilter}
+            />
+          </Col>
+          <Col span={16}>
+            <Button onClick={this.getListBooking} type="primary">
+              Clear
+            </Button>
+            <Button
+              style={{ marginLeft: "5px" }}
+               onClick={this.showListBooking}
+              type="primary"
+            >
+              Filter
+            </Button>
+          </Col>
+        </Row>
         <TableBooking visibleAccept={this.state.visibleAccept} listBooking={this.state.listBooking} checkInRoomBooked={this.checkInRoomBooked} deleteBooking={this.deleteBooking}></TableBooking>
       </div>
     );

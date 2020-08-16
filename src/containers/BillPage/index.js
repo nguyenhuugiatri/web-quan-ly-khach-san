@@ -14,8 +14,6 @@ class Bill extends Component {
     super(props);
     this.state = {
       listBill: [],
-      dateFrom: "",
-      dateTo: "",
       array: [],
     };
   }
