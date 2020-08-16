@@ -45,4 +45,10 @@ module.exports = {
     if (rows.length === 0) return null;
     return rows[0];
   },
+
+  getListType: async () => {
+    const rows = await db.load(`select * from serviceType`);
+    if (rows.length === 0) return [];
+    return rows;
+  },
 };

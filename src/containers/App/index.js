@@ -6,6 +6,7 @@ import RoomPage from '../RoomPage';
 import CustomerPage from '../CustomerPage';
 import RoomListPage from '../RoomListPage';
 import RoomTypeListPage from '../RoomTypeListPage';
+import ServicePage from '../ServicePage';
 import NotFoundPage from './../../components/NotFound';
 import BillPage from '../BillPage';
 import { Router } from '@reach/router';
@@ -31,6 +32,7 @@ class App extends Component {
           <CustomerPage path='/customer' />
           <RoomListPage path='/room' />
           <RoomTypeListPage path='/roomtype' />
+          <ServicePage path='/service' />
           <BillPage path='/bill' />
         </Router>
       );

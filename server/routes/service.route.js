@@ -77,4 +77,15 @@ router.post('/total', async (req, res, next) => {
   }
 });
 
+router.get('/list-type', async (req, res, next) => {
+  try {
+    const listType = await serviceModel.getListType();
+    return res.status(200).json({ listType, message: 'Successful !' });
+  } catch (err) {
+    return res.status(400).json({
+      message: 'Failed !',
+    });
+  }
+});
+
 module.exports = router;

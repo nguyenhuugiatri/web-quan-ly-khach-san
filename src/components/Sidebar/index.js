@@ -53,6 +53,10 @@ class Sidebar extends Component {
               <Link to='/roomtype'>Room Types</Link>
             </Menu.Item>
 
+            <Menu.Item key={PAGE.SERVICE_PAGE} icon={<MoneyCollectOutlined />}>
+              <Link to='/service'>Services</Link>
+            </Menu.Item>
+
             <Menu.Item key={PAGE.BILL_PAGE} icon={<MoneyCollectOutlined />}>
               <Link to='/bill'>Bills</Link>
             </Menu.Item>
