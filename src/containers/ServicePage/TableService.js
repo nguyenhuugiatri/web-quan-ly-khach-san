@@ -1,14 +1,7 @@
 import React, { Component } from 'react';
-import {
-  Table,
-  Input,
-  Button,
-  Space,
-  Popconfirm,
-  Form,
-  InputNumber,
-  Select,
-} from 'antd';
+import { Table, Input, Button, Space, Popconfirm, Form, Select } from 'antd';
+import Highlighter from 'react-highlight-words';
+import { SearchOutlined } from '@ant-design/icons';
 import { connect } from 'react-redux';
 
 class TableService extends Component {
@@ -36,6 +29,89 @@ class TableService extends Component {
     this.setState({ editingKey: record.id });
   };
 
+  handleSearch = (selectedKeys, confirm, dataIndex) => {
+    confirm();
+    this.setState({
+      searchText: selectedKeys[0],
+      searchedColumn: dataIndex,
+    });
+  };
+
+  handleReset = (clearFilters) => {
+    clearFilters();
+    this.setState({ searchText: '' });
+  };
+
+  getColumnSearchProps = (dataIndex) => ({
+    filterDropdown: ({
+      setSelectedKeys,
+      selectedKeys,
+      confirm,
+      clearFilters,
+    }) => (
+      <div style={{ padding: 8 }}>
+        <Input
+          ref={(node) => {
+            this.searchInput = node;
+          }}
+          placeholder={`Search ${dataIndex}`}
+          value={selectedKeys[0]}
+          onChange={(e) =>
+            setSelectedKeys(e.target.value ? [e.target.value] : [])
+          }
+          onPressEnter={() =>
+            this.handleSearch(selectedKeys, confirm, dataIndex)
+          }
+          style={{ width: 188, marginBottom: 8, display: 'block' }}
+        />
+        <Space>
+          <Button
+            type='primary'
+            onClick={() => this.handleSearch(selectedKeys, confirm, dataIndex)}
+            icon={<SearchOutlined />}
+            size='small'
+            style={{ width: 90 }}
+          >
+            Search
+          </Button>
+          <Button
+            onClick={() => this.handleReset(clearFilters)}
+            size='small'
+            style={{ width: 90 }}
+          >
+            Reset
+          </Button>
+        </Space>
+      </div>
+    ),
+    filterIcon: (filtered) => (
+      <SearchOutlined style={{ color: filtered ? '#1890ff' : undefined }} />
+    ),
+    onFilter: (value, record) =>
+      record[dataIndex]
+        ? record[dataIndex]
+            .toString()
+            .toLowerCase()
+            .includes(value.toLowerCase())
+        : '',
+    onFilterDropdownVisibleChange: (visible) => {
+      if (visible) {
+        setTimeout(() => this.searchInput.select(), 100);
+      }
+    },
+    render: (text) =>
+      this.state.searchedColumn === dataIndex ? (
+        <Highlighter
+          highlightStyle={{ backgroundColor: '#ffc069', padding: 0 }}
+          searchWords={[this.state.searchText]}
+          autoEscape
+          textToHighlight={text ? text.toString() : ''}
+        />
+      ) : (
+        text
+      ),
+  });
+
   render() {
     let {
       listService,
@@ -52,7 +128,6 @@ class TableService extends Component {
         key: 'no',
         width: '15%',
         editable: false,
-        // ...this.getColumnSearchProps('no'),
       },
       {
         title: 'Name',
@@ -60,15 +135,14 @@ class TableService extends Component {
         key: 'name',
         width: '30%',
         editable: true,
-        // ...this.getColumnSearchProps('name'),
+        ...this.getColumnSearchProps('name'),
       },
       {
         title: 'Type',
         dataIndex: 'idType',
-        key: 'typeName',
+        key: 'idType',
         width: '20%',
         editable: true,
-        // ...this.getColumnSearchProps('typeName'),
       },
       {
         title: 'Price',
@@ -76,7 +150,6 @@ class TableService extends Component {
         key: 'price',
         width: '20%',
         editable: true,
-        // ...this.getColumnSearchProps('price'),
       },
       {
         title: 'Action',
