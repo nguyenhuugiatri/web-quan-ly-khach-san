@@ -39,6 +39,14 @@ router.post("/deleteBooking", async (req, res) => {
   }
   
 });
+router.post('/listBookingFilter', async (req, res, next) => {
+  
+  const {dateFrom,dateTo}=req.body;
+  const listBooking = await bookingModel.getListBookingFilter(dateFrom,dateTo);
+  console.log('get',listBooking);
+
+  return res.status(200).json({ listBooking, message: 'Successful !' });
+});
 router.post("/checkinbooked", async (req, res) => {
   try {
     console.log('booked',req.body);
