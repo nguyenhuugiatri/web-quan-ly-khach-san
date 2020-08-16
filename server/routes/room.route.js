@@ -7,7 +7,6 @@ router.get('/list', async (req, res) => {
     moment().format('YYYY-MM-DD')
   );
   if (listRoomReserved.length !== 0) {
-    console.log('okkk');
     let idRoom = listRoomReserved.map((e) => e.idRoom).join(',');
     await roomModel.updateRoomReserved(idRoom);
   }
